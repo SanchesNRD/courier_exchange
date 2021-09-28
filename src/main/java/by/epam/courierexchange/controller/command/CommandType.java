@@ -9,5 +9,6 @@ public enum CommandType {
     GO_TO_SIGN_UP,
     GO_TO_FORGOT_PASS,
     GO_TO_USER_PROFILE,
-    START_PAGE
+    START_PAGE,
+    CHANGE_LOCALE
 }

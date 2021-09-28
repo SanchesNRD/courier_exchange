@@ -1,9 +1,6 @@
 package by.epam.courierexchange.controller.command;
 
-import by.epam.courierexchange.controller.command.impl.DefaultCommand;
-import by.epam.courierexchange.controller.command.impl.LoginCommand;
-import by.epam.courierexchange.controller.command.impl.LogoutCommand;
-import by.epam.courierexchange.controller.command.impl.StartPageCommand;
+import by.epam.courierexchange.controller.command.impl.*;
 import by.epam.courierexchange.controller.command.impl.go.GoToForgotPassword;
 import by.epam.courierexchange.controller.command.impl.go.GoToLogin;
 import by.epam.courierexchange.controller.command.impl.go.GoToSignUp;
@@ -26,6 +23,7 @@ public class CommandProvider {
         commands.put(GO_TO_LOGIN, new GoToLogin());
         commands.put(GO_TO_FORGOT_PASS, new GoToForgotPassword());
         commands.put(GO_TO_USER_PROFILE, new GoToUserProfile());
+        commands.put(CHANGE_LOCALE, new ChangeLocaleCommand());
     }
 
     public static CommandProvider getInstance(){

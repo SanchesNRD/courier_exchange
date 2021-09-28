@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import java.util.Optional;
 
 import static by.epam.courierexchange.controller.command.CommandResult.ResponseType.FORWARD;
+import static by.epam.courierexchange.controller.command.CommandResult.ResponseType.REDIRECT;
 import static by.epam.courierexchange.controller.command.PagePath.*;
 import static by.epam.courierexchange.controller.command.RequestAttribute.*;
 import static by.epam.courierexchange.controller.command.RequestParameter.LOGIN;
