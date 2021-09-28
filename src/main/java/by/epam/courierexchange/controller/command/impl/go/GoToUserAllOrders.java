@@ -8,12 +8,12 @@ import jakarta.servlet.http.HttpSession;
 
 import static by.epam.courierexchange.controller.command.CommandResult.ResponseType.FORWARD;
 
-public class GoToUserProfile implements Command {
+public class GoToUserAllOrders implements Command {
     @Override
     public CommandResult execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
         if(session.getAttribute("user") != null) {
-            return new CommandResult(PagePath.PROFILE_PAGE, FORWARD);
+            return new CommandResult(PagePath.USER_ALL_ORDERS_PAGE, FORWARD);
         }
         else{
             return new CommandResult(PagePath.LOGIN_PAGE, FORWARD);
