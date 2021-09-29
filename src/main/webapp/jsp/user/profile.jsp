@@ -83,6 +83,18 @@
                     <input type="submit" value="Update" class="login100-form-btn" onclick="location.href='${pageContext.request.contextPath}/jsp/guest/main.jsp'"/>
                 </div>
             </form>
+            <form method="post" action="${pageContext.request.contextPath}/image_display" enctype="multipart/form-data" class="wrap-login100">
+                <div class="form-group row">
+                    <div class="col-md-2 txt1 text-right">
+                        <fmt:message key="page.profile.choose_file"/></div>
+                    <div class="col-md-6">
+                        <div class="wrap-input100">
+                            <input type="file" name="multiPartServlet" style="margin-bottom: 40px"/>
+                            <input class="login100-form-btn" type="submit" value="<fmt:message key="page.profile.upload"/>"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </section>
     </div>
 

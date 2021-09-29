@@ -24,7 +24,11 @@
             </h1>
         </section>
         <section class="content">
-
+            <div class="wrap-login100">
+                <c:forEach var="orders" items="${sessionScope.orders}">
+                    <c:out value="${orders.name}"/>
+                </c:forEach>
+            </div>
         </section>
     </div>
 
