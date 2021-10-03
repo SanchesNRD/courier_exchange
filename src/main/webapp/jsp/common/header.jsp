@@ -15,8 +15,8 @@
                                 <c:out value="${sessionScope.user.name}"/>
                                 <c:out value="${sessionScope.user.surname}"/>
                             </span>
-
-                            <img src="${sessionScope.user.image}" class="user-image" alt="User Image">
+                            <img src="${pageContext.request.contextPath}/image_display" class="user-image" alt="User Image">
+                            <img src="${pageContext.request.contextPath}/img/avatar.png" class="user-image" alt="User Image">
                         </span>
                 </div>
             </div>

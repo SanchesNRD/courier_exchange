@@ -36,12 +36,19 @@ public class UserDaoImpl implements UserDao {
     private static final String SQL_DELETE_BY_ID=
             "DELETE FROM users WHERE id=?";
     private static final String SQL_INSERT= """
-            INSERT INTO users (id, login, password, mail, name, surname, phone, image, status_id) 
-            VALUES (?,?,?,?,?,?,?,?,?)
+            INSERT INTO users (id, login, password, mail, name, surname, phone, status_id) 
+            VALUES (?,?,?,?,?,?,?,?)
             """;
     private static final String SQL_UPDATE= """
             UPDATE users SET login=?, password=?, mail=?, name=?, surname=?,
             phone=?, image=?, status_id=? WHERE id=?
+            """;
+    private static final String SQL_UPLOAD_IMG_PATH_BY_ID = """
+            UPDATE users SET image=? WHERE id=?
+            """;
+    private static final String SQL_FIND_IMG_PATH_BY_ID = """
+            SELECT image
+            FROM users WHERE id=?
             """;
 
     private UserDaoImpl(){
@@ -70,7 +77,7 @@ public class UserDaoImpl implements UserDao {
                         .setName(resultSet.getString(USER_NAME))
                         .setSurname(resultSet.getString(USER_SURNAME))
                         .setPhone(resultSet.getString(USER_PHONE))
-                        .setImage(resultSet.getBinaryStream(USER_IMAGE))
+                        .setImage(resultSet.getString(USER_IMAGE))
                         .setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID)))
                         .build();;
                 users.add(user);
@@ -101,7 +108,7 @@ public class UserDaoImpl implements UserDao {
                         .setName(resultSet.getString(USER_NAME))
                         .setSurname(resultSet.getString(USER_SURNAME))
                         .setPhone(resultSet.getString(USER_PHONE))
-                        .setImage(resultSet.getBinaryStream(USER_IMAGE))
+                        .setImage(resultSet.getString(USER_IMAGE))
                         .setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID)))
                         .build();
                 return Optional.of(user);
@@ -130,7 +137,7 @@ public class UserDaoImpl implements UserDao {
                         .setName(resultSet.getString(USER_NAME))
                         .setSurname(resultSet.getString(USER_SURNAME))
                         .setPhone(resultSet.getString(USER_PHONE))
-                        .setImage(resultSet.getBinaryStream(USER_IMAGE))
+                        .setImage(resultSet.getString(USER_IMAGE))
                         .setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID)))
                         .build();
                 return Optional.of(user);
@@ -168,8 +175,7 @@ public class UserDaoImpl implements UserDao {
             statement.setString(5, user.getName());
             statement.setString(6, user.getSurname());
             statement.setString(7, user.getPhone());
-            statement.setBinaryStream(8, user.getImage());
-            statement.setShort(9, user.getUserStatus().getStatusId());
+            statement.setShort(8, user.getUserStatus().getStatusId());
             return statement.execute();
         } catch (SQLException e){
             logger.error("SQL exception in method createUser ", e);
@@ -189,7 +195,7 @@ public class UserDaoImpl implements UserDao {
             statement.setString(4, user.getName());
             statement.setString(5, user.getSurname());
             statement.setString(6, user.getPhone());
-            statement.setBinaryStream(7, user.getImage());
+            statement.setString(7, user.getImage());
             statement.setShort(8, user.getUserStatus().getStatusId());
             statement.setLong(9, user.getId());
             return statement.executeUpdate();
@@ -197,5 +203,39 @@ public class UserDaoImpl implements UserDao {
             logger.error("SQL exception in method updateUser ", e);
             throw new DaoException("SQL exception in method updateUser ", e);
         }
+    }
+
+    @Override
+    public boolean uploadImgPath(long id, String path) throws DaoException {
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_UPLOAD_IMG_PATH_BY_ID))
+        {
+            statement.setString(1, path);
+            statement.setLong(2, id);
+            return statement.execute();
+        } catch (SQLException e){
+            logger.error("SQL exception in method in uploadImgPath ", e);
+            throw new DaoException("SQL exception in method in uploadImgPath ", e);
+        }
+    }
+
+    @Override
+    public Optional<String> findImgPath(long id) throws DaoException {
+        String path = null;
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_FIND_IMG_PATH_BY_ID))
+        {
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()){
+                path = resultSet.getString(USER_IMAGE);
+            }
+        } catch (SQLException e){
+            logger.error("SQL exception in method in findImgPath ", e);
+            throw new DaoException("SQL exception in method in findImgPath ", e);
+        }
+        return Optional.ofNullable(path);
     }
 }

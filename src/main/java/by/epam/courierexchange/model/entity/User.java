@@ -10,7 +10,7 @@ public class User extends AbstractEntity{
     private String name;
     private String surname;
     private String phone;
-    private InputStream image;
+    private String image;
     private UserStatus userStatus;
 
     public User(){
@@ -57,7 +57,7 @@ public class User extends AbstractEntity{
         return phone;
     }
 
-    public InputStream getImage() { return image; }
+    public String getImage() { return image; }
 
     public UserStatus getUserStatus() {
         return userStatus;
@@ -140,7 +140,7 @@ public class User extends AbstractEntity{
         private String name;
         private String surname;
         private String phone;
-        private InputStream image;
+        private String image;
         private UserStatus userStatus;
 
         public UserBuilder(){ }
@@ -180,7 +180,7 @@ public class User extends AbstractEntity{
             return this;
         }
 
-        public UserBuilder setImage(InputStream image){
+        public UserBuilder setImage(String image){
             this.image = image;
             return this;
         }

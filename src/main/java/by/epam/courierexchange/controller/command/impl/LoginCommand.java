@@ -26,7 +26,6 @@ public class LoginCommand implements Command {
         String password = request.getParameter(PASSWORD);
         UserServiceImpl userService = UserServiceImpl.getInstance();
         CommandResult commandResult;
-
         try {
             Optional<User> optionalUser = userService.authorization(login, password);
             if(optionalUser.isPresent()){

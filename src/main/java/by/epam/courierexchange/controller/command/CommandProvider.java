@@ -15,12 +15,13 @@ public class CommandProvider {
         commands.put(DEFAULT, new DefaultCommand());
         commands.put(LOGIN, new LoginCommand());
         commands.put(LOGOUT, new LogoutCommand());
+        commands.put(SIGN_UP, new SignUpCommand());
+        commands.put(CHANGE_LOCALE, new ChangeLocaleCommand());
         commands.put(START_PAGE, new StartPageCommand());
         commands.put(GO_TO_SIGN_UP, new GoToSignUp());
         commands.put(GO_TO_LOGIN, new GoToLogin());
         commands.put(GO_TO_FORGOT_PASS, new GoToForgotPassword());
         commands.put(GO_TO_USER_PROFILE, new GoToUserProfile());
-        commands.put(CHANGE_LOCALE, new ChangeLocaleCommand());
         commands.put(GO_TO_USER_ALL_ORDERS, new GoToUserAllOrders());
     }
 

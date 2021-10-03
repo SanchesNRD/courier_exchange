@@ -19,7 +19,6 @@
     <jsp:include page="../common/user_sidebar.jsp"/>
 
     <div class="content-wrapper">
-        ${sessionScope.previous_request}
         <section class="content-header">
             <h1>
                 <fmt:message key="page.profile.title"/>
@@ -89,7 +88,7 @@
                         <fmt:message key="page.profile.choose_file"/></div>
                     <div class="col-md-6">
                         <div class="wrap-input100">
-                            <input type="file" name="multiPartServlet" style="margin-bottom: 40px"/>
+                            <input type="file" name="multiPartServlet" style="margin-left: 10px;margin-top: 20px;margin-bottom: 40px;">
                             <input class="login100-form-btn" type="submit" value="<fmt:message key="page.profile.upload"/>"/>
                         </div>
                     </div>

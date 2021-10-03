@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface UserDao extends BaseDao<Long, User>{
     Optional<User> selectByLogin(String login) throws DaoException;
+    boolean uploadImgPath(long id, String path) throws DaoException;
+    Optional<String> findImgPath(long id) throws DaoException;
 }
