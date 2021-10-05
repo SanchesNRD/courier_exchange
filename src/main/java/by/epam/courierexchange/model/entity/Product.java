@@ -4,26 +4,28 @@ import java.math.BigDecimal;
 
 public class Product extends AbstractEntity{
     private long id;
+    private String name;
     private int weight;
     private int length;
     private int width;
     private int height;
-    private BigDecimal pricePerKilo;
     private ProductType productType;
 
     public Product(ProductBuilder builder) {
         this.id = builder.id;
+        this.name = builder.name;
         this.weight = builder.weight;
         this.length = builder.length;
         this.width = builder.width;
         this.height = builder.height;
-        this.pricePerKilo = builder.pricePerKilo;
         this.productType = builder.productType;
     }
 
     public long getId() {
         return id;
     }
+
+    public String getName() {return name; }
 
     public int getWeight() {
         return weight;
@@ -41,10 +43,6 @@ public class Product extends AbstractEntity{
         return height;
     }
 
-    public BigDecimal getPricePerKilo() {
-        return pricePerKilo;
-    }
-
     public ProductType getProductType() {
         return productType;
     }
@@ -60,7 +58,7 @@ public class Product extends AbstractEntity{
 
         Product product = (Product) o;
 
-        if (pricePerKilo != null ? !pricePerKilo.equals(product.pricePerKilo) : product.pricePerKilo != null) {
+        if (name != null ? !name.equals(product.name) : product.name != null) {
             return false;
         }
         return productType == product.productType && id == product.id &&
@@ -75,7 +73,7 @@ public class Product extends AbstractEntity{
         result = 31 * result + length;
         result = 31 * result + width;
         result = 31 * result + height;
-        result = 31 * result + (pricePerKilo != null ? pricePerKilo.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (productType != null ? productType.hashCode() : 0);
         return result;
     }
@@ -84,11 +82,11 @@ public class Product extends AbstractEntity{
     public String toString() {
         final StringBuilder sb = new StringBuilder("Product{");
         sb.append("id=").append(id);
+        sb.append(", name=").append(name);
         sb.append(", weight=").append(weight);
         sb.append(", length=").append(length);
         sb.append(", width=").append(width);
         sb.append(", height=").append(height);
-        sb.append(", pricePerKilo=").append(pricePerKilo);
         sb.append(", productType=").append(productType);
         sb.append('}');
         return sb.toString();
@@ -97,15 +95,20 @@ public class Product extends AbstractEntity{
     public static class ProductBuilder{
 
         private long id;
+        private String name;
         private int weight;
         private int length;
         private int width;
         private int height;
-        private BigDecimal pricePerKilo;
         private ProductType productType;
 
         public ProductBuilder setId(long id) {
             this.id = id;
+            return this;
+        }
+
+        public ProductBuilder setName(String name) {
+            this.name = name;
             return this;
         }
 
@@ -129,10 +132,6 @@ public class Product extends AbstractEntity{
             return this;
         }
 
-        public ProductBuilder setPricePerKilo(BigDecimal pricePerKilo) {
-            this.pricePerKilo = pricePerKilo;
-            return this;
-        }
 
         public ProductBuilder setProductType(ProductType productType) {
             this.productType = productType;

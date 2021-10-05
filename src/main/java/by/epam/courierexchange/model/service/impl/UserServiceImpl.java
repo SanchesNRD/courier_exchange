@@ -117,4 +117,33 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException("DaoException to the find file path: ", e);
         }
     }
+
+    @Override
+    public Optional<User> updateProfile(String name, String surname, String phone, User user) throws ServiceException {
+        Optional<User> optionalUser;
+        if(!UserValidator.nameIsValid(name) && !UserValidator.surnameIsValid(surname)
+                && !UserValidator.phoneIsValid(phone)){
+            return Optional.empty();
+        }
+        try{
+            user = new User.UserBuilder()
+                    .setPhone(phone)
+                    .setSurname(surname)
+                    .setName(name)
+                    .setMail(user.getMail())
+                    .setLogin(user.getLogin())
+                    .setPassword(user.getPassword())
+                    .setId(user.getId())
+                    .setImage(user.getImage())
+                    .setUserStatus(user.getUserStatus())
+                    .build();
+            userDao.update(user);
+            optionalUser = Optional.of(user);
+        } catch (DaoException e){
+            logger.error("DaoException to the update profile: ", e);
+            throw new ServiceException("DaoException to the update profile: ", e);
+        }
+        return optionalUser;
+    }
+
 }

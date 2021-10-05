@@ -8,7 +8,7 @@
     <div class="pull-right hidden-xs">
         <b><fmt:message key="footer.version"/></b>2.4.0
     </div>
-    <strong>Copyright &copy; 2014-2016 <a class="almassed-studio" href="https://adminlte.io">Almsaeed Studio</a>.</strong>
+    <strong>Copyright &copy; 2014-2016 <a class="almassed-studio" href="https://adminlte.io"><fmt:message key="footer.heading"/></a>.</strong>
         <fmt:message key="footer.rights"/>
 </footer>
 </html>

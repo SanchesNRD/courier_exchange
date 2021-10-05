@@ -8,9 +8,19 @@ public class UserValidator {
             "^([a-z0-9_-]+\\.)*[a-z0-9_-]+@[a-z0-9_-]+(\\.[a-z0-9_-]+)*\\.[a-z]{2,6}$";
     private static final String NAME_PATTERN = "[a-zA-Zа-яА-я]{2,20}";
     private static final String SURNAME_PATTERN = "[a-zA-Zа-яА-я]{2,20}";
+    private static final String NUMBER_PATTERN = "[+]?\\d+";
+    private static final String TYPE_PATTERN = "[1234]{1}";
 
     public static boolean loginIsValid(String login){
         return login != null && login.matches(LOGIN_PATTERN);
+    }
+
+    public static boolean typeIsValid(String login){
+        return login != null && login.matches(TYPE_PATTERN);
+    }
+
+    public static boolean numberIsValid(String login){
+        return login != null && login.matches(NUMBER_PATTERN);
     }
 
     public static boolean passwordIsValid(String password){

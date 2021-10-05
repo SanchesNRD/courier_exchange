@@ -572,6 +572,26 @@ iframe {
   height: 40px;
   padding: 0 25px 0 25px;
 }
+
+.radio100 {
+  position: relative;
+
+  width: 18px;
+  padding: 0 25px 0 25px;
+}
+
+.radio-label100{
+  display: inline-block;
+  text-align: left;
+  padding-left: 10px;
+  font-weight: 100;
+  font-size: 16;
+}
+
+.radio-content{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 /*------------------------------------------------------------------
 [ Focus Input ]*/
 .focus-input100 {

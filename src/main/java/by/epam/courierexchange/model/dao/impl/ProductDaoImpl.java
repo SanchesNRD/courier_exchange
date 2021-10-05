@@ -22,22 +22,26 @@ public class ProductDaoImpl implements ProductDao {
     private static final ProductDaoImpl instance = new ProductDaoImpl();
 
     private static final String SQL_SELECT_ALL="""
-            SELECT id, weight, length, width, height, type_id 
+            SELECT id, name, weight, length, width, height, type_id 
             FROM products
             """;
     private static final String SQL_SELECT_BY_ID="""
-            SELECT id, weight, length, width, height, type_id 
+            SELECT id, name, weight, length, width, height, type_id 
             FROM products WHERE id=?
             """;
     private static final String SQL_SELECT_BY_TYPE="""
-            SELECT id, weight, length, width, height, type_id 
+            SELECT id, name, weight, length, width, height, type_id 
             FROM products WHERE type_id=?
+            """;
+    private static final String SQL_SELECT_BY_NAME="""
+            SELECT id, name, weight, length, width, height, type_id 
+            FROM products WHERE name=?
             """;
     private static final String SQL_DELETE_BY_ID=
             "DELETE FROM products WHERE id=?";
     private static final String SQL_INSERT="""
-            INSERT INTO products(id, weight, length, width, height, type_id)
-            VALUES (?,?,?,?,?,?)
+            INSERT INTO products(id, name, weight, length, width, height, type_id)
+            VALUES (?,?,?,?,?,?,?)
             """;
     private static final String SQL_UPDATE="""
             UPDATE products SET weight=?, length=?, width=?, 
@@ -65,6 +69,7 @@ public class ProductDaoImpl implements ProductDao {
             while(resultSet.next()){
                 Product product = new Product.ProductBuilder()
                         .setId(resultSet.getLong(ID))
+                        .setName(resultSet.getString(PRODUCT_NAME))
                         .setWeight(resultSet.getInt(PRODUCT_WEIGHT))
                         .setLength(resultSet.getInt(PRODUCT_LENGTH))
                         .setWidth(resultSet.getInt(PRODUCT_WIDTH))
@@ -93,6 +98,7 @@ public class ProductDaoImpl implements ProductDao {
             } else{
                 Product product = new Product.ProductBuilder()
                         .setId(resultSet.getLong(ID))
+                        .setName(resultSet.getString(PRODUCT_NAME))
                         .setWeight(resultSet.getInt(PRODUCT_WEIGHT))
                         .setLength(resultSet.getInt(PRODUCT_LENGTH))
                         .setWidth(resultSet.getInt(PRODUCT_WIDTH))
@@ -104,6 +110,33 @@ public class ProductDaoImpl implements ProductDao {
         } catch (SQLException e){
             logger.error("SQL exception in method selectProductId", e);
             throw new DaoException("SQL exception in method selectProductId", e);
+        }
+    }
+
+    public Optional<Product> selectByName(String name) throws DaoException {
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_NAME))
+        {
+            statement.setString(1, name);
+            ResultSet resultSet = statement.executeQuery();
+            if(!resultSet.next()){
+                return Optional.empty();
+            } else{
+                Product product = new Product.ProductBuilder()
+                        .setId(resultSet.getLong(ID))
+                        .setName(resultSet.getString(PRODUCT_NAME))
+                        .setWeight(resultSet.getInt(PRODUCT_WEIGHT))
+                        .setLength(resultSet.getInt(PRODUCT_LENGTH))
+                        .setWidth(resultSet.getInt(PRODUCT_WIDTH))
+                        .setHeight(resultSet.getInt(PRODUCT_HEIGHT))
+                        .setProductType(ProductType.parseType(resultSet.getShort(TYPE_ID)))
+                        .build();
+                return Optional.of(product);
+            }
+        } catch (SQLException e){
+            logger.error("SQL exception in method selectProductName", e);
+            throw new DaoException("SQL exception in method selectProductName", e);
         }
     }
 
@@ -119,6 +152,7 @@ public class ProductDaoImpl implements ProductDao {
             while(resultSet.next()){
                 Product product = new Product.ProductBuilder()
                         .setId(resultSet.getLong(ID))
+                        .setName(resultSet.getString(PRODUCT_NAME))
                         .setWeight(resultSet.getInt(PRODUCT_WEIGHT))
                         .setLength(resultSet.getInt(PRODUCT_LENGTH))
                         .setWidth(resultSet.getInt(PRODUCT_WIDTH))
@@ -155,11 +189,12 @@ public class ProductDaoImpl implements ProductDao {
                 PreparedStatement statement = connection.prepareStatement(SQL_INSERT))
         {
             statement.setLong(1, product.getId());
-            statement.setInt(2, product.getWeight());
-            statement.setInt(3, product.getLength());
-            statement.setInt(4, product.getWidth());
-            statement.setInt(5, product.getHeight());
-            statement.setInt(6, product.getProductType().getId());
+            statement.setString(2, product.getName());
+            statement.setInt(3, product.getWeight());
+            statement.setInt(4, product.getLength());
+            statement.setInt(5, product.getWidth());
+            statement.setInt(6, product.getHeight());
+            statement.setInt(7, product.getProductType().getId());
             return statement.execute();
         } catch (SQLException e){
             logger.error("SQL exception in method createProducts", e);

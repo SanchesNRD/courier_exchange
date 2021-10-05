@@ -25,13 +25,15 @@
             </h1>
         </section>
         <section class="content">
-            <form action="" class="wrap-login100">
+            <form action="${pageContext.request.contextPath}/controller" class="wrap-login100">
+                <input type="hidden" name="command" value="update_profile"/>
                 <div class="form-group row">
                     <div class="col-md-2 txt1 text-right">
                         <fmt:message key="page.profile.login"/></div>
                     <div class="col-md-6">
                         <div class="wrap-input100">
-                            <input class="validate-input input100" type="text" name="login" disabled="disabled" value="${sessionScope.user.login}">
+                            <input class="validate-input input100" type="text" name="login" disabled="disabled"
+                                   value="${sessionScope.user.login}">
                             <span class="focus-input100"></span>
                         </div>
                     </div>
@@ -41,7 +43,8 @@
                         <fmt:message key="page.profile.mail"/></div>
                     <div class="col-md-6">
                         <div class="wrap-input100">
-                            <input class="validate-input input100" type="text" name="mail" disabled="disabled" value="${sessionScope.user.mail}">
+                            <input class="validate-input input100" type="text" name="mail" disabled="disabled"
+                                   value="${sessionScope.user.mail}">
                             <span class="focus-input100"></span>
                         </div>
                     </div>
@@ -51,7 +54,8 @@
                         <fmt:message key="page.profile.name"/></div>
                     <div class="col-md-6">
                         <div class="wrap-input100">
-                            <input class="validate-input input100" type="text" name="name" value="${sessionScope.user.name}">
+                            <input class="validate-input input100" type="text" name="name"
+                                   value="${sessionScope.user.name}" pattern="[a-zA-Zа-яА-я]{2,20}">
                             <span class="focus-input100"></span>
                         </div>
                     </div>
@@ -61,7 +65,8 @@
                         <fmt:message key="page.profile.surname"/></div>
                     <div class="col-md-6">
                         <div class="wrap-input100">
-                            <input class="validate-input input100" type="text" name="surname" value="${sessionScope.user.surname}">
+                            <input class="validate-input input100" type="text" name="surname"
+                                   value="${sessionScope.user.surname}" pattern="[a-zA-Zа-яА-я]{2,20}">
                             <span class="focus-input100"></span>
                         </div>
                     </div>
@@ -71,7 +76,8 @@
                         <fmt:message key="page.profile.phone"/></div>
                     <div class="col-md-6">
                         <div class="wrap-input100">
-                            <input class="validate-input input100" type="text" name="phone" value="${sessionScope.user.phone}">
+                            <input class="validate-input input100" type="text" name="phone"
+                                   value="${sessionScope.user.phone}" pattern="(\+375|80)(29|25|44|33)[\d]{7}">
                             <span class="focus-input100"></span>
                         </div>
                     </div>
@@ -79,7 +85,7 @@
 
 
                 <div class="col-md-offset-2 container-login100-form-btn ">
-                    <input type="submit" value="Update" class="login100-form-btn" onclick="location.href='${pageContext.request.contextPath}/jsp/guest/main.jsp'"/>
+                    <input type="submit" value="<fmt:message key="page.profile.update"/>" class="login100-form-btn"/>
                 </div>
             </form>
             <form method="post" action="${pageContext.request.contextPath}/image_display" enctype="multipart/form-data" class="wrap-login100">

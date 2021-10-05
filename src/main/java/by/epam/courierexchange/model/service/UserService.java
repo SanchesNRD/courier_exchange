@@ -11,5 +11,6 @@ public interface UserService {
     boolean updatePassword(User user) throws ServiceException;
     boolean uploadImgPath(long id, String path) throws ServiceException;
     String findImgPath(long id) throws ServiceException;
+    Optional<User> updateProfile(String name, String surname, String phone, User user) throws ServiceException;
 
 }

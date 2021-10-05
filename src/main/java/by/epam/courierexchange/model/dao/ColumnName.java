@@ -21,6 +21,7 @@ public class ColumnName {
     //clients
     public static final String ADDRESS_ID = "address_id";
     //products
+    public static final String PRODUCT_NAME = "name";
     public static final String PRODUCT_WEIGHT = "weight";
     public static final String PRODUCT_LENGTH = "length";
     public static final String PRODUCT_WIDTH = "width";
