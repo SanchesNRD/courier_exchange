@@ -15,6 +15,8 @@ public class RequestParameter {
     public static final String LENGTH = "length";
     public static final String WEIGHT = "weight";
     public static final String ORDER_TYPE = "order_type";
+    public static final String USER_ID = "user_id";
+    public static final String NEW_PASSWORD = "new_password";
 
     private RequestParameter(){}
 }

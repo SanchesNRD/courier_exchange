@@ -33,6 +33,10 @@ public class UserDaoImpl implements UserDao {
             SELECT id, login, password, mail, name, surname, phone, image, status_id 
             FROM users WHERE login=?
             """;
+    private static final String SQL_SELECT_BY_MAIL= """
+            SELECT id, login, password, mail, name, surname, phone, image, status_id 
+            FROM users WHERE mail=?
+            """;
     private static final String SQL_DELETE_BY_ID=
             "DELETE FROM users WHERE id=?";
     private static final String SQL_INSERT= """
@@ -42,6 +46,9 @@ public class UserDaoImpl implements UserDao {
     private static final String SQL_UPDATE= """
             UPDATE users SET login=?, password=?, mail=?, name=?, surname=?,
             phone=?, image=?, status_id=? WHERE id=?
+            """;
+    private static final String SQL_UPDATE_PASSWORD= """
+            UPDATE users SET password=? WHERE id=?
             """;
     private static final String SQL_UPLOAD_IMG_PATH_BY_ID = """
             UPDATE users SET image=? WHERE id=?
@@ -143,8 +150,37 @@ public class UserDaoImpl implements UserDao {
                 return Optional.of(user);
             }
         } catch (SQLException e){
-            logger.error("SQL exception in method in selectUserById ", e);
-            throw new DaoException("SQL exception in method in selectUserById ", e);
+            logger.error("SQL exception in method in selectUserByLogin ", e);
+            throw new DaoException("SQL exception in method in selectUserByLogin ", e);
+        }
+    }
+
+    public Optional<User> selectByMail(String mail) throws DaoException {
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_MAIL))
+        {
+            statement.setString(1, mail);
+            ResultSet resultSet = statement.executeQuery();
+            if(!resultSet.next()){
+                return Optional.empty();
+            }else {
+                User user = new User.UserBuilder()
+                        .setId(resultSet.getLong(ID))
+                        .setLogin(resultSet.getString(USER_LOGIN))
+                        .setPassword(resultSet.getString(USER_PASSWORD))
+                        .setMail(resultSet.getString(USER_MAIL))
+                        .setName(resultSet.getString(USER_NAME))
+                        .setSurname(resultSet.getString(USER_SURNAME))
+                        .setPhone(resultSet.getString(USER_PHONE))
+                        .setImage(resultSet.getString(USER_IMAGE))
+                        .setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID)))
+                        .build();
+                return Optional.of(user);
+            }
+        } catch (SQLException e){
+            logger.error("SQL exception in method in selectUserByMail ", e);
+            throw new DaoException("SQL exception in method in selectUserByMail ", e);
         }
     }
 
@@ -198,6 +234,21 @@ public class UserDaoImpl implements UserDao {
             statement.setString(7, user.getImage());
             statement.setShort(8, user.getUserStatus().getStatusId());
             statement.setLong(9, user.getId());
+            return statement.executeUpdate();
+        } catch (SQLException e){
+            logger.error("SQL exception in method updateUser ", e);
+            throw new DaoException("SQL exception in method updateUser ", e);
+        }
+    }
+
+    @Override
+    public int updatePasswordById(long id, String password) throws DaoException {
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_PASSWORD))
+        {
+            statement.setString(1, password);
+            statement.setLong(2, id);
             return statement.executeUpdate();
         } catch (SQLException e){
             logger.error("SQL exception in method updateUser ", e);

@@ -6,7 +6,8 @@ public enum UserStatus{
     CONFIRMED((short)1),
     NON_CONFIRMED((short)2),
     BANED((short)3),
-    ADMIN((short) 4);
+    COURIER_CONFIRMED((short)4),
+    ADMIN((short) 5);
 
     private static final String UNDERSCORE = "_";
     private static final String HYPHEN = "-";

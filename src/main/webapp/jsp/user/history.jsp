@@ -20,7 +20,7 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                <fmt:message key="page.orders.title"/>
+                <fmt:message key="page.history.heading"/>
             </h1>
         </section>
         <section class="content">
@@ -28,34 +28,18 @@
                 <div class="wrap-login100">
                     <div class="row">
                         <div class="col-md-3 txt1 text-left">
-                            <fmt:message key="page.orders.name_client"/>
+                            <fmt:message key="page.user_orders.name_courier"/>
                         </div>
                         <div class="col-md-3 txt1 text-left">
-                            <fmt:message key="page.orders.name_product"/>
+                            <fmt:message key="page.user_orders.name_product"/>
                         </div>
                         <div class="col-md-4 txt1 text-left">
-                            <fmt:message key="page.orders.size"/>
+                            <fmt:message key="page.user_orders.name_transport"/>
                         </div>
                         <div class="cpl-md-2 txt1 text-left">
-                            <fmt:message key="page.orders.weight"/>
+                            <fmt:message key="page.user_orders.date"/>
                         </div>
                     </div>
-                    <c:forEach var="clientProducts" items="${sessionScope.clientProducts}">
-                        <div class="row">
-                            <div class="col-md-3 txt1 text-left">
-                                <c:out value="${clientProducts.client}"/>
-                            </div>
-                            <div class="col-md-3 txt1 text-left">
-                                <c:out value="${clientProducts.product}"/>
-                            </div>
-                            <div class="col-md-4 txt1 text-left">
-                                <fmt:message key="page.orders.size"/>
-                            </div>
-                            <div class="col-md-2 txt1 text-left">
-                                <fmt:message key="page.orders.size"/>
-                            </div>
-                        </div>
-                    </c:forEach>
                 </div>
             </c:if>
             <c:if test="${sessionScope.user.userStatus == 'NON_CONFIRMED'}">

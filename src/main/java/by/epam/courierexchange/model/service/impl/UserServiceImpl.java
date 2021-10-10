@@ -86,9 +86,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean updatePassword(User user) throws ServiceException {
-        // TODO: 11.09.2021 !!!
-        return false;
+    public boolean updatePassword(String id, String password) throws ServiceException {
+        if(!UserValidator.passwordIsValid(password) && !UserValidator.numberIsValid(id)){
+            return false;
+        }
+        try{
+            return userDao.updatePasswordById(Long.parseLong(id), PasswordEncryption.encode(password)) == 1;
+        }catch (DaoException e){
+            logger.error("Exception while working with the database ", e);
+            throw new ServiceException("exception while working with the database ", e);
+        }
+    }
+
+    public Optional<User> selectByMail(String mail) throws ServiceException{
+        if (!UserValidator.emailIsValid(mail)){
+            return Optional.empty();
+        }
+        try{
+            return userDao.selectByMail(mail);
+        }catch (DaoException e){
+            logger.error("Exception while working with the database ", e);
+            throw new ServiceException("exception while working with the database ", e);
+        }
     }
 
     public boolean uploadImgPath(long id, String name) throws ServiceException{
@@ -115,6 +134,34 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException e){
             logger.error("DaoException to the find file path: ", e);
             throw new ServiceException("DaoException to the find file path: ", e);
+        }
+    }
+
+    @Override
+    public Optional<User> changePassword(User user, String password, String newPassword) throws ServiceException {
+        if(!UserValidator.passwordIsValid(password) && !UserValidator.passwordIsValid(newPassword)){
+            return Optional.empty();
+        }
+        if(!user.getPassword().equals(PasswordEncryption.encode(password))){
+            return Optional.empty();
+        }
+        try {
+            userDao.updatePasswordById(user.getId(), PasswordEncryption.encode(newPassword));
+            user = new User.UserBuilder()
+                    .setPassword(PasswordEncryption.encode(newPassword))
+                    .setId(user.getId())
+                    .setImage(user.getImage())
+                    .setLogin(user.getLogin())
+                    .setMail(user.getMail())
+                    .setName(user.getName())
+                    .setSurname(user.getSurname())
+                    .setUserStatus(user.getUserStatus())
+                    .setPhone(user.getPhone())
+                    .build();
+            return Optional.of(user);
+        } catch (DaoException e) {
+            logger.error("DaoException to the update password: ", e);
+            throw new ServiceException("DaoException to the update password: ", e);
         }
     }
 
@@ -146,4 +193,63 @@ public class UserServiceImpl implements UserService {
         return optionalUser;
     }
 
+    @Override
+    public User confirmProfile(User user) throws ServiceException {
+        user = new User.UserBuilder()
+                .setUserStatus(UserStatus.CONFIRMED)
+                .setPhone(user.getPhone())
+                .setSurname(user.getSurname())
+                .setName(user.getName())
+                .setMail(user.getMail())
+                .setPassword(user.getPassword())
+                .setLogin(user.getLogin())
+                .setImage(user.getImage())
+                .setId(user.getId())
+                .build();
+        try{
+            userDao.update(user);
+        } catch (DaoException e){
+            logger.error("DaoException to the update user status: ", e);
+            throw new ServiceException("DaoException to the user status: ", e);
+        }
+        return user;
+    }
+
+    @Override
+    public Optional<User> changeRole(User user) throws ServiceException {
+//        if(user.getUserStatus() != UserStatus.COURIER_CONFIRMED || user.getUserStatus() != UserStatus.CONFIRMED)
+//            return Optional.empty();
+        try{
+            if(user.getUserStatus() == UserStatus.COURIER_CONFIRMED){
+                user = new User.UserBuilder()
+                        .setUserStatus(UserStatus.CONFIRMED)
+                        .setPhone(user.getPhone())
+                        .setSurname(user.getSurname())
+                        .setName(user.getName())
+                        .setMail(user.getMail())
+                        .setPassword(user.getPassword())
+                        .setLogin(user.getLogin())
+                        .setImage(user.getImage())
+                        .setId(user.getId())
+                        .build();
+            }else{
+                user = new User.UserBuilder()
+                        .setUserStatus(UserStatus.COURIER_CONFIRMED)
+                        .setPhone(user.getPhone())
+                        .setSurname(user.getSurname())
+                        .setName(user.getName())
+                        .setMail(user.getMail())
+                        .setPassword(user.getPassword())
+                        .setLogin(user.getLogin())
+                        .setImage(user.getImage())
+                        .setId(user.getId())
+                        .build();
+            }
+            userDao.update(user);
+        } catch (DaoException e){
+            logger.error("DaoException to the update user status: ", e);
+            throw new ServiceException("DaoException to the user status: ", e);
+        }
+        return Optional.of(user);
+    }
 }

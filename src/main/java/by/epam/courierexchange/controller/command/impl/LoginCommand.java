@@ -19,6 +19,8 @@ import static by.epam.courierexchange.controller.command.RequestParameter.LOGIN;
 import static by.epam.courierexchange.controller.command.RequestParameter.PASSWORD;
 
 public class LoginCommand implements Command {
+    private final String role_client = "client";
+    private final String role_admin = "admin";
 
     @Override
     public CommandResult execute(HttpServletRequest request) {
@@ -33,12 +35,18 @@ public class LoginCommand implements Command {
                 HttpSession session = request.getSession(true);
                 session.setAttribute(SessionAttribute.USER, user);
                 switch (user.getUserStatus()){
-                    case CONFIRMED ->
-                            commandResult = new CommandResult(PROFILE_PAGE, FORWARD);
+                    case CONFIRMED -> {
+                        commandResult = new CommandResult(PROFILE_PAGE, FORWARD);
+                    }
+                    case COURIER_CONFIRMED -> {
+                        commandResult = new CommandResult(PROFILE_PAGE, FORWARD);
+                    }
                     case NON_CONFIRMED ->
                             commandResult = new CommandResult(PROFILE_PAGE, FORWARD);
-                    case ADMIN ->
-                            commandResult = new CommandResult(ADMIN_PAGE, FORWARD);
+                    case ADMIN -> {
+                        session.setAttribute(SessionAttribute.USER_ROLE, role_admin);
+                        commandResult = new CommandResult(ADMIN_PAGE, FORWARD);
+                    }
                     case BANED -> {
                         request.setAttribute(BANNED_USER, true);
                         commandResult = new CommandResult(LOGIN_PAGE, FORWARD);

@@ -3,6 +3,7 @@ package by.epam.courierexchange.model.service.impl;
 import by.epam.courierexchange.exception.DaoException;
 import by.epam.courierexchange.exception.ServiceException;
 import by.epam.courierexchange.model.dao.impl.ClientDaoImpl;
+import by.epam.courierexchange.model.entity.Client;
 import by.epam.courierexchange.model.entity.ClientProduct;
 import by.epam.courierexchange.model.service.ClientService;
 import org.apache.logging.log4j.LogManager;
@@ -31,6 +32,16 @@ public class ClientServiceImpl implements ClientService {
         } catch (DaoException e) {
             logger.error("DaoException to the create product-client: ", e);
             throw new ServiceException("DaoException to the create product-client: ", e);
+        }
+    }
+
+    @Override
+    public boolean createClient(Long idUser) throws ServiceException {
+        try{
+            return clientDao.createById(idUser);
+        }catch (DaoException e){
+            logger.error("DaoException to the create client: ", e);
+            throw new ServiceException("DaoException to the create client: ", e);
         }
     }
 }

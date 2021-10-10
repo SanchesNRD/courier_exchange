@@ -17,8 +17,6 @@
                 <fmt:message key="sidebar.user.myorders"/></a></li>
             <li><a href="${pageContext.request.contextPath}/controller?command=go_to_history_page">
                 <fmt:message key="sidebar.user.history"/></a></li>
-            <li><a href="${pageContext.request.contextPath}/controller?command=go_to_my_couriers_page">
-                <fmt:message key="sidebar.user.mycourier"/></a></li>
             <li style="margin-top: 60px">
                 <a href="${pageContext.request.contextPath}/controller?command=change_locale&locale=${sessionScope.locale}&current_url=${pageContext.request.requestURL}">
                 <fmt:message key="sidebar.user.language"/></a></li>

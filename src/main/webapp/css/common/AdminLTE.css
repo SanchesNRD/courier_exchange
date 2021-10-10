@@ -84,6 +84,10 @@ body {
   background-color: #fbfbfb;
   z-index: 800;
 }
+.content-confirm{
+  background-color: #bcddbc;
+  padding: 10px 20px;
+}
 .main-footer {
   font-size: x-small;
   background: #d7f0f0;
@@ -778,6 +782,7 @@ iframe {
   transition: all 0.4s;
 }
 .login100-form-btn:hover {
+  color: #ffffff;
   background-color: #72afd2;
 }
 .signup-form-btn {

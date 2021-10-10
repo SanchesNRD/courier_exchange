@@ -2,8 +2,7 @@ package by.epam.courierexchange.controller.command;
 
 import by.epam.courierexchange.controller.command.impl.*;
 import by.epam.courierexchange.controller.command.impl.go.*;
-import by.epam.courierexchange.controller.command.impl.user.CreateNewOrder;
-import by.epam.courierexchange.controller.command.impl.user.UpdateProfile;
+import by.epam.courierexchange.controller.command.impl.user.*;
 
 import java.util.EnumMap;
 
@@ -22,13 +21,20 @@ public class CommandProvider {
         commands.put(START_PAGE, new StartPageCommand());
         commands.put(UPDATE_PROFILE, new UpdateProfile());
         commands.put(CREATE_NEW_ORDER, new CreateNewOrder());
+        commands.put(UPDATE_PASSWORD, new UpdatePassword());
+        commands.put(CHANGE_PASSWORD, new ChangePassword());
+        commands.put(CONFIRM_PROFILE, new ConfirmProfile());
+        commands.put(CHANGE_USER_ROLE, new ChangeRole());
 
+        commands.put(GO_TO_NEW_PASS, new GoToNewPassword());
         commands.put(GO_TO_SIGN_UP, new GoToSignUp());
         commands.put(GO_TO_LOGIN, new GoToLogin());
         commands.put(GO_TO_FORGOT_PASS, new GoToForgotPassword());
         commands.put(GO_TO_USER_PROFILE, new GoToUserProfile());
         commands.put(GO_TO_USER_ALL_ORDERS, new GoToUserAllOrders());
         commands.put(GO_TO_NEW_ORDER_PAGE, new GoToNewOrderPage());
+        commands.put(GO_TO_MY_ORDERS_PAGE, new GoToClientOrders());
+        commands.put(GO_TO_HISTORY_PAGE, new GoToUserHistory());
     }
 
     public static CommandProvider getInstance(){

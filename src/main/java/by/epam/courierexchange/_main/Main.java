@@ -27,15 +27,14 @@ import static by.epam.courierexchange.controller.command.RequestParameter.PHONE;
 public class Main {
     private static final Logger logger = LogManager.getLogger(Main.class);
     public static void main(String... args) {
-//        ClientServiceImpl clientService = ClientServiceImpl.getInstance();
-//        ProductServiceImpl productService = ProductServiceImpl.getInstance();
-//        try {
-//            Optional<Product> optionalProduct;
-//            optionalProduct = productService.findProductByName("Первый");
-//            System.out.println(optionalProduct.get().toString());
-//        } catch (ServiceException e) {
-//            e.printStackTrace();
-//        }
-        System.out.println(UserValidator.nameIsValid("Первый"));
+        Optional<User> optionalUser;
+        UserServiceImpl userService = UserServiceImpl.getInstance();
+        UserDaoImpl userDao = UserDaoImpl.getInstance();
+        try {
+            int result = userDao.updatePasswordById(7, PasswordEncryption.encode("b12345678"));
+            System.out.println(result);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
     }
 }

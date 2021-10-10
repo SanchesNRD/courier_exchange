@@ -5,36 +5,35 @@
 <fmt:setBundle basename="prop.pagecontent"/>
 <html>
 <head>
-    <title><fmt:message key="page.forgotpass.title"/></title>
+    <title><fmt:message key="page.newpass.title"/></title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/auth/util.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/auth/main.css">
 </head>
 <body>
 <div class="limiter">
-    <a class="container-language" href="${pageContext.request.contextPath}/controller?command=change_locale&locale=${sessionScope.locale}&current_url=${pageContext.request.requestURL}">
-        <fmt:message key="sidebar.user.language"/>
-    </a>
     <div class="container-login100">
         <div class="wrap-login100">
+            ${requestScope.user_id}
             <form action="${pageContext.request.contextPath}\controller" name="loginForm" method="POST" class="login100-form validate-form">
-                <input type="hidden" name="command" value="pass_recovery"/>
+                <input type="hidden" name="command" value="update_password"/>
+                <input type="hidden" name="user_id" value=${requestScope.user_id}>
 
                 <div class="login100-form-title">
-                    <fmt:message key="page.forgotpass.heading"/>
+                    <fmt:message key="page.newpass.heading"/>
                 </div>
                 <div class="txt1">
-                    <fmt:message key="page.signup.mail"/>
+                    <fmt:message key="page.signup.password"/>
                 </div>
                 <div class="wrap-input100 validate-input" data-validate = "Username is required">
-                    <input class="input100" type="email" name="mail"
-                           pattern="^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$"/>
+                    <input class="input100" type="password" name="password"
+                           pattern="(?=.*[\d])(?=.*[a-z])[\w]{8,40}"/>
                     <span class="focus-input100"></span>
                 </div>
 
                 <div class="forgot-pass">
                     <c:if test="${requestScope.wrong_validation == true}">
                         <span class="error-content">
-                            <fmt:message key="page.forgotpass.validation"/>
+                            <fmt:message key="page.newpass.validation"/>
                         </span>
                     </c:if>
                     <a href='${pageContext.request.contextPath}/jsp/auth/login.jsp' class="txt3">
@@ -43,7 +42,7 @@
                 </div>
 
                 <div class="container-login100-form-btn">
-                    <input type="submit" value="<fmt:message key="page.forgotpass.sent"/>" class="signup-form-btn"/>
+                    <input type="submit" value="<fmt:message key="page.newpass.update"/>" class="signup-form-btn"/>
                 </div>
             </form>
         </div>

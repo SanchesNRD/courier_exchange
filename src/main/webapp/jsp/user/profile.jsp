@@ -16,12 +16,29 @@
 
     <jsp:include page="../common/header.jsp"/>
 
-    <jsp:include page="../common/user_sidebar.jsp"/>
+    <c:if test="${sessionScope.user.userStatus == 'COURIER_CONFIRMED'}">
+        <jsp:include page="../common/courier_sidebar.jsp"/>
+    </c:if>
+    <c:if test="${sessionScope.user.userStatus == 'CONFIRMED' || sessionScope.user.userStatus == 'NON_CONFIRMED'}">
+        <jsp:include page="../common/user_sidebar.jsp"/>
+    </c:if>
+    <c:if test="${sessionScope.user.userStatus == 'ADMIN'}">
+        <jsp:include page="../common/admin_sidebar.jsp"/>
+    </c:if>
 
     <div class="content-wrapper">
+        <c:if test="${sessionScope.user.userStatus == 'NON_CONFIRMED'}">
+            <div class="content-confirm">
+                <fmt:message key="page.profile.confirm"/>
+                <p>
+                <a href="${pageContext.request.contextPath}/controller?command=confirm_profile">
+                    <fmt:message key="page.profile.confirm_but"/>
+                </a>
+            </div>
+        </c:if>
         <section class="content-header">
             <h1>
-                <fmt:message key="page.profile.title"/>
+                <fmt:message key="page.profile.heading_profile"/>
             </h1>
         </section>
         <section class="content">
@@ -82,13 +99,64 @@
                         </div>
                     </div>
                 </div>
-
-
                 <div class="col-md-offset-2 container-login100-form-btn ">
                     <input type="submit" value="<fmt:message key="page.profile.update"/>" class="login100-form-btn"/>
                 </div>
             </form>
-            <form method="post" action="${pageContext.request.contextPath}/image_display" enctype="multipart/form-data" class="wrap-login100">
+            <form action="${pageContext.request.contextPath}/controller" class="wrap-login100">
+                <input type="hidden" name="command" value="change_password"/>
+                <div class="form-group row">
+                    <div class="col-md-2 txt1 text-right">
+                        <fmt:message key="page.profile.password"/></div>
+                    <div class="col-md-6">
+                        <div class="wrap-input100">
+                            <input class="validate-input input100" type="password" name="password"
+                                   pattern="(?=.*[\d])(?=.*[a-z])[\w]{8,40}">
+                            <span class="focus-input100"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-2 txt1 text-right">
+                        <fmt:message key="page.profile.new_password"/></div>
+                    <div class="col-md-6">
+                        <div class="wrap-input100">
+                            <input class="validate-input input100" type="password" name="new_password"
+                                   pattern="(?=.*[\d])(?=.*[a-z])[\w]{8,40}">
+                            <span class="focus-input100"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-offset-2 container-login100-form-btn ">
+                    <input type="submit" value="<fmt:message key="page.profile.change"/>" class="login100-form-btn"/>
+                </div>
+                <c:if test="${sessionScope.user.userStatus == 'CONFIRMED' || sessionScope.user.userStatus == 'COURIER_CONFIRMED'}">
+                    <div class="form-group row" style="margin-top: 60px">
+                        <div class="col-md-2 txt1 text-right">
+                            <fmt:message key="page.profile.role"/></div>
+                        <div class="col-md-6">
+                            <div class="wrap-input100">
+                                <c:if test="${sessionScope.user.userStatus == 'CONFIRMED'}">
+                                    <input class="validate-input input100" type="text" name="login" disabled="disabled"
+                                           value="<fmt:message key="page.profile.role_client"/>"/>
+                                </c:if>
+                                <c:if test="${sessionScope.user.userStatus == 'COURIER_CONFIRMED'}">
+                                    <input class="validate-input input100" type="text" name="login" disabled="disabled"
+                                           value="<fmt:message key="page.profile.role_courier"/>"/>
+                                </c:if>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-offset-2 container-login100-form-btn" style="margin-top: 20px">
+                        <a href="${pageContext.request.contextPath}/controller?command=change_user_role"
+                           class="login100-form-btn">
+                            <fmt:message key="page.profile.change_role"/>
+                        </a>
+                    </div>
+                </c:if>
+            </form>
+            <form method="post" action="${pageContext.request.contextPath}/image_display"
+                  enctype="multipart/form-data" class="wrap-login100">
                 <div class="form-group row">
                     <div class="col-md-2 txt1 text-right">
                         <fmt:message key="page.profile.choose_file"/></div>

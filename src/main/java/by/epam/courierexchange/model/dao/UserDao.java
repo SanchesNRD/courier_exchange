@@ -9,4 +9,6 @@ public interface UserDao extends BaseDao<Long, User>{
     Optional<User> selectByLogin(String login) throws DaoException;
     boolean uploadImgPath(long id, String path) throws DaoException;
     Optional<String> findImgPath(long id) throws DaoException;
+    Optional<User> selectByMail(String mail) throws DaoException;
+    int updatePasswordById(long id, String password) throws DaoException;
 }

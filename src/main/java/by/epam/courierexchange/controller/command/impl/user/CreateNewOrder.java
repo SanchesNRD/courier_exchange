@@ -26,9 +26,8 @@ public class CreateNewOrder implements Command {
         String height = request.getParameter(RequestParameter.HEIGHT);
         String length = request.getParameter(RequestParameter.LENGTH);
         String type = request.getParameter(RequestParameter.ORDER_TYPE);
-        boolean result;
         try {
-            result = productService.createProduct(name, weight, width, height, length, type);
+            productService.createProduct(name, weight, width, height, length, type);
             commandResult = new CommandResult(PagePath.NEW_ORDER_PAGE, FORWARD);
             Optional<Product> optionalProduct;
             optionalProduct = productService.findProductByName(name);
@@ -38,7 +37,7 @@ public class CreateNewOrder implements Command {
                 clientService.createProductClient(user.getId(), product.getId());
             }
             else{
-                // TODO: 06.10.2021
+                return new CommandResult(PagePath.ERROR_PAGE, FORWARD);
             }
         } catch (ServiceException e) {
             return new CommandResult(PagePath.ERROR_PAGE, FORWARD);

@@ -6,6 +6,8 @@ public class RequestAttribute {
     public static final String EXCEPTION = "exception";
     public static final String WRONG_SIGN_UP = "wrong_sign_up";
     public static final String WRONG_VALIDATION = "wrong_validation";
+    public static final String USER_ID = "user_id";
+    public static final String PASSWORD_CHANGE_SUC = "password_change_suc";
 
     private RequestAttribute(){}
 }

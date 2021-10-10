@@ -44,6 +44,8 @@ public class ClientDaoImpl implements ClientDao {
             "DELETE FROM clients WHERE id=?";
     private static final String SQL_INSERT_CLIENT=
             "INSERT INTO clients (id, address_id) VALUES (?,?)";
+    private static final String SQL_INSERT_CLIENT_BY_ID=
+            "INSERT INTO clients (id) VALUES (?)";
     private static final String SQL_UPDATE_CLIENT=
             "UPDATE clients SET address_id=? WHERE id=?";
 
@@ -217,6 +219,20 @@ public class ClientDaoImpl implements ClientDao {
         {
             statement.setLong(1, client.getId());
             statement.setLong(2, client.getAddress());
+            return statement.execute();
+        } catch (SQLException e){
+            logger.error("SQL exception in method createClient ", e);
+            throw new DaoException("SQL exception in method createClient ", e);
+        }
+    }
+
+    @Override
+    public boolean createById(long userId) throws DaoException {
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_INSERT_CLIENT_BY_ID))
+        {
+            statement.setLong(1, userId);
             return statement.execute();
         } catch (SQLException e){
             logger.error("SQL exception in method createClient ", e);
