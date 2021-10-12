@@ -194,7 +194,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User confirmProfile(User user) throws ServiceException {
+    public int confirmProfile(User user) throws ServiceException {
         user = new User.UserBuilder()
                 .setUserStatus(UserStatus.CONFIRMED)
                 .setPhone(user.getPhone())
@@ -207,49 +207,30 @@ public class UserServiceImpl implements UserService {
                 .setId(user.getId())
                 .build();
         try{
-            userDao.update(user);
+            return userDao.update(user);
         } catch (DaoException e){
             logger.error("DaoException to the update user status: ", e);
             throw new ServiceException("DaoException to the user status: ", e);
         }
-        return user;
     }
 
     @Override
     public Optional<User> changeRole(User user) throws ServiceException {
-//        if(user.getUserStatus() != UserStatus.COURIER_CONFIRMED || user.getUserStatus() != UserStatus.CONFIRMED)
-//            return Optional.empty();
+        if(user.getUserStatus() != UserStatus.COURIER_CONFIRMED && user.getUserStatus() != UserStatus.CONFIRMED) {
+            return Optional.empty();
+        }
         try{
+            UserStatus userStatus;
             if(user.getUserStatus() == UserStatus.COURIER_CONFIRMED){
-                user = new User.UserBuilder()
-                        .setUserStatus(UserStatus.CONFIRMED)
-                        .setPhone(user.getPhone())
-                        .setSurname(user.getSurname())
-                        .setName(user.getName())
-                        .setMail(user.getMail())
-                        .setPassword(user.getPassword())
-                        .setLogin(user.getLogin())
-                        .setImage(user.getImage())
-                        .setId(user.getId())
-                        .build();
+               userStatus = UserStatus.CONFIRMED;
             }else{
-                user = new User.UserBuilder()
-                        .setUserStatus(UserStatus.COURIER_CONFIRMED)
-                        .setPhone(user.getPhone())
-                        .setSurname(user.getSurname())
-                        .setName(user.getName())
-                        .setMail(user.getMail())
-                        .setPassword(user.getPassword())
-                        .setLogin(user.getLogin())
-                        .setImage(user.getImage())
-                        .setId(user.getId())
-                        .build();
+                userStatus = UserStatus.COURIER_CONFIRMED;
             }
-            userDao.update(user);
+            userDao.updateStatus(user.getId(), userStatus);
+            return userDao.selectById(user.getId());
         } catch (DaoException e){
             logger.error("DaoException to the update user status: ", e);
             throw new ServiceException("DaoException to the user status: ", e);
         }
-        return Optional.of(user);
     }
 }

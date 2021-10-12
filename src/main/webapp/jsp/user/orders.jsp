@@ -43,16 +43,16 @@
                     <c:forEach var="clientProducts" items="${sessionScope.clientProducts}">
                         <div class="row">
                             <div class="col-md-3 txt1 text-left">
-                                <c:out value="${clientProducts.client}"/>
+                                <c:out value="${clientProducts.client.login}"/>
                             </div>
                             <div class="col-md-3 txt1 text-left">
-                                <c:out value="${clientProducts.product}"/>
+                                <c:out value="${clientProducts.product.height}"/>
                             </div>
                             <div class="col-md-4 txt1 text-left">
-                                <fmt:message key="page.orders.size"/>
+                                <c:out value="${clientProducts.product.length}"/>
                             </div>
                             <div class="col-md-2 txt1 text-left">
-                                <fmt:message key="page.orders.size"/>
+                                <c:out value="${clientProducts.address.country}"/>
                             </div>
                         </div>
                     </c:forEach>

@@ -50,6 +50,9 @@ public class UserDaoImpl implements UserDao {
     private static final String SQL_UPDATE_PASSWORD= """
             UPDATE users SET password=? WHERE id=?
             """;
+    private static final String SQL_UPDATE_STATUS= """
+            UPDATE users SET status_id=? WHERE id=?
+            """;
     private static final String SQL_UPLOAD_IMG_PATH_BY_ID = """
             UPDATE users SET image=? WHERE id=?
             """;
@@ -288,5 +291,20 @@ public class UserDaoImpl implements UserDao {
             throw new DaoException("SQL exception in method in findImgPath ", e);
         }
         return Optional.ofNullable(path);
+    }
+
+    @Override
+    public int updateStatus(long id, UserStatus userStatus) throws DaoException {
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_STATUS))
+        {
+            statement.setShort(1, userStatus.getStatusId());
+            statement.setLong(2, id);
+            return statement.executeUpdate();
+        } catch (SQLException e){
+            logger.error("SQL exception in method updateUserStatus ", e);
+            throw new DaoException("SQL exception in method updateUserStatus ", e);
+        }
     }
 }

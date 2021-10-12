@@ -13,6 +13,6 @@ public interface UserService {
     String findImgPath(long id) throws ServiceException;
     Optional<User> updateProfile(String name, String surname, String phone, User user) throws ServiceException;
     Optional<User> changePassword(User user, String password, String newPassword) throws ServiceException;
-    User confirmProfile(User user) throws ServiceException;
+    int confirmProfile(User user) throws ServiceException;
     Optional<User> changeRole(User user) throws ServiceException;
 }

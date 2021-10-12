@@ -34,7 +34,7 @@ public class CreateNewOrder implements Command {
             if(optionalProduct.isPresent()){
                 Product product = optionalProduct.get();
                 User user = (User)session.getAttribute(SessionAttribute.USER);
-                clientService.createProductClient(user.getId(), product.getId());
+                clientService.createProductClient(user.getId(), product.getId(), 1l);
             }
             else{
                 return new CommandResult(PagePath.ERROR_PAGE, FORWARD);

@@ -4,7 +4,9 @@ import by.epam.courierexchange.controller.command.PagePath;
 import by.epam.courierexchange.controller.command.SessionAttribute;
 import by.epam.courierexchange.exception.DaoException;
 import by.epam.courierexchange.exception.ServiceException;
+import by.epam.courierexchange.model.dao.impl.ClientDaoImpl;
 import by.epam.courierexchange.model.dao.impl.UserDaoImpl;
+import by.epam.courierexchange.model.entity.ClientProduct;
 import by.epam.courierexchange.model.entity.Product;
 import by.epam.courierexchange.model.entity.User;
 import by.epam.courierexchange.model.entity.UserStatus;
@@ -19,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 
 import static by.epam.courierexchange.controller.command.RequestParameter.*;
@@ -27,12 +30,14 @@ import static by.epam.courierexchange.controller.command.RequestParameter.PHONE;
 public class Main {
     private static final Logger logger = LogManager.getLogger(Main.class);
     public static void main(String... args) {
-        Optional<User> optionalUser;
+        Optional<ClientProduct> optional;
+        List<ClientProduct> list;
         UserServiceImpl userService = UserServiceImpl.getInstance();
         UserDaoImpl userDao = UserDaoImpl.getInstance();
+        ClientDaoImpl clientDao = ClientDaoImpl.getInstance();
         try {
-            int result = userDao.updatePasswordById(7, PasswordEncryption.encode("b12345678"));
-            System.out.println(result);
+            list = clientDao.selectAllClientProduct();
+            System.out.println(list.get(0).toString());
         } catch (DaoException e) {
             e.printStackTrace();
         }

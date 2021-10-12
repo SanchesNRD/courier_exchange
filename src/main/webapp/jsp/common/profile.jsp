@@ -14,16 +14,16 @@
 <body>
 <div class="wrapper">
 
-    <jsp:include page="../common/header.jsp"/>
+    <jsp:include page="header.jsp"/>
 
     <c:if test="${sessionScope.user.userStatus == 'COURIER_CONFIRMED'}">
-        <jsp:include page="../common/courier_sidebar.jsp"/>
+        <jsp:include page="courier_sidebar.jsp"/>
     </c:if>
     <c:if test="${sessionScope.user.userStatus == 'CONFIRMED' || sessionScope.user.userStatus == 'NON_CONFIRMED'}">
-        <jsp:include page="../common/user_sidebar.jsp"/>
+        <jsp:include page="user_sidebar.jsp"/>
     </c:if>
     <c:if test="${sessionScope.user.userStatus == 'ADMIN'}">
-        <jsp:include page="../common/admin_sidebar.jsp"/>
+        <jsp:include page="admin_sidebar.jsp"/>
     </c:if>
 
     <div class="content-wrapper">
@@ -171,7 +171,7 @@
         </section>
     </div>
 
-    <jsp:include page="../common/footer.jsp"/>
+    <jsp:include page="footer.jsp"/>
 </div>
 
 <script src="${pageContext.request.contextPath}/lib/bootstrap/dist/js/bootstrap.js"></script>

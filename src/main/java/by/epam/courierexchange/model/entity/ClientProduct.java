@@ -1,23 +1,31 @@
 package by.epam.courierexchange.model.entity;
 
 public class ClientProduct extends AbstractEntity{
-    private long client;
-    private long product;
+    private Client client;
+    private Product product;
+    private Address address;
 
+    public Address getAddress() {
+        return address;
+    }
 
-    public long getClient() {
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public Client getClient() {
         return client;
     }
 
-    public void setClient(long client) {
+    public void setClient(Client client) {
         this.client = client;
     }
 
-    public long getProduct() {
+    public Product getProduct() {
         return product;
     }
 
-    public void setProduct(long product) {
+    public void setProduct(Product product) {
         this.product = product;
     }
 
@@ -26,19 +34,26 @@ public class ClientProduct extends AbstractEntity{
         if (this == o) {
             return true;
         }
-        if (o==null || getClass()!=o.getClass()) {
+        if (!(o instanceof ClientProduct)) {
             return false;
         }
 
         ClientProduct that = (ClientProduct) o;
 
-        return product == that.product && client == that.client;
+        if (client != null ? !client.equals(that.client) : that.client != null) {
+            return false;
+        }
+        if (product != null ? !product.equals(that.product) : that.product != null) {
+            return false;
+        }
+        return address != null ? address.equals(that.address) : that.address == null;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (client ^ (client >>> 32));
-        result = 31 * result + (int) (product ^ (product >>> 32));
+        int result = client != null ? client.hashCode() : 0;
+        result = 31 * result + (product != null ? product.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
         return result;
     }
 
@@ -47,6 +62,7 @@ public class ClientProduct extends AbstractEntity{
         final StringBuilder sb = new StringBuilder("ClientProduct{");
         sb.append("client=").append(client);
         sb.append(", product=").append(product);
+        sb.append(", address=").append(address);
         sb.append('}');
         return sb.toString();
     }

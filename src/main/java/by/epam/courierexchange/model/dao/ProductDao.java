@@ -9,7 +9,6 @@ import java.util.Optional;
 
 public interface ProductDao extends BaseDao<Long, Product>{
     List<Product> selectByType(Integer type) throws DaoException;
-    Optional<ClientProduct> selectClientProductById(Long id) throws DaoException;
     Optional<Product> selectByName(String name) throws DaoException;
 
 }
