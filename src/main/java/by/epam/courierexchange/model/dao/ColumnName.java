@@ -20,6 +20,7 @@ public class ColumnName {
 
     //clients
     public static final String ADDRESS_ID = "address_id";
+    public static final String CLIENT_POINT_ID = "clients.id";
     //products
     public static final String PRODUCT_NAME = "name";
     public static final String PRODUCT_WEIGHT = "weight";

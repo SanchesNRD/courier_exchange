@@ -17,6 +17,7 @@ public final class PagePath {
     public static final String USER_ALL_ORDERS_PAGE = "jsp/user/orders.jsp";
     public static final String USER_ORDERS_PAGE = "jsp/user/user_orders.jsp";
     public static final String USER_HISTORY_PAGE = "jsp/user/history.jsp";
+    public static final String CLIENT_ADDRESS = "jsp/user/address.jsp";
 
     private PagePath(){}
 }

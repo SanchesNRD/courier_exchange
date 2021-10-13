@@ -17,6 +17,11 @@ public class RequestParameter {
     public static final String ORDER_TYPE = "order_type";
     public static final String USER_ID = "user_id";
     public static final String NEW_PASSWORD = "new_password";
+    public static final String COUNTRY = "country";
+    public static final String CITY = "city";
+    public static final String STREET = "street";
+    public static final String STREET_NUMBER = "street_number";
+    public static final String APARTMENT = "apartment";
 
     private RequestParameter(){}
 }

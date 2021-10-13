@@ -30,7 +30,6 @@ public class GoToUserAllOrders implements Command {
         if(user != null) {
             try {
                 clientProducts = clientDao.selectAllClientProduct();
-                // TODO: 06.10.2021 show full info about product and client
                 session.setAttribute(SessionAttribute.CLIENT_PRODUCT, clientProducts);
             } catch (DaoException e) {
                 request.setAttribute(EXCEPTION, e);

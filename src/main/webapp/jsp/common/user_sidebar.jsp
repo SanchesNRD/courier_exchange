@@ -9,6 +9,8 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li><a href="${pageContext.request.contextPath}/controller?command=go_to_user_profile">
                 <fmt:message key="sidebar.user.profile"/></a></li>
+            <li><a href="${pageContext.request.contextPath}/controller?command=go_to_client_address">
+                <fmt:message key="sidebar.user.address"/></a></li>
             <li><a href="${pageContext.request.contextPath}/controller?command=go_to_user_all_orders">
                 <fmt:message key="sidebar.user.orders"/></a></li>
             <li><a href="${pageContext.request.contextPath}/controller?command=go_to_new_order_page">

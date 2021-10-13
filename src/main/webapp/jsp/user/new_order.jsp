@@ -24,7 +24,8 @@
             </h1>
         </section>
         <section class="content">
-            <c:if test="${sessionScope.user.userStatus == 'CONFIRMED'}">
+            <c:if test="${sessionScope.user.userStatus == 'CONFIRMED'
+                    && sessionScope.client.address != 0}">
                 <form action="${pageContext.request.contextPath}/controller" class="wrap-login100">
                     <input type="hidden" name="command" value="create_new_order"/>
                     <div class="form-group row">
@@ -108,6 +109,11 @@
                         <input type="submit" value="<fmt:message key="page.neworder.create"/>" class="login100-form-btn"/>
                     </div>
                 </form>
+            </c:if>
+            <c:if test="${sessionScope.client.address == 0}">
+                <div class="wrap-login100">
+                    Введите данные своего адреса
+                </div>
             </c:if>
             <c:if test="${sessionScope.user.userStatus == 'NON_CONFIRMED'}">
                 <div class="wrap-login100">

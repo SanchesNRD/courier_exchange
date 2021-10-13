@@ -6,10 +6,7 @@ import by.epam.courierexchange.exception.DaoException;
 import by.epam.courierexchange.exception.ServiceException;
 import by.epam.courierexchange.model.dao.impl.ClientDaoImpl;
 import by.epam.courierexchange.model.dao.impl.UserDaoImpl;
-import by.epam.courierexchange.model.entity.ClientProduct;
-import by.epam.courierexchange.model.entity.Product;
-import by.epam.courierexchange.model.entity.User;
-import by.epam.courierexchange.model.entity.UserStatus;
+import by.epam.courierexchange.model.entity.*;
 import by.epam.courierexchange.model.service.impl.ClientServiceImpl;
 import by.epam.courierexchange.model.service.impl.ProductServiceImpl;
 import by.epam.courierexchange.model.service.impl.UserServiceImpl;
@@ -35,9 +32,10 @@ public class Main {
         UserServiceImpl userService = UserServiceImpl.getInstance();
         UserDaoImpl userDao = UserDaoImpl.getInstance();
         ClientDaoImpl clientDao = ClientDaoImpl.getInstance();
+        Optional<Client> client;
         try {
-            list = clientDao.selectAllClientProduct();
-            System.out.println(list.get(0).toString());
+            client = clientDao.selectById(6l);
+            System.out.println(client.get().toString());
         } catch (DaoException e) {
             e.printStackTrace();
         }
