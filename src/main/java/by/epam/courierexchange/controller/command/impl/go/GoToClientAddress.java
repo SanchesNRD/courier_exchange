@@ -32,8 +32,8 @@ public class GoToClientAddress implements Command {
         if(user != null) {
             try {
                 client = clientDao.selectById(user.getId());
-                client.ifPresent(value -> session.setAttribute(SessionAttribute.CLIENT, value));
                 if(client.isPresent()){
+                    session.setAttribute(SessionAttribute.CLIENT, client.get());
                     long addressId = client.get().getAddress();
                     address = addressDao.selectById(addressId);
                     address.ifPresent(value -> session.setAttribute(SessionAttribute.ADDRESS, value));

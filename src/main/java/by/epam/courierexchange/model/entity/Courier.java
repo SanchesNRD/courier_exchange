@@ -2,10 +2,16 @@ package by.epam.courierexchange.model.entity;
 
 public class Courier extends User{
     private double rating;
+    private long transport;
 
     public Courier(CourierBuilder courierBuilder) {
         super(courierBuilder.builder);
         this.rating = courierBuilder.rating;
+        this.transport = courierBuilder.transport;
+    }
+
+    public long getTransport() {
+        return transport;
     }
 
     public double getRating() {
@@ -17,7 +23,7 @@ public class Courier extends User{
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof Courier)) {
             return false;
         }
         if (!super.equals(o)) {
@@ -26,7 +32,10 @@ public class Courier extends User{
 
         Courier courier = (Courier) o;
 
-        return Double.compare(courier.rating, rating) == 0;
+        if (Double.compare(courier.rating, rating) != 0) {
+            return false;
+        }
+        return transport == courier.transport;
     }
 
     @Override
@@ -35,14 +44,15 @@ public class Courier extends User{
         long temp;
         temp = Double.doubleToLongBits(rating);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (int) (transport ^ (transport >>> 32));
         return result;
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Courier{");
-        sb.append(super.toString());
-        sb.append(", rating=").append(rating);
+        sb.append("rating=").append(rating);
+        sb.append(", transport=").append(transport);
         sb.append('}');
         return sb.toString();
     }
@@ -51,6 +61,7 @@ public class Courier extends User{
 
         private UserBuilder builder;
         private double rating;
+        private long transport;
 
         public CourierBuilder setBuilder(UserBuilder builder) {
             this.builder = builder;
@@ -59,6 +70,11 @@ public class Courier extends User{
 
         public CourierBuilder setRating(double rating) {
             this.rating = rating;
+            return this;
+        }
+
+        public CourierBuilder setTransport(long transport){
+            this.transport = transport;
             return this;
         }
 

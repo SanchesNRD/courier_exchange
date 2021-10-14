@@ -22,6 +22,8 @@ public class RequestParameter {
     public static final String STREET = "street";
     public static final String STREET_NUMBER = "street_number";
     public static final String APARTMENT = "apartment";
+    public static final String SPEED = "speed";
+    public static final String TRANSPORT_TYPE = "transport_type";
 
     private RequestParameter(){}
 }

@@ -8,6 +8,8 @@ public class SessionAttribute {
     public static final String CLIENT_PRODUCT = "clientProducts";
     public static final String CLIENT = "client";
     public static final String ADDRESS = "address";
+    public static final String COURIER = "courier";
+    public static final String TRANSPORT = "transport";
 
     private SessionAttribute(){}
 }

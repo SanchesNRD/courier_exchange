@@ -2,6 +2,7 @@ package by.epam.courierexchange.controller.command;
 
 import by.epam.courierexchange.controller.command.impl.*;
 import by.epam.courierexchange.controller.command.impl.client.*;
+import by.epam.courierexchange.controller.command.impl.courier.UpdateCourierTranposrt;
 import by.epam.courierexchange.controller.command.impl.go.*;
 import by.epam.courierexchange.controller.command.impl.user.*;
 
@@ -27,7 +28,9 @@ public class CommandProvider {
         commands.put(CONFIRM_PROFILE, new ConfirmProfile());
         commands.put(CHANGE_USER_ROLE, new ChangeRole());
         commands.put(UPDATE_CLIENT_ADDRESS, new UpdateClientAddress());
+        commands.put(UPDATE_COURIER_TRANSPORT, new UpdateCourierTranposrt());
 
+        commands.put(GO_TO_COURIER_TRANSPORT, new GoToCourierTransport());
         commands.put(GO_TO_CLIENT_ADDRESS, new GoToClientAddress());
         commands.put(GO_TO_NEW_PASS, new GoToNewPassword());
         commands.put(GO_TO_SIGN_UP, new GoToSignUp());

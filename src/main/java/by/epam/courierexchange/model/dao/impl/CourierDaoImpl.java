@@ -22,31 +22,42 @@ public class CourierDaoImpl implements CourierDao {
     private static final CourierDaoImpl instance = new CourierDaoImpl();
 
     private static final String SQL_SELECT_ALL_COURIER="""
-            SELECT couriers.id, couriers.rating, users.login, users.mail, 
-            users.name, users.surname, users.phone, users.status_id 
-            FROM couriers, users
+           SELECT users.id, rating, transport_id, login, mail, 
+            password, name, surname, phone, status_id 
+            FROM couriers
+            INNER JOIN users ON couriers.id = users.id
             """;
     private static final String SQL_SELECT_BY_ID="""
-            SELECT couriers.id, couriers.rating, users.login, users.mail, 
-            users.name, users.surname, users.phone, users.status_id 
-            FROM couriers, users WHERE couriers.id=?
+            SELECT users.id, rating, transport_id, login, mail, 
+            password, name, surname, phone, status_id 
+            FROM couriers
+            INNER JOIN users ON couriers.id = users.id
+            WHERE couriers.id=?
             """;
     private static final String SQL_SELECT_BY_LOGIN="""
-            SELECT couriers.id, couriers.rating, users.login, users.mail, 
-            users.name, users.surname, users.phone, users.status_id 
-            FROM couriers, users WHERE users.login=?
+           SELECT users.id, rating, transport_id, login, mail, 
+            password, name, surname, phone, status_id 
+            FROM couriers
+            INNER JOIN users ON couriers.id = users.id
+            WHERE users.login=?
             """;
     private static final String SQL_SELECT_BY_RATING="""
-            SELECT couriers.id, couriers.rating, users.login, users.mail, 
-            users.name, users.surname, users.phone, users.status_id 
-            FROM couriers, users WHERE couriers.rating>=?
+           SELECT users.id, rating, transport_id, login, mail, 
+            password, name, surname, phone, status_id 
+            FROM couriers
+            INNER JOIN users ON couriers.id = users.id
+            WHERE couriers.rating>=?
             """;
     private static final String SQL_DELETE_BY_ID=
             "DELETE FROM couriers WHERE id=?";
     private static final String SQL_INSERT=
-            "INSERT INTO couriers (id, rating) VALUES (?,?)";
+            "INSERT INTO couriers (id, rating, transport_id) VALUES (?,?,?)";
+    private static final String SQL_INSERT_BY_ID=
+            "INSERT INTO couriers (id, rating) VALUES (?, ?)";
     private static final String SQL_UPDATE=
-            "UPDATE couriers SET rating=? WHERE id=?";
+            "UPDATE couriers SET rating=?, transport_id=? WHERE id=?";
+    private static final String SQL_UPDATE_TRANSPORT=
+            "UPDATE couriers SET transport_id=? WHERE id=?";
 
     private CourierDaoImpl(){}
 
@@ -65,6 +76,7 @@ public class CourierDaoImpl implements CourierDao {
             while (resultSet.next()){
                 Courier courier = new Courier.CourierBuilder()
                         .setRating(resultSet.getLong(COURIER_RATING))
+                        .setTransport(resultSet.getLong(TRANSPORT_ID))
                         .setBuilder(new User.UserBuilder()
                                 .setId(resultSet.getLong(USER_ID))
                                 .setLogin(resultSet.getString(USER_LOGIN))
@@ -96,7 +108,8 @@ public class CourierDaoImpl implements CourierDao {
                 return Optional.empty();
             }else {
                 Courier courier = new Courier.CourierBuilder()
-                        .setRating(resultSet.getLong(COURIER_RATING))
+                        .setRating(resultSet.getDouble(COURIER_RATING))
+                        .setTransport(resultSet.getLong(TRANSPORT_ID))
                         .setBuilder(new User.UserBuilder()
                                 .setId(resultSet.getLong(USER_ID))
                                 .setLogin(resultSet.getString(USER_LOGIN))
@@ -128,6 +141,7 @@ public class CourierDaoImpl implements CourierDao {
             }else {
                 Courier courier = new Courier.CourierBuilder()
                         .setRating(resultSet.getLong(COURIER_RATING))
+                        .setTransport(resultSet.getLong(TRANSPORT_ID))
                         .setBuilder(new User.UserBuilder()
                                 .setId(resultSet.getLong(USER_ID))
                                 .setLogin(resultSet.getString(USER_LOGIN))
@@ -158,6 +172,7 @@ public class CourierDaoImpl implements CourierDao {
             while (resultSet.next()){
                 Courier courier = new Courier.CourierBuilder()
                         .setRating(resultSet.getLong(COURIER_RATING))
+                        .setTransport(resultSet.getLong(TRANSPORT_ID))
                         .setBuilder(new User.UserBuilder()
                                 .setId(resultSet.getLong(USER_ID))
                                 .setLogin(resultSet.getString(USER_LOGIN))
@@ -199,6 +214,22 @@ public class CourierDaoImpl implements CourierDao {
         {
             statement.setLong(1, courier.getId());
             statement.setDouble(2, courier.getRating());
+            statement.setLong(3, courier.getTransport());
+            return statement.execute();
+        } catch (SQLException e){
+            logger.error("SQL exception in method in createCourier ", e);
+            throw new DaoException("SQL exception in method in createCourier ", e);
+        }
+    }
+
+    @Override
+    public boolean createById(long id) throws DaoException {
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_INSERT_BY_ID))
+        {
+            statement.setLong(1, id);
+            statement.setDouble(2, 0);
             return statement.execute();
         } catch (SQLException e){
             logger.error("SQL exception in method in createCourier ", e);
@@ -213,7 +244,8 @@ public class CourierDaoImpl implements CourierDao {
                 PreparedStatement statement = connection.prepareStatement(SQL_UPDATE))
         {
             statement.setDouble(1, courier.getRating());
-            statement.setLong(2, courier.getId());
+            statement.setLong(2, courier.getTransport());
+            statement.setLong(3, courier.getId());
             return statement.executeUpdate();
         } catch (SQLException e){
             logger.error("SQL exception in method in updateCourier ", e);
@@ -221,4 +253,18 @@ public class CourierDaoImpl implements CourierDao {
         }
     }
 
+    @Override
+    public int updateTransportToCourier(long courier, long transport) throws DaoException {
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_TRANSPORT))
+        {
+            statement.setLong(1, transport);
+            statement.setLong(2, courier);
+            return statement.executeUpdate();
+        } catch (SQLException e){
+            logger.error("SQL exception in method updateClient ", e);
+            throw new DaoException("SQL exception in method updateClient ", e);
+        }
+    }
 }

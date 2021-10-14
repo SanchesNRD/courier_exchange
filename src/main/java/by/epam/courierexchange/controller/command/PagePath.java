@@ -13,6 +13,8 @@ public final class PagePath {
 
     public static final String ADMIN_PAGE = "jsp/admin/admin.jsp";
 
+    public static final String COURIER_TRANSPORT = "jsp/courier/transport.jsp";
+
     public static final String NEW_ORDER_PAGE = "jsp/user/new_order.jsp";
     public static final String USER_ALL_ORDERS_PAGE = "jsp/user/orders.jsp";
     public static final String USER_ORDERS_PAGE = "jsp/user/user_orders.jsp";
