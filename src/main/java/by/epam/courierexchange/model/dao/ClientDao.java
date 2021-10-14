@@ -11,6 +11,7 @@ public interface ClientDao extends BaseDao<Long, Client>{
     Optional<Client> selectClientByLogin(String loginPattern) throws DaoException;
     List<Client> selectClientsByStatus(Integer id) throws DaoException;
     boolean createById(long userId) throws DaoException;
+    int updateAddressToClient(long idClient, long idAddress) throws DaoException;
 
     List<ClientProduct> selectAllClientProduct() throws DaoException;
     Optional<ClientProduct> selectClientProductById(Long id) throws DaoException;

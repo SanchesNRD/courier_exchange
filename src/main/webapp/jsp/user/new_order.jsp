@@ -105,6 +105,60 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-2 txt1 text-right">
+                            <fmt:message key="page.address.country"/></div>
+                        <div class="col-md-6">
+                            <div class="wrap-input100">
+                                <input class="validate-input input100" type="text" name="country"
+                                       value="${sessionScope.address.country}" pattern="[a-zA-Zа-яА-я]{2,20}"/>
+                                <span class="focus-input100"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-2 txt1 text-right">
+                            <fmt:message key="page.address.city"/></div>
+                        <div class="col-md-6">
+                            <div class="wrap-input100">
+                                <input class="validate-input input100" type="text" name="city"
+                                       value="${sessionScope.address.city}" pattern="[a-zA-Zа-яА-я]{2,20}"/>
+                                <span class="focus-input100"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-2 txt1 text-right">
+                            <fmt:message key="page.address.street"/></div>
+                        <div class="col-md-6">
+                            <div class="wrap-input100">
+                                <input class="validate-input input100" type="text" name="street"
+                                       value="${sessionScope.address.street}" pattern="[a-zA-Zа-яА-я]{2,20}"/>
+                                <span class="focus-input100"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-2 txt1 text-right">
+                            <fmt:message key="page.address.street_number"/></div>
+                        <div class="col-md-4">
+                            <div class="wrap-input100">
+                                <input class="validate-input input100" type="text" name="street_number"
+                                       value="${sessionScope.address.street_number}" pattern="\d+"/>
+                                <span class="focus-input100"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 txt1 text-right">
+                            <fmt:message key="page.address.apartment"/></div>
+                        <div class="col-md-4">
+                            <div class="wrap-input100">
+                                <input class="validate-input input100" type="text" name="apartment"
+                                       value="${sessionScope.address.apartment}" pattern="\d+"/>
+                                <span class="focus-input100"></span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-offset-2 container-login100-form-btn ">
                         <input type="submit" value="<fmt:message key="page.neworder.create"/>" class="login100-form-btn"/>
                     </div>

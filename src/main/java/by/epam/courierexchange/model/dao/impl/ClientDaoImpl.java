@@ -265,7 +265,22 @@ public class ClientDaoImpl implements ClientDao {
         }
     }
 
+    @Override
+    public int updateAddressToClient(long idClient, long idAddress) throws DaoException {
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_CLIENT))
+        {
+            statement.setLong(1, idAddress);
+            statement.setLong(2, idClient);
+            return statement.executeUpdate();
+        } catch (SQLException e){
+            logger.error("SQL exception in method updateClient ", e);
+            throw new DaoException("SQL exception in method updateClient ", e);
+        }
+    }
     //client_product
+
     @Override
     public List<ClientProduct> selectAllClientProduct() throws DaoException {
         List<ClientProduct> clientProducts = new ArrayList<>();

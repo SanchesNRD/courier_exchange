@@ -54,7 +54,7 @@
                             <fmt:message key="page.address.street"/></div>
                         <div class="col-md-6">
                             <div class="wrap-input100">
-                                <input class="validate-input input100" type="text" name="sreet"
+                                <input class="validate-input input100" type="text" name="street"
                                        value="${sessionScope.address.street}" pattern="[a-zA-Zа-яА-я]{2,20}"/>
                                 <span class="focus-input100"></span>
                             </div>

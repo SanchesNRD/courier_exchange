@@ -40,6 +40,10 @@ public class AddressDaoImpl implements AddressDao {
             UPDATE addresses SET country=?, city=?, street=?, street_number=?, apartment=?
             WHERE id=?
             """;
+    private static final String SQL_SELECT_CLIENT_ADDRESS = """
+            SELECT id FROM addresses 
+            WHERE country=? AND city=? AND street=? AND street_number=? AND apartment=?
+            """;
 
     private AddressDaoImpl(){}
 
@@ -176,6 +180,29 @@ public class AddressDaoImpl implements AddressDao {
         } catch (SQLException e){
             logger.error("SQL exception in method updateAddress ", e);
             throw new DaoException("SQL exception in method updateAddress ", e);
+        }
+    }
+
+    @Override
+    public long selectIdAddress(String country, String city, String street, Integer numberInt, Integer apartmentInt) throws DaoException {
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_CLIENT_ADDRESS))
+        {
+            statement.setString(1, country);
+            statement.setString(2, city);
+            statement.setString(3, street);
+            statement.setInt(4, numberInt);
+            statement.setInt(5, apartmentInt);
+            ResultSet resultSet = statement.executeQuery();
+            if(!resultSet.next()){
+                return 0;
+            }else {
+                return resultSet.getLong(ID);
+            }
+        } catch(SQLException e){
+            logger.error("SQL exception in method selectAddressById ", e);
+            throw new DaoException("SQL exception in method selectAddressById ", e);
         }
     }
 }

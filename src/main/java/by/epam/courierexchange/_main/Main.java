@@ -4,6 +4,7 @@ import by.epam.courierexchange.controller.command.PagePath;
 import by.epam.courierexchange.controller.command.SessionAttribute;
 import by.epam.courierexchange.exception.DaoException;
 import by.epam.courierexchange.exception.ServiceException;
+import by.epam.courierexchange.model.dao.impl.AddressDaoImpl;
 import by.epam.courierexchange.model.dao.impl.ClientDaoImpl;
 import by.epam.courierexchange.model.dao.impl.UserDaoImpl;
 import by.epam.courierexchange.model.entity.*;
@@ -30,14 +31,13 @@ public class Main {
         Optional<ClientProduct> optional;
         List<ClientProduct> list;
         UserServiceImpl userService = UserServiceImpl.getInstance();
+        ClientServiceImpl clientService = ClientServiceImpl.getInstance();
         UserDaoImpl userDao = UserDaoImpl.getInstance();
         ClientDaoImpl clientDao = ClientDaoImpl.getInstance();
         Optional<Client> client;
-        try {
-            client = clientDao.selectById(6l);
-            System.out.println(client.get().toString());
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
+        AddressDaoImpl addressDao = AddressDaoImpl.getInstance();
+        ProductServiceImpl productService = ProductServiceImpl.getInstance();
+
+        
     }
 }

@@ -39,12 +39,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean createProduct(String name, String weight, String width, String height, String length, String type) throws ServiceException {
-        if(!UserValidator.numberIsValid(weight) && !UserValidator.numberIsValid(width)
-                && !UserValidator.numberIsValid(height) && !UserValidator.numberIsValid(length)
-                && !UserValidator.typeIsValid(type) && !UserValidator.nameIsValid(name)){
-            return false;
+    public long createProduct(String name, String weight, String width, String height, String length, String type) throws ServiceException {
+        if(!UserValidator.numberIsValid(weight) || !UserValidator.numberIsValid(width)
+                || !UserValidator.numberIsValid(height) || !UserValidator.numberIsValid(length)
+                || !UserValidator.typeIsValid(type) || !UserValidator.nameIsValid(name)){
+            return 0;
         }
+        Optional<Product> optionalProduct;
         Product product = new Product.ProductBuilder()
                 .setName(name)
                 .setWeight(Integer.parseInt(weight))
@@ -54,7 +55,12 @@ public class ProductServiceImpl implements ProductService {
                 .setProductType(ProductType.parseType(Short.parseShort(type)))
                 .build();
         try{
-            return productDao.create(product);
+            optionalProduct = productDao.selectByName(name);
+            if(optionalProduct.isEmpty()){
+                productDao.create(product);
+                optionalProduct = productDao.selectByName(name);
+            }
+            return optionalProduct.get().getId();
         } catch (DaoException e){
             logger.error("DaoException to the create product: ", e);
             throw new ServiceException("DaoException to the create product: ", e);
