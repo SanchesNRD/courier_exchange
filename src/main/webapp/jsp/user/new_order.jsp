@@ -171,7 +171,7 @@
             </c:if>
             <c:if test="${sessionScope.user.userStatus == 'NON_CONFIRMED'}">
                 <div class="wrap-login100">
-                    Авторизуйтесь
+                    <fmt:message key="page.profile.auth"/>
                 </div>
             </c:if>
         </section>

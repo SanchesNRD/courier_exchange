@@ -14,6 +14,8 @@ public final class PagePath {
     public static final String ADMIN_PAGE = "jsp/admin/admin.jsp";
 
     public static final String COURIER_TRANSPORT = "jsp/courier/transport.jsp";
+    public static final String COURIER_ALL_ORDERS_PAGE = "jsp/courier/orders.jsp";
+    public static final String COURIER_ORDER = "jsp/courier/my_order.jsp";
 
     public static final String NEW_ORDER_PAGE = "jsp/user/new_order.jsp";
     public static final String USER_ALL_ORDERS_PAGE = "jsp/user/orders.jsp";

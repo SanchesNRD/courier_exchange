@@ -48,7 +48,7 @@ public class ClientDaoImpl implements ClientDao {
 
     //client_product
     private static final String SQL_SELECT_ALL_CLIENT_PRODUCT="""
-            SELECT client_id, login, password, mail, users.name, surname, phone, image, status_id, 
+            SELECT client_product.id, client_id, login, password, mail, users.name, surname, phone, image, status_id, 
                 clients.address_id, client_product.address_id, country, city, street, street_number, 
                 apartment, product_id, products.name, weight, length, width, height, type_id
             FROM client_product
@@ -58,7 +58,7 @@ public class ClientDaoImpl implements ClientDao {
                 INNER JOIN clients ON client_product.client_id = clients.id
         """;
     private static final String SQL_SELECT_CLIENT_PRODUCT_BY_ID="""
-             SELECT client_id, login, password, mail, users.name, surname, phone, image, status_id, 
+             SELECT client_product.id, client_id, login, password, mail, users.name, surname, phone, image, status_id, 
                 clients.address_id, client_product.address_id, country, city, street, street_number, 
                 apartment, product_id, products.name, weight, length, width, height, type_id
             FROM client_product
@@ -291,6 +291,7 @@ public class ClientDaoImpl implements ClientDao {
         {
             while (resultSet.next()){
                 ClientProduct clientProduct = new ClientProduct();
+                clientProduct.setId(resultSet.getLong(CLIENT_PRODUCT_ID));
                 clientProduct.setClient(new Client.ClientBuilder()
                         .setBuilder(new User.UserBuilder()
                                 .setId(resultSet.getLong(CLIENT_ID))
@@ -342,6 +343,7 @@ public class ClientDaoImpl implements ClientDao {
             if(!resultSet.next()) {
                 return Optional.empty();
             }else{
+                clientProduct.setId(resultSet.getLong(CLIENT_PRODUCT_ID));
                 clientProduct.setClient(new Client.ClientBuilder()
                         .setBuilder(new User.UserBuilder()
                                 .setId(resultSet.getLong(CLIENT_ID))

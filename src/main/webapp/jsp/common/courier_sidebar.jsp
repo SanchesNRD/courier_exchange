@@ -13,8 +13,8 @@
                 <fmt:message key="sidebar.courier.transport"/></a></li>
             <li><a href="${pageContext.request.contextPath}/controller?command=go_to_courier_all_orders">
                 <fmt:message key="sidebar.user.orders"/></a></li>
-            <li><a href="${pageContext.request.contextPath}/controller?command=go_to_courier_orders">
-                <fmt:message key="sidebar.user.myorders"/></a></li>
+            <li><a href="${pageContext.request.contextPath}/controller?command=go_to_courier_order">
+                <fmt:message key="sidebar.courier.my_order"/></a></li>
             <li><a href="${pageContext.request.contextPath}/controller?command=go_to_courier_history">
                 <fmt:message key="sidebar.user.history"/></a></li>
 

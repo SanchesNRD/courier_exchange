@@ -35,6 +35,7 @@ public class ColumnName {
     public static final String CLIENTS_ADDRESS_ID = "clients.address_id";
     public static final String CLIENT_PRODUCT_ADDRESS_ID = "client_product.address_id";
     public static final String PRODUCT_POINT_NAME = "products.name";
+    public static final String CLIENT_PRODUCT_ID = "client_product.id";
     //couriers
     public static final String COURIER_RATING = "rating";
     //transport

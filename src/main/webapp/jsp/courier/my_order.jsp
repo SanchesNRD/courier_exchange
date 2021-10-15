@@ -15,7 +15,7 @@
 
     <jsp:include page="../common/header.jsp"/>
 
-    <jsp:include page="../common/user_sidebar.jsp"/>
+    <jsp:include page="../common/courier_sidebar.jsp"/>
 
     <div class="content-wrapper">
         <section class="content-header">
@@ -24,41 +24,27 @@
             </h1>
         </section>
         <section class="content">
-            <c:if test="${sessionScope.user.userStatus == 'CONFIRMED'}">
+            <c:if test="${sessionScope.user.userStatus == 'COURIER_CONFIRMED'}">
                 <div class="wrap-login100">
                     <div class="row">
-                        <div class="col-md-3 txt1 text-left">
+                        <div class="col-md-2 txt1 text-left">
                             <fmt:message key="page.orders.name_client"/>
                         </div>
-                        <div class="col-md-3 txt1 text-left">
+                        <div class="col-md-2 txt1 text-left">
                             <fmt:message key="page.orders.name_product"/>
                         </div>
                         <div class="col-md-4 txt1 text-left">
                             <fmt:message key="page.orders.size"/>
                         </div>
-                        <div class="cpl-md-2 txt1 text-left">
+                        <div class="col-md-2 txt1 text-left">
                             <fmt:message key="page.orders.weight"/>
                         </div>
-                    </div>
-                    <c:forEach var="clientProducts" items="${sessionScope.clientProducts}">
-                        <div class="row">
-                            <div class="col-md-3 txt1 text-left">
-                                <c:out value="${clientProducts.client.login}"/>
-                            </div>
-                            <div class="col-md-3 txt1 text-left">
-                                <c:out value="${clientProducts.product.height}"/>
-                            </div>
-                            <div class="col-md-4 txt1 text-left">
-                                <c:out value="${clientProducts.product.length}"/>
-                            </div>
-                            <div class="col-md-2 txt1 text-left">
-                                <c:out value="${clientProducts.address.country}"/>
-                            </div>
+                        <div class="col-md-2 txt1 text-left">
                         </div>
-                    </c:forEach>
+                    </div>
                 </div>
             </c:if>
-            <c:if test="${sessionScope.user.userStatus == 'NON_CONFIRMED'}">
+            <c:if test="${sessionScope.user.userStatus != 'COURIER_CONFIRMED'}">
                 <div class="wrap-login100">
                     <fmt:message key="page.profile.auth"/>
                 </div>

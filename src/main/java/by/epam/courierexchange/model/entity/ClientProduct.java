@@ -1,9 +1,18 @@
 package by.epam.courierexchange.model.entity;
 
 public class ClientProduct extends AbstractEntity{
+    private long id;
     private Client client;
     private Product product;
     private Address address;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public Address getAddress() {
         return address;
@@ -40,6 +49,9 @@ public class ClientProduct extends AbstractEntity{
 
         ClientProduct that = (ClientProduct) o;
 
+        if (id != that.id) {
+            return false;
+        }
         if (client != null ? !client.equals(that.client) : that.client != null) {
             return false;
         }
@@ -51,7 +63,8 @@ public class ClientProduct extends AbstractEntity{
 
     @Override
     public int hashCode() {
-        int result = client != null ? client.hashCode() : 0;
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (client != null ? client.hashCode() : 0);
         result = 31 * result + (product != null ? product.hashCode() : 0);
         result = 31 * result + (address != null ? address.hashCode() : 0);
         return result;

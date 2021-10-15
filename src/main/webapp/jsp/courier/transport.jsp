@@ -15,7 +15,8 @@
 
     <jsp:include page="../common/header.jsp"/>
 
-    <jsp:include page="../common/user_sidebar.jsp"/>
+    <jsp:include page="../common/courier_sidebar.jsp"/>
+
 
     <div class="content-wrapper">
         <section class="content-header">
@@ -91,7 +92,7 @@
             </c:if>
             <c:if test="${sessionScope.user.userStatus != 'COURIER_CONFIRMED'}">
                 <div class="wrap-login100">
-                    Авторизуйтесь
+                    <fmt:message key="page.profile.auth"/>
                 </div>
             </c:if>
         </section>
