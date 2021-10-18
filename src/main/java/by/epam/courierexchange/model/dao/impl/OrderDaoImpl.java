@@ -3,13 +3,13 @@ package by.epam.courierexchange.model.dao.impl;
 import by.epam.courierexchange.exception.DaoException;
 import by.epam.courierexchange.model.connection.ConnectionPool;
 import by.epam.courierexchange.model.dao.OrderDao;
-import by.epam.courierexchange.model.entity.Order;
-import by.epam.courierexchange.model.entity.OrderStatus;
+import by.epam.courierexchange.model.entity.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,24 +21,43 @@ public class OrderDaoImpl implements OrderDao {
     private static final OrderDaoImpl instance = new OrderDaoImpl();
 
     private static final String SQL_SELECT_ALL="""
-            SELECT id, client_id, product_id, transport_id, address_id, courier_id, date, status_id 
+            SELECT id, client_product_id, courier_id, date, status_id 
             FROM orders
             """;
     private static final String SQL_SELECT_BY_ID="""
-            SELECT id, client_id, product_id, transport_id, address_id, courier_id, date, status_id 
+            SELECT id, client_product_id, courier_id, date, status_id 
             FROM orders WHERE id=?
+            """;
+    private static final String SQL_SELECT_BY_COURIER="""
+            SELECT id, client_product_id, courier_id, date, status_id 
+            FROM orders WHERE courier_id=? AND status_id=?
             """;
     private static final String SQL_DELETE_BY_ID=
             "DELETE FROM orders WHERE id=?";
     private static final String SQL_INSERT=""" 
-            INSERT INTO orders(id, client_id, product_id, transport_id, 
-            address_id, courier_id, date, status_id) 
-            VALUES (?,?,?,?,?,?,?,?)
+            INSERT INTO orders(client_product_id, courier_id, date, status_id) 
+            VALUES (?,?,?,?)
             """;
     private static final String SQL_UPDATE="""
-            UPDATE orders SET client_id=?, product_id=?, transport_id=?, 
-            address_id=?, courier_id=?, date=?, status_id=? 
+            UPDATE orders SET client_product_id=?, courier_id=?, date=?, status_id=? 
             WHERE id=?
+            """;
+    private static final String SQL_SELECT_ACTIVE_BY_COURIER="""
+            SELECT orders.id, orders.date, orders.status_id, courier_id, co.transport_id, co.rating,
+                  u2.name, u2.surname, u2.login, u2.password, u2.image, u2.mail, u2.phone, u2.status_id,
+                  client_product_id, client_id, cp.address_id,
+                  u.name, u.surname, u.login, u.password, u.image, u.mail, u.phone, u.status_id,
+                  product_id, p.name, p.height, p.width, p.length, p.weight, p.type_id,
+                  cl.address_id, a.country, a.city, a.street, a.street_number, a.apartment
+            FROM orders
+                  INNER JOIN couriers co on orders.courier_id = co.id
+                  INNER JOIN client_product cp on orders.client_product_id = cp.id
+                  INNER JOIN products p on cp.product_id = p.id
+                  INNER JOIN clients cl on cp.client_id = cl.id
+                  INNER JOIN users u on cl.id = u.id
+                  INNER JOIN users u2 on co.id = u2.id
+                  INNER JOIN addresses a on cp.address_id = a.id
+            WHERE courier_id=? AND orders.status_id=?
             """;
 
     private OrderDaoImpl(){}
@@ -58,11 +77,9 @@ public class OrderDaoImpl implements OrderDao {
             while(resultSet.next()){
                 Order order = new Order.OrderBuilder()
                         .setId(resultSet.getLong(ID))
-                        .setClient(resultSet.getLong(CLIENT_ID))
-                        .setProduct(resultSet.getLong(PRODUCT_ID))
-                        .setTransport(resultSet.getLong(TRANSPORT_ID))
-                        .setAddress(resultSet.getLong(ADDRESS_ID))
-                        .setCourier(resultSet.getLong(COURTIER_ID))
+                        .setClientProduct(new ClientProduct())
+                        .setCourier(new Courier.CourierBuilder()
+                                .build())
                         .setDate(resultSet.getDate(ORDER_DATE))
                         .setOrderStatus(OrderStatus.parseStatus(resultSet.getShort(STATUS_ID)))
                         .build();
@@ -88,11 +105,9 @@ public class OrderDaoImpl implements OrderDao {
             }else{
                 Order order = new Order.OrderBuilder()
                         .setId(resultSet.getLong(ID))
-                        .setClient(resultSet.getLong(CLIENT_ID))
-                        .setProduct(resultSet.getLong(PRODUCT_ID))
-                        .setTransport(resultSet.getLong(TRANSPORT_ID))
-                        .setAddress(resultSet.getLong(ADDRESS_ID))
-                        .setCourier(resultSet.getLong(COURTIER_ID))
+                        .setClientProduct(new ClientProduct())
+                        .setCourier(new Courier.CourierBuilder()
+                                .build())
                         .setDate(resultSet.getDate(ORDER_DATE))
                         .setOrderStatus(OrderStatus.parseStatus(resultSet.getShort(STATUS_ID)))
                         .build();
@@ -125,14 +140,28 @@ public class OrderDaoImpl implements OrderDao {
                 PreparedStatement statement = connection.prepareStatement(SQL_INSERT))
         {
             statement.setLong(1, order.getId());
-            statement.setLong(2, order.getClient());
-            statement.setLong(3, order.getProduct());
-            statement.setLong(4, order.getTransport());
-            statement.setLong(5, order.getAddress());
-            statement.setLong(6, order.getCourier());
-            statement.setDate(7, order.getDate());
-            statement.setShort(8, order.getOrderStatus().getStatusId());
+            statement.setLong(2, order.getClientProduct().getId());
+            statement.setLong(3, order.getCourier().getId());
+            statement.setDate(4, order.getDate());
+            statement.setShort(5, order.getOrderStatus().getStatusId());
             return statement.execute();
+        } catch (SQLException e){
+            logger.error("SQL exception in method in createOrder ", e);
+            throw new DaoException("SQL exception in method in createOrder ", e);
+        }
+    }
+
+    @Override
+    public int createByField(long clientProduct, long courier, Object date, OrderStatus status) throws DaoException {
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_INSERT))
+        {
+            statement.setLong(1, clientProduct);
+            statement.setLong(2, courier);
+            statement.setObject(3, date);
+            statement.setShort(4, status.getStatusId());
+            return statement.executeUpdate();
         } catch (SQLException e){
             logger.error("SQL exception in method in createOrder ", e);
             throw new DaoException("SQL exception in method in createOrder ", e);
@@ -145,18 +174,107 @@ public class OrderDaoImpl implements OrderDao {
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_UPDATE))
         {
-            statement.setLong(1, order.getClient());
-            statement.setLong(2, order.getProduct());
-            statement.setLong(3, order.getTransport());
-            statement.setLong(4, order.getAddress());
-            statement.setLong(5, order.getCourier());
-            statement.setDate(6, order.getDate());
-            statement.setShort(7, order.getOrderStatus().getStatusId());
-            statement.setLong(8, order.getId());
+            statement.setLong(1, order.getClientProduct().getId());
+            statement.setLong(2, order.getCourier().getId());
+            statement.setDate(3, order.getDate());
+            statement.setShort(4, order.getOrderStatus().getStatusId());
+            statement.setLong(5, order.getId());
             return statement.executeUpdate();
         } catch (SQLException e){
             logger.error("SQL exception in method in updateOrder ", e);
             throw new DaoException("SQL exception in method in updateOrder ", e);
+        }
+    }
+
+    @Override
+    public long selectIdByCourier(long courier, OrderStatus status) throws DaoException {
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_COURIER))
+        {
+            statement.setLong(1, courier);
+            statement.setShort(2, status.getStatusId());
+            ResultSet resultSet = statement.executeQuery();
+            if(!resultSet.next()){
+                return 0;
+            }else{
+                return resultSet.getLong(ID);
+            }
+        } catch (SQLException e){
+            logger.error("SQL exception in method in selectOrderById ", e);
+            throw new DaoException("SQL exception in method in selectOrderById ", e);
+        }
+    }
+
+    @Override
+    public Optional<Order> selectActiveOrderByCourier(long courier, OrderStatus status) throws DaoException {
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_ACTIVE_BY_COURIER))
+        {
+            statement.setLong(1, courier);
+            statement.setShort(2, status.getStatusId());
+            ResultSet resultSet = statement.executeQuery();
+            if(!resultSet.next()){
+                return Optional.empty();
+            }else{
+                ClientProduct clientProduct = new ClientProduct();
+                clientProduct.setId(resultSet.getLong(ORDER_CLIENT_PRODUCT_ID));
+                clientProduct.setClient(new Client.ClientBuilder()
+                        .setAddress(resultSet.getLong(CL_ADDRESS_ID))
+                        .setBuilder(new User.UserBuilder()
+                            .setId(resultSet.getLong(CLIENT_ID))
+                            .setName(resultSet.getString(U_NAME))
+                            .setSurname(resultSet.getString(U_SURNAME))
+                            .setLogin(resultSet.getString(U_LOGIN))
+                            .setPassword(resultSet.getString(U_PASSWORD))
+                            .setMail(resultSet.getString(U_MAIL))
+                            .setImage(resultSet.getString(U_IMAGE))
+                            .setPhone(resultSet.getString(U_PHONE))
+                            .setUserStatus(UserStatus.parseStatus(resultSet.getShort(U_STATUS))))
+                        .build());
+                clientProduct.setAddress(new Address.AddressBuilder()
+                        .setId(resultSet.getInt(CP_ADDRESS))
+                        .setCountry(resultSet.getString(A_COUNTRY))
+                        .setCity(resultSet.getString(A_CITY))
+                        .setStreet(resultSet.getString(A_STREET))
+                        .setStreet_number(resultSet.getInt(A_STREET_NUMBER))
+                        .setApartment(resultSet.getInt(A_APARTMENT))
+                        .build());
+                clientProduct.setProduct(new Product.ProductBuilder()
+                        .setId(resultSet.getLong(PRODUCT_ID))
+                        .setName(resultSet.getString(P_NAME))
+                        .setWidth(resultSet.getInt(P_WIDTH))
+                        .setHeight(resultSet.getInt(P_HEIGHT))
+                        .setWeight(resultSet.getInt(P_WEIGHT))
+                        .setLength(resultSet.getInt(P_LENGTH))
+                        .setProductType(ProductType.parseType(resultSet.getShort(P_TYPE)))
+                        .build());
+                Order order = new Order.OrderBuilder()
+                        .setId(resultSet.getLong(ORDERS_ID))
+                        .setClientProduct(clientProduct)
+                        .setCourier(new Courier.CourierBuilder()
+                                .setBuilder(new User.UserBuilder()
+                                        .setId(resultSet.getLong(COURTIER_ID))
+                                        .setName(resultSet.getString(U2_NAME))
+                                        .setSurname(resultSet.getString(U2_SURNAME))
+                                        .setLogin(resultSet.getString(U2_LOGIN))
+                                        .setPassword(resultSet.getString(U2_PASSWORD))
+                                        .setMail(resultSet.getString(U2_MAIL))
+                                        .setImage(resultSet.getString(U2_IMAGE))
+                                        .setPhone(resultSet.getString(U2_PHONE))
+                                        .setUserStatus(UserStatus.parseStatus(resultSet.getShort(U2_STATUS))))
+                                .setTransport(resultSet.getLong(CO_TRANSPORT))
+                                .setRating(resultSet.getDouble(CO_RATING))
+                                .build())
+                        .setDate(resultSet.getDate(ORDERS_DATE))
+                        .setOrderStatus(OrderStatus.parseStatus(resultSet.getShort(ORDERS_STATUS)))
+                        .build();
+                return Optional.of(order);
+            }
+        } catch (SQLException e){
+            logger.error("SQL exception in method in selectOrderById ", e);
+            throw new DaoException("SQL exception in method in selectOrderById ", e);
         }
     }
 }

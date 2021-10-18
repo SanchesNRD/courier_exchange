@@ -86,9 +86,9 @@ public class Address extends AbstractEntity{
     public String toString() {
         final StringBuilder sb = new StringBuilder("Address{");
         sb.append("id=").append(id);
-        sb.append(", country='").append(country).append('\'');
-        sb.append(", city='").append(city).append('\'');
-        sb.append(", street='").append(street).append('\'');
+        sb.append(", country='").append(country);
+        sb.append(", city='").append(city);
+        sb.append(", street='").append(street);
         sb.append(", street_number=").append(street_number);
         sb.append(", apartment=").append(apartment);
         sb.append('}');

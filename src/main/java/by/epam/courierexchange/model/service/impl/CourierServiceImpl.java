@@ -2,19 +2,15 @@ package by.epam.courierexchange.model.service.impl;
 
 import by.epam.courierexchange.exception.DaoException;
 import by.epam.courierexchange.exception.ServiceException;
-import by.epam.courierexchange.model.dao.impl.AddressDaoImpl;
-import by.epam.courierexchange.model.dao.impl.ClientDaoImpl;
-import by.epam.courierexchange.model.dao.impl.CourierDaoImpl;
-import by.epam.courierexchange.model.dao.impl.TransportDaoImpl;
-import by.epam.courierexchange.model.entity.Address;
-import by.epam.courierexchange.model.entity.Courier;
-import by.epam.courierexchange.model.entity.Transport;
-import by.epam.courierexchange.model.entity.TransportType;
+import by.epam.courierexchange.model.dao.impl.*;
+import by.epam.courierexchange.model.entity.*;
 import by.epam.courierexchange.model.service.CourierService;
 import by.epam.courierexchange.model.validator.UserValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Optional;
 
 public class CourierServiceImpl implements CourierService {
@@ -22,12 +18,40 @@ public class CourierServiceImpl implements CourierService {
     private static final CourierServiceImpl instance = new CourierServiceImpl();
     private static final CourierDaoImpl courierDao = CourierDaoImpl.getInstance();
     private static final TransportDaoImpl  transportDao = TransportDaoImpl.getInstance();
+    private static final OrderDaoImpl orderDao = OrderDaoImpl.getInstance();
+    private static final ClientDaoImpl clientDao = ClientDaoImpl.getInstance();
 
     public CourierServiceImpl() {
     }
 
     public static CourierServiceImpl getInstance() {
         return instance;
+    }
+
+    @Override
+    public int createOrder(String clientProductStr, long courier) throws ServiceException {
+        if (!UserValidator.numberIsValid(clientProductStr)) {
+            return 0;
+        }
+        Optional<ClientProduct> clientProductOptional;
+        long order;
+        Date date = new Date();
+        Object dateSql = new Timestamp(date.getTime());
+        long clientProduct = Long.parseLong(clientProductStr);
+        int result;
+        try {
+            clientProductOptional = clientDao.selectClientProductById(clientProduct);
+            order = orderDao.selectIdByCourier(courier, OrderStatus.AGREED);
+            if (clientProductOptional.get().getClient().getId() != courier && order == 0) {
+                result = orderDao.createByField(clientProduct, courier, dateSql, OrderStatus.AGREED);
+            } else {
+                result = 0;
+            }
+        } catch (DaoException e) {
+            logger.error("DaoException to the update transport: ", e);
+            throw new ServiceException("DaoException to the update transport: ", e);
+        }
+        return result;
     }
 
     @Override
@@ -58,6 +82,18 @@ public class CourierServiceImpl implements CourierService {
         }catch (DaoException e){
             logger.error("DaoException to the update transport: ", e);
             throw new ServiceException("DaoException to the update transport: ", e);
+        }
+
+
+    }
+
+    @Override
+    public Optional<Order> selectActiveOrderByCourier(long courier) throws ServiceException {
+        try {
+            return orderDao.selectActiveOrderByCourier(courier, OrderStatus.AGREED);
+        } catch (DaoException e) {
+            logger.error("DaoException to the select active order: ", e);
+            throw new ServiceException("DaoException to the select active order: ", e);
         }
     }
 }

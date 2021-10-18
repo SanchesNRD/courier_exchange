@@ -3,7 +3,7 @@ package by.epam.courierexchange.model.entity;
 import java.util.Arrays;
 
 public enum OrderStatus {
-    TREATMENT((short)1), AGREED((short)2), DELIVERED((short)3), COMPLETED((short)4), CANCELED((short)5);
+    AGREED((short)1), DELIVERED((short)2), COMPLETED((short)3);
 
     private final short id;
 
@@ -20,6 +20,6 @@ public enum OrderStatus {
         return Arrays.stream(OrderStatus.values())
                 .filter(status -> status.id == statusId)
                 .findFirst()
-                .orElse(TREATMENT);
+                .orElse(AGREED);
     }
 }

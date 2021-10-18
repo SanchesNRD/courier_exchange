@@ -8,6 +8,8 @@ public class RequestAttribute {
     public static final String WRONG_VALIDATION = "wrong_validation";
     public static final String USER_ID = "user_id";
     public static final String PASSWORD_CHANGE_SUC = "password_change_suc";
+    public static final String COURIER_HAVE_ORDER = "courier_have_order";
+    public static final String NO_ORDER = "no_order";
 
     private RequestAttribute(){}
 }

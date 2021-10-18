@@ -20,29 +20,121 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                <fmt:message key="page.orders.title"/>
+                <fmt:message key="page.my_order.title"/>
             </h1>
         </section>
         <section class="content">
             <c:if test="${sessionScope.user.userStatus == 'COURIER_CONFIRMED'}">
-                <div class="wrap-login100">
-                    <div class="row">
-                        <div class="col-md-2 txt1 text-left">
-                            <fmt:message key="page.orders.name_client"/>
+                <c:if test="${requestScope.courier_have_order}">
+                    <fmt:message key="page.my_order.have_order"/>
+                </c:if>
+                <c:if test = "${!requestScope.no_order}">
+                    <form action="${pageContext.request.contextPath}/controller">
+                        <input type="hidden" name="command" value="completed_order"/>
+                        <div class="wrap-login100">
+                            <div class="form-group row">
+                                <div class="col-md-2 txt1 text-right">
+                                    <fmt:message key="page.user_orders.name_product"/>
+                                </div>
+                                <div class="col-md-6 wrap-input100">
+                                    <input class="validate-input input100"
+                                           value="${sessionScope.order.clientProduct.product.name}" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-2 txt1 text-right">
+                                    <fmt:message key="page.neworder.weight"/>
+                                </div>
+                                <div class="col-md-6 wrap-input100">
+                                    <input class="validate-input input100"
+                                           value="${sessionScope.order.clientProduct.product.weight}" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-2 txt1 text-right">
+                                    <fmt:message key="page.neworder.height"/>
+                                </div>
+                                <div class="col-md-6 wrap-input100">
+                                    <input class="validate-input input100"
+                                           value="${sessionScope.order.clientProduct.product.height}" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-2 txt1 text-right">
+                                    <fmt:message key="page.neworder.length"/>
+                                </div>
+                                <div class="col-md-6 wrap-input100">
+                                    <input class="validate-input input100"
+                                           value="${sessionScope.order.clientProduct.product.length}" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-2 txt1 text-right">
+                                    <fmt:message key="page.neworder.width"/>
+                                </div>
+                                <div class="col-md-6 wrap-input100">
+                                    <input class="validate-input input100"
+                                           value="${sessionScope.order.clientProduct.product.width}" disabled>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-2 txt1 text-left">
-                            <fmt:message key="page.orders.name_product"/>
+                        <div class="wrap-login100">
+                            <div class="form-group row">
+                                <div class="col-md-2 txt1 text-right">
+                                    <fmt:message key="page.address.country"/>
+                                </div>
+                                <div class="col-md-6 wrap-input100">
+                                    <input class="validate-input input100"
+                                           value="${sessionScope.order.clientProduct.address.country}" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-2 txt1 text-right">
+                                    <fmt:message key="page.address.city"/>
+                                </div>
+                                <div class="col-md-6 wrap-input100">
+                                    <input class="validate-input input100"
+                                           value="${sessionScope.order.clientProduct.address.city}" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-2 txt1 text-right">
+                                    <fmt:message key="page.address.street"/>
+                                </div>
+                                <div class="col-md-6 wrap-input100">
+                                    <input class="validate-input input100"
+                                           value="${sessionScope.order.clientProduct.address.street}" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-2 txt1 text-right">
+                                    <fmt:message key="page.address.street_number"/>
+                                </div>
+                                <div class="col-md-6 wrap-input100">
+                                    <input class="validate-input input100"
+                                           value="${sessionScope.order.clientProduct.address.street_number}" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-2 txt1 text-right">
+                                    <fmt:message key="page.address.apartment"/>
+                                </div>
+                                <div class="col-md-6 wrap-input100">
+                                    <input class="validate-input input100"
+                                           value="${sessionScope.order.clientProduct.address.apartment}" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-offset-2 container-login100-form-btn ">
+                                <input type="submit" value="<fmt:message key="page.my_order.completed"/>" class="login100-form-btn"/>
+                            </div>
                         </div>
-                        <div class="col-md-4 txt1 text-left">
-                            <fmt:message key="page.orders.size"/>
-                        </div>
-                        <div class="col-md-2 txt1 text-left">
-                            <fmt:message key="page.orders.weight"/>
-                        </div>
-                        <div class="col-md-2 txt1 text-left">
-                        </div>
+                    </form>
+                </c:if>
+                <c:if test = "${requestScope.no_order}">
+                    <div class="wrap-login100">
+                        <fmt:message key="page.my_order.no_order"/>
                     </div>
-                </div>
+                </c:if>
             </c:if>
             <c:if test="${sessionScope.user.userStatus != 'COURIER_CONFIRMED'}">
                 <div class="wrap-login100">
