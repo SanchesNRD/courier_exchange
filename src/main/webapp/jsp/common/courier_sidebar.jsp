@@ -18,8 +18,9 @@
             <li><a href="${pageContext.request.contextPath}/controller?command=go_to_courier_history">
                 <fmt:message key="sidebar.user.history"/></a></li>
 
-            <li style="margin-top: 40px"><a href="${pageContext.request.contextPath}/controller?command=change_locale?">
-                <fmt:message key="sidebar.user.language"/></a></li>
+            <li style="margin-top: 60px">
+                <a href="${pageContext.request.contextPath}/controller?command=change_locale&locale=${sessionScope.locale}&current_url=${pageContext.request.requestURL}">
+                    <fmt:message key="sidebar.user.language"/></a></li>
             <li><a href="${pageContext.request.contextPath}/controller?command=logout">
                 <fmt:message key="sidebar.user.logout"/></a></li>
         </ul>

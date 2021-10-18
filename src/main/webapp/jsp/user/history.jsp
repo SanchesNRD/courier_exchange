@@ -40,6 +40,22 @@
                             <fmt:message key="page.user_orders.date"/>
                         </div>
                     </div>
+                    <c:forEach var="orders" items="${sessionScope.orders}">
+                        <div class="row">
+                            <div class="col-md-3 txt1 text-left">
+                                <c:out value="${orders.id}"/>
+                            </div>
+                            <div class="col-md-3 txt1 text-left">
+                                <c:out value="${orders.courier.login}"/>
+                            </div>
+                            <div class="col-md-4 txt1 text-left">
+                                <c:out value="${orders.clientProduct.client.login}"/>
+                            </div>
+                            <div class="cpl-md-2 txt1 text-left">
+                                <c:out value="${orders.clientProduct.product.name}"/>
+                            </div>
+                        </div>
+                    </c:forEach>
                 </div>
             </c:if>
             <c:if test="${sessionScope.user.userStatus == 'NON_CONFIRMED'}">

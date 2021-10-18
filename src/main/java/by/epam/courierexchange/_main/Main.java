@@ -46,10 +46,7 @@ public class Main {
         Optional<ClientProduct> clientProductOptional;
         Optional<Product> productOptional;
         try {
-           Optional<Order> orderOptional = orderDao.selectActiveOrderByCourier(6l, OrderStatus.AGREED);
-           if(orderOptional.isPresent()){
-               System.out.println(orderOptional.get().toString());
-           }
+            orderDao.updateStatus(12, OrderStatus.COMPLETED);
         } catch (DaoException e) {
             e.printStackTrace();
         }

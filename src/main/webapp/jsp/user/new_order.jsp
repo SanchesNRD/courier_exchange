@@ -26,6 +26,11 @@
         <section class="content">
             <c:if test="${sessionScope.user.userStatus == 'CONFIRMED'
                     && sessionScope.client.address != 0}">
+                <c:if test="${requestScope.same_address}">
+                    <div class="wrap-login100" style="background-color: #d0908f">
+                        same address
+                    </div>
+                </c:if>
                 <form action="${pageContext.request.contextPath}/controller" class="wrap-login100">
                     <input type="hidden" name="command" value="create_new_order"/>
                     <div class="form-group row">

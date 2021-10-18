@@ -1,13 +1,18 @@
 package by.epam.courierexchange.controller.command.impl.client;
 
 import by.epam.courierexchange.controller.command.*;
+import by.epam.courierexchange.exception.DaoException;
 import by.epam.courierexchange.exception.ServiceException;
+import by.epam.courierexchange.model.dao.impl.ClientDaoImpl;
+import by.epam.courierexchange.model.entity.Client;
 import by.epam.courierexchange.model.entity.User;
 import by.epam.courierexchange.model.service.impl.AddressServiceImpl;
 import by.epam.courierexchange.model.service.impl.ClientServiceImpl;
 import by.epam.courierexchange.model.service.impl.ProductServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+
+import java.util.Optional;
 
 import static by.epam.courierexchange.controller.command.CommandResult.ResponseType.*;
 
@@ -34,16 +39,27 @@ public class CreateNewOrder implements Command {
             long productId = productService.createProduct(name, weight, width, height, length, type);
             long addressId = addressService.createAddress(country, city, street, number, apartment);
             commandResult = new CommandResult(PagePath.NEW_ORDER_PAGE, FORWARD);
+            ClientDaoImpl clientDao = ClientDaoImpl.getInstance();
 
             if(productId != 0 && addressId != 0){
                 User user = (User)session.getAttribute(SessionAttribute.USER);
-                clientService.createProductClient(user.getId(), productId, addressId);
+                Optional<Client> clientOptional = clientDao.selectById(user.getId());
+                if(clientOptional.isPresent()){
+                    long clientAddress = clientOptional.get().getAddress();
+                    if(clientAddress != addressId){
+                        clientService.createProductClient(user.getId(), productId, addressId);
+                    }
+                    else{
+                        request.setAttribute(RequestAttribute.SAME_ADDRESS, true);
+                    }
+                }
             }
             else{
                 request.setAttribute(RequestAttribute.WRONG_VALIDATION, true);
             }
-        } catch (ServiceException e) {
-            return new CommandResult(PagePath.ERROR_PAGE, FORWARD);
+        } catch (ServiceException | DaoException e) {
+            request.setAttribute(RequestAttribute.EXCEPTION, e);
+            commandResult = new CommandResult(PagePath.ERROR_PAGE, FORWARD);
         }
 
         return commandResult;

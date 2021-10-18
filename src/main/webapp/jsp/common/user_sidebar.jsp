@@ -11,10 +11,12 @@
                 <fmt:message key="sidebar.user.profile"/></a></li>
             <li><a href="${pageContext.request.contextPath}/controller?command=go_to_client_address">
                 <fmt:message key="sidebar.user.address"/></a></li>
-            <li><a href="${pageContext.request.contextPath}/controller?command=go_to_user_all_orders">
-                <fmt:message key="sidebar.user.orders"/></a></li>
             <li><a href="${pageContext.request.contextPath}/controller?command=go_to_new_order_page">
                 <fmt:message key="sidebar.user.neworder"/></a></li>
+            <li><a href="${pageContext.request.contextPath}/controller?command=go_to_user_all_orders">
+                <fmt:message key="sidebar.user.orders"/></a></li>
+            <li><a href="${pageContext.request.contextPath}/controller?command=go_to_my_templates">
+                <fmt:message key="sidebar.user.templates"/></a></li>
             <li><a href="${pageContext.request.contextPath}/controller?command=go_to_my_orders_page">
                 <fmt:message key="sidebar.user.myorders"/></a></li>
             <li><a href="${pageContext.request.contextPath}/controller?command=go_to_history_page">

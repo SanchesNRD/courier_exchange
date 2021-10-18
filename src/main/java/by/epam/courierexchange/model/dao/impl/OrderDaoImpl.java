@@ -42,6 +42,10 @@ public class OrderDaoImpl implements OrderDao {
             UPDATE orders SET client_product_id=?, courier_id=?, date=?, status_id=? 
             WHERE id=?
             """;
+    private static final String SQL_UPDATE_STATUS="""
+            UPDATE orders SET status_id=? 
+            WHERE id=?
+            """;
     private static final String SQL_SELECT_ACTIVE_BY_COURIER="""
             SELECT orders.id, orders.date, orders.status_id, courier_id, co.transport_id, co.rating,
                   u2.name, u2.surname, u2.login, u2.password, u2.image, u2.mail, u2.phone, u2.status_id,
@@ -58,6 +62,23 @@ public class OrderDaoImpl implements OrderDao {
                   INNER JOIN users u2 on co.id = u2.id
                   INNER JOIN addresses a on cp.address_id = a.id
             WHERE courier_id=? AND orders.status_id=?
+            """;
+    private static final String SQL_SELECT_ACTIVE_BY_CLIENT="""
+            SELECT orders.id, orders.date, orders.status_id, courier_id, co.transport_id, co.rating,
+                  u2.name, u2.surname, u2.login, u2.password, u2.image, u2.mail, u2.phone, u2.status_id,
+                  client_product_id, client_id, cp.address_id,
+                  u.name, u.surname, u.login, u.password, u.image, u.mail, u.phone, u.status_id,
+                  product_id, p.name, p.height, p.width, p.length, p.weight, p.type_id,
+                  cl.address_id, a.country, a.city, a.street, a.street_number, a.apartment
+            FROM orders
+                  INNER JOIN couriers co on orders.courier_id = co.id
+                  INNER JOIN client_product cp on orders.client_product_id = cp.id
+                  INNER JOIN products p on cp.product_id = p.id
+                  INNER JOIN clients cl on cp.client_id = cl.id
+                  INNER JOIN users u on cl.id = u.id
+                  INNER JOIN users u2 on co.id = u2.id
+                  INNER JOIN addresses a on cp.address_id = a.id
+            WHERE client_id=? AND orders.status_id=?
             """;
 
     private OrderDaoImpl(){}
@@ -276,5 +297,164 @@ public class OrderDaoImpl implements OrderDao {
             logger.error("SQL exception in method in selectOrderById ", e);
             throw new DaoException("SQL exception in method in selectOrderById ", e);
         }
+    }
+
+    @Override
+    public int updateStatus(long id, OrderStatus status) throws DaoException {
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_STATUS))
+        {
+            statement.setShort(1, status.getStatusId());
+            statement.setLong(2, id);
+            return statement.executeUpdate();
+        } catch (SQLException e){
+            logger.error("SQL exception in method in updateOrderStatus ", e);
+            throw new DaoException("SQL exception in method in updateOrderSatus ", e);
+        }
+    }
+
+    @Override
+    public List<Order> selectHistoryByCourier(long id, OrderStatus status) throws DaoException {
+        List<Order> orders = new ArrayList<>();
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_ACTIVE_BY_COURIER))
+        {
+            statement.setLong(1, id);
+            statement.setShort(2, status.getStatusId());
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()){
+                ClientProduct clientProduct = new ClientProduct();
+                clientProduct.setId(resultSet.getLong(ORDER_CLIENT_PRODUCT_ID));
+                clientProduct.setClient(new Client.ClientBuilder()
+                        .setAddress(resultSet.getLong(CL_ADDRESS_ID))
+                        .setBuilder(new User.UserBuilder()
+                                .setId(resultSet.getLong(CLIENT_ID))
+                                .setName(resultSet.getString(U_NAME))
+                                .setSurname(resultSet.getString(U_SURNAME))
+                                .setLogin(resultSet.getString(U_LOGIN))
+                                .setPassword(resultSet.getString(U_PASSWORD))
+                                .setMail(resultSet.getString(U_MAIL))
+                                .setImage(resultSet.getString(U_IMAGE))
+                                .setPhone(resultSet.getString(U_PHONE))
+                                .setUserStatus(UserStatus.parseStatus(resultSet.getShort(U_STATUS))))
+                        .build());
+                clientProduct.setAddress(new Address.AddressBuilder()
+                        .setId(resultSet.getInt(CP_ADDRESS))
+                        .setCountry(resultSet.getString(A_COUNTRY))
+                        .setCity(resultSet.getString(A_CITY))
+                        .setStreet(resultSet.getString(A_STREET))
+                        .setStreet_number(resultSet.getInt(A_STREET_NUMBER))
+                        .setApartment(resultSet.getInt(A_APARTMENT))
+                        .build());
+                clientProduct.setProduct(new Product.ProductBuilder()
+                        .setId(resultSet.getLong(PRODUCT_ID))
+                        .setName(resultSet.getString(P_NAME))
+                        .setWidth(resultSet.getInt(P_WIDTH))
+                        .setHeight(resultSet.getInt(P_HEIGHT))
+                        .setWeight(resultSet.getInt(P_WEIGHT))
+                        .setLength(resultSet.getInt(P_LENGTH))
+                        .setProductType(ProductType.parseType(resultSet.getShort(P_TYPE)))
+                        .build());
+                Order order = new Order.OrderBuilder()
+                        .setId(resultSet.getLong(ORDERS_ID))
+                        .setClientProduct(clientProduct)
+                        .setCourier(new Courier.CourierBuilder()
+                                .setBuilder(new User.UserBuilder()
+                                        .setId(resultSet.getLong(COURTIER_ID))
+                                        .setName(resultSet.getString(U2_NAME))
+                                        .setSurname(resultSet.getString(U2_SURNAME))
+                                        .setLogin(resultSet.getString(U2_LOGIN))
+                                        .setPassword(resultSet.getString(U2_PASSWORD))
+                                        .setMail(resultSet.getString(U2_MAIL))
+                                        .setImage(resultSet.getString(U2_IMAGE))
+                                        .setPhone(resultSet.getString(U2_PHONE))
+                                        .setUserStatus(UserStatus.parseStatus(resultSet.getShort(U2_STATUS))))
+                                .setTransport(resultSet.getLong(CO_TRANSPORT))
+                                .setRating(resultSet.getDouble(CO_RATING))
+                                .build())
+                        .setDate(resultSet.getDate(ORDERS_DATE))
+                        .setOrderStatus(OrderStatus.parseStatus(resultSet.getShort(ORDERS_STATUS)))
+                        .build();
+                orders.add(order);
+            }
+        } catch (SQLException e){
+            logger.error("SQL exception in method in selectOrderById ", e);
+            throw new DaoException("SQL exception in method in selectOrderById ", e);
+        }
+        return orders;
+    }
+
+    @Override
+    public List<Order> selectHistoryByClient(long id, OrderStatus status) throws DaoException {
+        List<Order> orders = new ArrayList<>();
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_ACTIVE_BY_CLIENT))
+        {
+            statement.setLong(1, id);
+            statement.setShort(2, status.getStatusId());
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()){
+                ClientProduct clientProduct = new ClientProduct();
+                clientProduct.setId(resultSet.getLong(ORDER_CLIENT_PRODUCT_ID));
+                clientProduct.setClient(new Client.ClientBuilder()
+                        .setAddress(resultSet.getLong(CL_ADDRESS_ID))
+                        .setBuilder(new User.UserBuilder()
+                                .setId(resultSet.getLong(CLIENT_ID))
+                                .setName(resultSet.getString(U_NAME))
+                                .setSurname(resultSet.getString(U_SURNAME))
+                                .setLogin(resultSet.getString(U_LOGIN))
+                                .setPassword(resultSet.getString(U_PASSWORD))
+                                .setMail(resultSet.getString(U_MAIL))
+                                .setImage(resultSet.getString(U_IMAGE))
+                                .setPhone(resultSet.getString(U_PHONE))
+                                .setUserStatus(UserStatus.parseStatus(resultSet.getShort(U_STATUS))))
+                        .build());
+                clientProduct.setAddress(new Address.AddressBuilder()
+                        .setId(resultSet.getInt(CP_ADDRESS))
+                        .setCountry(resultSet.getString(A_COUNTRY))
+                        .setCity(resultSet.getString(A_CITY))
+                        .setStreet(resultSet.getString(A_STREET))
+                        .setStreet_number(resultSet.getInt(A_STREET_NUMBER))
+                        .setApartment(resultSet.getInt(A_APARTMENT))
+                        .build());
+                clientProduct.setProduct(new Product.ProductBuilder()
+                        .setId(resultSet.getLong(PRODUCT_ID))
+                        .setName(resultSet.getString(P_NAME))
+                        .setWidth(resultSet.getInt(P_WIDTH))
+                        .setHeight(resultSet.getInt(P_HEIGHT))
+                        .setWeight(resultSet.getInt(P_WEIGHT))
+                        .setLength(resultSet.getInt(P_LENGTH))
+                        .setProductType(ProductType.parseType(resultSet.getShort(P_TYPE)))
+                        .build());
+                Order order = new Order.OrderBuilder()
+                        .setId(resultSet.getLong(ORDERS_ID))
+                        .setClientProduct(clientProduct)
+                        .setCourier(new Courier.CourierBuilder()
+                                .setBuilder(new User.UserBuilder()
+                                        .setId(resultSet.getLong(COURTIER_ID))
+                                        .setName(resultSet.getString(U2_NAME))
+                                        .setSurname(resultSet.getString(U2_SURNAME))
+                                        .setLogin(resultSet.getString(U2_LOGIN))
+                                        .setPassword(resultSet.getString(U2_PASSWORD))
+                                        .setMail(resultSet.getString(U2_MAIL))
+                                        .setImage(resultSet.getString(U2_IMAGE))
+                                        .setPhone(resultSet.getString(U2_PHONE))
+                                        .setUserStatus(UserStatus.parseStatus(resultSet.getShort(U2_STATUS))))
+                                .setTransport(resultSet.getLong(CO_TRANSPORT))
+                                .setRating(resultSet.getDouble(CO_RATING))
+                                .build())
+                        .setDate(resultSet.getDate(ORDERS_DATE))
+                        .setOrderStatus(OrderStatus.parseStatus(resultSet.getShort(ORDERS_STATUS)))
+                        .build();
+                orders.add(order);
+            }
+        } catch (SQLException e){
+            logger.error("SQL exception in method in selectOrderById ", e);
+            throw new DaoException("SQL exception in method in selectOrderById ", e);
+        }
+        return orders;
     }
 }

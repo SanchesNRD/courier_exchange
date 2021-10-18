@@ -14,7 +14,8 @@ public interface ClientDao extends BaseDao<Long, Client>{
     int updateAddressToClient(long idClient, long idAddress) throws DaoException;
 
     List<ClientProduct> selectAllClientProduct() throws DaoException;
-    Optional<ClientProduct> selectClientProductById(Long id) throws DaoException;
+    Optional<ClientProduct> selectClientProductById(long id) throws DaoException;
+    List<ClientProduct> selectActiveClientProductById(long id) throws DaoException;
     boolean deleteClientProductById(Long id) throws DaoException;
     boolean createClientProduct(Long clientId, Long productId, Long addressId) throws DaoException;
     int updateClientProduct(ClientProduct clientProduct) throws DaoException;

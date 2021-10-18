@@ -30,7 +30,7 @@
                 </c:if>
                 <c:if test = "${!requestScope.no_order}">
                     <form action="${pageContext.request.contextPath}/controller">
-                        <input type="hidden" name="command" value="completed_order"/>
+                        <input type="hidden" name="command" value="complete_order"/>
                         <div class="wrap-login100">
                             <div class="form-group row">
                                 <div class="col-md-2 txt1 text-right">

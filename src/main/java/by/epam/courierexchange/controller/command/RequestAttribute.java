@@ -10,6 +10,7 @@ public class RequestAttribute {
     public static final String PASSWORD_CHANGE_SUC = "password_change_suc";
     public static final String COURIER_HAVE_ORDER = "courier_have_order";
     public static final String NO_ORDER = "no_order";
+    public static final String SAME_ADDRESS = "same_address";
 
     private RequestAttribute(){}
 }

@@ -80,6 +80,18 @@ public class ClientDaoImpl implements ClientDao {
                      LEFT JOIN orders ON client_product.id = orders.client_product_id
             where orders.id IS NULL AND client_id!=?
             """;
+    private static final String SQL_SELECT_ACTIVE_CLIENT_PRODUCT="""
+            SELECT client_product.id, client_id, login, password, mail, users.name, surname, phone, image,  users.status_id,
+                   clients.address_id, client_product.address_id, country, city, street, street_number,
+                   apartment, product_id, products.name, weight, length, width, height, type_id
+            FROM client_product
+                     INNER JOIN users ON client_product.client_id = users.id
+                     INNER JOIN addresses ON  client_product.address_id = addresses.id
+                     INNER JOIN products ON client_product.product_id = products.id
+                     INNER JOIN clients ON client_product.client_id = clients.id
+                     LEFT JOIN orders ON client_product.id = orders.client_product_id
+            where orders.id IS NULL AND client_id=?
+            """;
     private static final String SQL_DELETE_CLIENT_PRODUCT_BY_ID=
             "DELETE FROM client_product WHERE client_id=?";
     private static final String SQL_INSERT_CLIENT_PRODUCT="""
@@ -395,7 +407,7 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public Optional<ClientProduct> selectClientProductById(Long id) throws DaoException {
+    public Optional<ClientProduct> selectClientProductById(long id) throws DaoException {
         ClientProduct clientProduct = new ClientProduct();
         try(
                 Connection connection = connectionPool.getConnection();
@@ -489,5 +501,56 @@ public class ClientDaoImpl implements ClientDao {
             logger.error("SQL exception in method createClientProduct ", e);
             throw new DaoException("SQL exception in method createClientProduct ", e);
         }
+    }
+
+    @Override
+    public List<ClientProduct> selectActiveClientProductById(long id) throws DaoException {
+        List<ClientProduct> clientProducts = new ArrayList<>();
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_ACTIVE_CLIENT_PRODUCT))
+        {
+            statement.setLong(1,id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                ClientProduct clientProduct = new ClientProduct();
+                clientProduct.setId(resultSet.getLong(CLIENT_PRODUCT_ID));
+                clientProduct.setClient(new Client.ClientBuilder()
+                        .setBuilder(new User.UserBuilder()
+                                .setId(resultSet.getLong(CLIENT_ID))
+                                .setLogin(resultSet.getString(USER_LOGIN))
+                                .setPassword(resultSet.getString(USER_PASSWORD))
+                                .setMail(resultSet.getString(USER_MAIL))
+                                .setName(resultSet.getString(USER_POINT_NAME))
+                                .setSurname(resultSet.getString(USER_SURNAME))
+                                .setPhone(resultSet.getString(USER_PHONE))
+                                .setImage(resultSet.getString(USER_IMAGE))
+                                .setUserStatus(UserStatus.parseStatus(resultSet.getShort(USERS_STATUS_ID))))
+                        .setAddress(resultSet.getLong(CLIENTS_ADDRESS_ID))
+                        .build());
+                clientProduct.setAddress(new Address.AddressBuilder()
+                        .setId(resultSet.getLong(CLIENT_PRODUCT_ADDRESS_ID))
+                        .setCountry(resultSet.getString(ADDRESS_COUNTRY))
+                        .setCity(resultSet.getString(ADDRESS_CITY))
+                        .setStreet(resultSet.getString(ADDRESS_STREET))
+                        .setStreet_number(resultSet.getInt(ADDRESS_STREET_NUMBER))
+                        .setApartment(resultSet.getInt(ADDRESS_APARTMENT))
+                        .build());
+                clientProduct.setProduct(new Product.ProductBuilder()
+                        .setId(resultSet.getLong(PRODUCT_ID))
+                        .setName(resultSet.getString(PRODUCT_POINT_NAME))
+                        .setHeight(resultSet.getInt(PRODUCT_HEIGHT))
+                        .setLength(resultSet.getInt(PRODUCT_LENGTH))
+                        .setWeight(resultSet.getInt(PRODUCT_WEIGHT))
+                        .setWidth(resultSet.getInt(PRODUCT_WIDTH))
+                        .setProductType(ProductType.parseType(resultSet.getShort(TYPE_ID)))
+                        .build());
+                clientProducts.add(clientProduct);
+            }
+        } catch (SQLException e){
+            logger.error("SQL exception in method selectActiveClientProducts ", e);
+            throw new DaoException("SQL exception in method selectActiveClientProducts ", e);
+        }
+        return clientProducts;
     }
 }
