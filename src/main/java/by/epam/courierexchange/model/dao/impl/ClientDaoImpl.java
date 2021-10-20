@@ -78,7 +78,7 @@ public class ClientDaoImpl implements ClientDao {
                      INNER JOIN products ON client_product.product_id = products.id
                      INNER JOIN clients ON client_product.client_id = clients.id
                      LEFT JOIN orders ON client_product.id = orders.client_product_id
-            where orders.id IS NULL AND client_id!=?
+            where orders.id IS NULL AND client_id!=? AND weight<=?
             """;
     private static final String SQL_SELECT_ACTIVE_CLIENT_PRODUCT="""
             SELECT client_product.id, client_id, login, password, mail, users.name, surname, phone, image,  users.status_id,
@@ -93,7 +93,7 @@ public class ClientDaoImpl implements ClientDao {
             where orders.id IS NULL AND client_id=?
             """;
     private static final String SQL_DELETE_CLIENT_PRODUCT_BY_ID=
-            "DELETE FROM client_product WHERE client_id=?";
+            "DELETE FROM client_product WHERE id=?";
     private static final String SQL_INSERT_CLIENT_PRODUCT="""
             INSERT INTO client_product (client_id, product_id, address_id)
             VALUES (?,?,?)
@@ -356,13 +356,14 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public List<ClientProduct> selectClientProductForCourier(long id) throws DaoException {
+    public List<ClientProduct> selectClientProductForCourier(long id, int weight) throws DaoException {
         List<ClientProduct> clientProducts = new ArrayList<>();
         try(
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_SELECT_CLIENT_PRODUCT_FOR_COURIER))
         {
             statement.setLong(1,id);
+            statement.setInt(2, weight);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
                 ClientProduct clientProduct = new ClientProduct();

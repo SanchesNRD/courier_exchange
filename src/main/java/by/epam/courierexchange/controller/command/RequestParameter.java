@@ -25,6 +25,7 @@ public class RequestParameter {
     public static final String SPEED = "speed";
     public static final String TRANSPORT_TYPE = "transport_type";
     public static final String CLIENT_ORDER = "client_order";
+    public static final String ID = "id";
 
     private RequestParameter(){}
 }

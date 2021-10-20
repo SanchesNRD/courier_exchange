@@ -46,8 +46,8 @@ public class Main {
         Optional<ClientProduct> clientProductOptional;
         Optional<Product> productOptional;
         try {
-            orderDao.updateStatus(12, OrderStatus.COMPLETED);
-        } catch (DaoException e) {
+            System.out.println(clientService.deleteClientProduct("1"));
+        } catch (ServiceException e) {
             e.printStackTrace();
         }
 

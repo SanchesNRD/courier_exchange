@@ -20,19 +20,19 @@ import static by.epam.courierexchange.controller.command.CommandResult.ResponseT
 import static by.epam.courierexchange.controller.command.PagePath.ERROR_PAGE;
 import static by.epam.courierexchange.controller.command.RequestAttribute.EXCEPTION;
 
-public class GoToClientOrders implements Command {
+public class GoToClientTemplates implements Command {
     @Override
     public CommandResult execute(HttpServletRequest request) {
-        OrderDaoImpl orderDao = OrderDaoImpl.getInstance();
-        List<Order> orders;
+        ClientDaoImpl clientDao = ClientDaoImpl.getInstance();
+        List<ClientProduct> clientProducts;
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute(SessionAttribute.USER);
         CommandResult commandResult;
         if(user != null) {
             try {
-                orders = orderDao.selectHistoryByClient(user.getId(), OrderStatus.AGREED);
-                session.setAttribute(SessionAttribute.ORDERS, orders);
-                commandResult = new CommandResult(PagePath.USER_ORDERS_PAGE, FORWARD);
+                clientProducts = clientDao.selectActiveClientProductById(user.getId());
+                session.setAttribute(SessionAttribute.CLIENT_PRODUCT, clientProducts);
+                commandResult = new CommandResult(PagePath.USER_TEMPLATE, FORWARD);
             } catch (DaoException e) {
                 request.setAttribute(EXCEPTION, e);
                 commandResult = new CommandResult(ERROR_PAGE, FORWARD);

@@ -471,6 +471,9 @@ iframe {
   line-height: 1.4;
   text-transform: uppercase;
 }
+.text-font{
+  font-weight: 600;
+}
 .txt2 {
   font-family: Raleway-Regular, Arial, serif;
   font-size: 13px;
@@ -479,7 +482,8 @@ iframe {
 }
 .txt3 {
   font-family: Raleway-Regular, Arial, serif;
-  font-size: 13px;
+  font-size: 15px;
+  padding: 16px;
   text-decoration: none;
   color: #555555;
   line-height: 1.4;
@@ -811,6 +815,37 @@ iframe {
   transition: all 0.4s;
 }
 .order-courier-btn:hover {
+  background-color: #72afd2;
+  color: #ffffff;
+}
+.order-client-btn{
+  font-family: Raleway-Bold, Arial, serif;
+  font-size: 12px;
+  color: #fff;
+  line-height: 1.2;
+  margin-top: 12px;
+  margin-bottom: 16px;
+
+  align-self: flex-end;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+  min-width: 110px;
+  height: 35px;
+  background-color: #333333;
+  border-radius: 27px;
+
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+}
+.order-client-btn:hover {
   background-color: #72afd2;
   color: #ffffff;
 }

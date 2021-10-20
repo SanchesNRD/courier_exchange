@@ -3,7 +3,12 @@
 
 <header class="main-header">
     <a href="${pageContext.request.contextPath}/controller?command=go_to_user_profile" class="logo">
-        <span class="logo-lg"><b>Courier</b>XCH</span>
+        <c:if test="${sessionScope.user.userStatus!= 'ADMIN'}">
+            <span class="logo-lg"><b>Courier</b>XCH</span>
+        </c:if>
+        <c:if test="${sessionScope.user.userStatus== 'ADMIN'}">
+            <span class="logo-lg"><b>Admin</b>PNL</span>
+        </c:if>
     </a>
 
     <nav class="navbar navbar-static-top">

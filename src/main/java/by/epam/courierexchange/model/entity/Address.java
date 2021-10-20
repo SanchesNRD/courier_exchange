@@ -84,14 +84,12 @@ public class Address extends AbstractEntity{
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Address{");
-        sb.append("id=").append(id);
-        sb.append(", country='").append(country);
-        sb.append(", city='").append(city);
-        sb.append(", street='").append(street);
-        sb.append(", street_number=").append(street_number);
-        sb.append(", apartment=").append(apartment);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("");
+        sb.append(country);
+        sb.append(", ").append(city);
+        sb.append(", ").append(street);
+        sb.append(", ").append(street_number);
+        sb.append(", ").append(apartment);
         return sb.toString();
     }
 

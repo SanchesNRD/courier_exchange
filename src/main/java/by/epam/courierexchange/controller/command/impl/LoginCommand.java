@@ -35,16 +35,10 @@ public class LoginCommand implements Command {
                 HttpSession session = request.getSession(true);
                 session.setAttribute(SessionAttribute.USER, user);
                 switch (user.getUserStatus()){
-                    case CONFIRMED -> {
+                    case CONFIRMED, COURIER_CONFIRMED, NON_CONFIRMED -> {
                         commandResult = new CommandResult(PROFILE_PAGE, FORWARD);
                     }
-                    case COURIER_CONFIRMED -> {
-                        commandResult = new CommandResult(PROFILE_PAGE, FORWARD);
-                    }
-                    case NON_CONFIRMED ->
-                            commandResult = new CommandResult(PROFILE_PAGE, FORWARD);
                     case ADMIN -> {
-                        session.setAttribute(SessionAttribute.USER_ROLE, role_admin);
                         commandResult = new CommandResult(ADMIN_PAGE, FORWARD);
                     }
                     case BANED -> {

@@ -4,12 +4,14 @@ import by.epam.courierexchange.exception.DaoException;
 import by.epam.courierexchange.exception.ServiceException;
 import by.epam.courierexchange.model.dao.impl.AddressDaoImpl;
 import by.epam.courierexchange.model.dao.impl.ClientDaoImpl;
+import by.epam.courierexchange.model.dao.impl.TransportDaoImpl;
 import by.epam.courierexchange.model.entity.*;
 import by.epam.courierexchange.model.service.ClientService;
 import by.epam.courierexchange.model.validator.UserValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.List;
 import java.util.Optional;
 
 import static by.epam.courierexchange.model.dao.ColumnName.*;
@@ -19,6 +21,7 @@ public class ClientServiceImpl implements ClientService {
     private static final ClientServiceImpl instance = new ClientServiceImpl();
     private static final ClientDaoImpl clientDao = ClientDaoImpl.getInstance();
     private static final AddressDaoImpl addressDao = AddressDaoImpl.getInstance();
+    private static final int DEFAULT_WEIGHT = 6;
 
     public ClientServiceImpl() {
     }
@@ -93,6 +96,42 @@ public class ClientServiceImpl implements ClientService {
         }catch (DaoException e){
             logger.error("DaoException to the update address: ", e);
             throw new ServiceException("DaoException to the update address: ", e);
+        }
+    }
+
+    @Override
+    public boolean deleteClientProduct(String idStr) throws ServiceException {
+        if(!UserValidator.numberIsValid(idStr)){
+            return false;
+        }
+        long id = Long.parseLong(idStr);
+        ClientDaoImpl clientDao = ClientDaoImpl.getInstance();
+        try {
+            return clientDao.deleteClientProductById(id);
+        } catch (DaoException e) {
+            logger.error("DaoException to the delete client-product: ", e);
+            throw new ServiceException("DaoException to the  delete client-product: ", e);
+        }
+    }
+
+    @Override
+    public List<ClientProduct> selectClientProductForCourier(long idCourier, long idTransport) throws ServiceException {
+        try {
+            Transport transport;
+            Optional<Transport> transportOptional;
+            int weight;
+            TransportDaoImpl transportDao = TransportDaoImpl.getInstance();
+            transportOptional = transportDao.selectById(idTransport);
+            if(transportOptional.isPresent()){
+                transport = transportOptional.get();
+                weight = transport.getMaxProductWeight();
+            }else{
+                weight = DEFAULT_WEIGHT;
+            }
+            return clientDao.selectClientProductForCourier(idCourier, weight);
+        } catch (DaoException e) {
+            logger.error("DaoException to the select product-client for courier: ", e);
+            throw new ServiceException("DaoException to the select product-client for courier: ", e);
         }
     }
 }

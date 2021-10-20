@@ -24,45 +24,53 @@
             </h1>
         </section>
         <section class="content">
-            <c:if test="${sessionScope.user.userStatus == 'CONFIRMED'}">
-                <div class="wrap-login100">
-                    <div class="row">
-                        <div class="col-md-3 txt1 text-left">
-                            <fmt:message key="page.orders.name_client"/>
-                        </div>
-                        <div class="col-md-3 txt1 text-left">
-                            <fmt:message key="page.orders.name_product"/>
-                        </div>
-                        <div class="col-md-4 txt1 text-left">
+            <div class="wrap-login100">
+                <div class="row">
+                    <div class="col-md-2 txt1 text-font text-left">
+                        <fmt:message key="page.orders.name_client"/>
+                    </div>
+                    <div class="col-md-2 txt1 text-font text-left">
+                        <fmt:message key="page.orders.name_product"/>
+                    </div>
+                    <div class="col-md-2 txt1 text-left">
+                        <div class="text-font">
                             <fmt:message key="page.orders.size"/>
                         </div>
-                        <div class="cpl-md-2 txt1 text-left">
-                            <fmt:message key="page.orders.weight"/>
+                        <div class="txt2" style="text-transform: none">
+                            <fmt:message key="page.orders.lwh"/>
                         </div>
                     </div>
-                    <c:forEach var="clientProducts" items="${sessionScope.clientProducts}">
-                        <div class="row">
-                            <div class="col-md-3 txt1 text-left">
-                                <c:out value="${clientProducts.client.login}"/>
-                            </div>
-                            <div class="col-md-3 txt1 text-left">
-                                <c:out value="${clientProducts.product.height}"/>
-                            </div>
-                            <div class="col-md-4 txt1 text-left">
-                                <c:out value="${clientProducts.product.length}"/>
-                            </div>
-                            <div class="col-md-2 txt1 text-left">
-                                <c:out value="${clientProducts.address.country}"/>
-                            </div>
+                    <div class="col-md-2 txt1 text-font text-left">
+                        <fmt:message key="page.orders.weight"/>
+                    </div>
+                    <div class="col-md-4 txt1 text-font text-left">
+                        <fmt:message key="page.orders.address"/>
+                    </div>
+                </div>
+                <c:forEach var="clientProducts" items="${sessionScope.clientProducts}">
+                    <div class="row">
+                        <div class="col-md-2 txt3 text-left">
+                            <c:out value="${clientProducts.client.login}"/>
                         </div>
-                    </c:forEach>
-                </div>
-            </c:if>
-            <c:if test="${sessionScope.user.userStatus == 'NON_CONFIRMED'}">
-                <div class="wrap-login100">
-                    <fmt:message key="page.profile.auth"/>
-                </div>
-            </c:if>
+                        <div class="col-md-2 txt3 text-left">
+                            <c:out value="${clientProducts.product.name}"/>
+                        </div>
+                        <div class="col-md-2 txt3 text-left">
+                            <c:out value="${clientProducts.product.length}"/>
+                            -
+                            <c:out value="${clientProducts.product.width}"/>
+                            -
+                            <c:out value="${clientProducts.product.height}"/>
+                        </div>
+                        <div class="col-md-2 txt3 text-left">
+                            <c:out value="${clientProducts.product.weight}"/>
+                        </div>
+                        <div class="col-md-4 txt3 text-left">
+                            <c:out value="${clientProducts.address}"/>
+                        </div>
+                    </div>
+                </c:forEach>
+            </div>
         </section>
     </div>
 
