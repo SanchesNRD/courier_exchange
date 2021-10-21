@@ -45,11 +45,7 @@ public class Main {
         List<ClientProduct> clientProductList;
         Optional<ClientProduct> clientProductOptional;
         Optional<Product> productOptional;
-        try {
-            System.out.println(clientService.deleteClientProduct("1"));
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
+        System.out.println("hy");
 
     }
 }

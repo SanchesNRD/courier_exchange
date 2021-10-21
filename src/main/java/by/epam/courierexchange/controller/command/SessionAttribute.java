@@ -12,6 +12,7 @@ public class SessionAttribute {
     public static final String TRANSPORT = "transport";
     public static final String ORDER = "order";
     public static final String ORDERS = "orders";
+    public static final String USERS = "users";
 
     private SessionAttribute(){}
 }

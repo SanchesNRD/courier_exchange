@@ -24,6 +24,7 @@ public class UserDaoImpl implements UserDao {
     private static final String SQL_SELECT_ALL= """
             SELECT id, login, password, mail, name, surname, phone, image, status_id
             FROM users
+            WHERE status_id!=5
             """;
     private static final String SQL_SELECT_BY_ID= """
             SELECT id, login, password, mail, name, surname, phone, image, status_id 

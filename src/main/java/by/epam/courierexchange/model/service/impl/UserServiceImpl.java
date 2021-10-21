@@ -3,6 +3,8 @@ package by.epam.courierexchange.model.service.impl;
 import by.epam.courierexchange.controller.command.PagePath;
 import by.epam.courierexchange.exception.DaoException;
 import by.epam.courierexchange.exception.ServiceException;
+import by.epam.courierexchange.model.dao.impl.ClientDaoImpl;
+import by.epam.courierexchange.model.dao.impl.OrderDaoImpl;
 import by.epam.courierexchange.model.dao.impl.UserDaoImpl;
 import by.epam.courierexchange.model.entity.User;
 import by.epam.courierexchange.model.entity.UserStatus;
@@ -12,11 +14,14 @@ import by.epam.courierexchange.util.PasswordEncryption;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.List;
 import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
     private static final Logger logger = LogManager.getLogger();
     private static final UserServiceImpl instance = new UserServiceImpl();
+    private static final OrderDaoImpl orderDao = OrderDaoImpl.getInstance();
+    private static final ClientDaoImpl clientDao = ClientDaoImpl.getInstance();
     private static final UserDaoImpl userDao = UserDaoImpl.getInstance();
     private static final String DEFAULT_PATH="C:\\Users\\alex2\\epam\\img\\";
     private static final String DEFAULT_IMG = "default.jpg";
@@ -58,7 +63,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> registration(String login, String password, String name, String surname, String mail, String phone)
             throws ServiceException {
-        boolean createResult;
         Optional<User> optionalUser;
         User user;
         if(!UserValidator.loginIsValid(login) && !UserValidator.passwordIsValid(password)
@@ -76,7 +80,7 @@ public class UserServiceImpl implements UserService {
                     .setPhone(phone)
                     .setUserStatus(UserStatus.NON_CONFIRMED)
                     .build();
-            createResult = userDao.create(user);
+            userDao.create(user);
             optionalUser = Optional.of(user);
         } catch (DaoException e){
             logger.error("Exception wile working with database ", e);
@@ -230,7 +234,54 @@ public class UserServiceImpl implements UserService {
             return userDao.selectById(user.getId());
         } catch (DaoException e){
             logger.error("DaoException to the update user status: ", e);
-            throw new ServiceException("DaoException to the user status: ", e);
+            throw new ServiceException("DaoException to the update user status: ", e);
+        }
+    }
+
+    @Override
+    public int banUser(String idStr) throws ServiceException {
+        if(!UserValidator.numberIsValid(idStr)){
+            return 0;
+        }
+        int result;
+        long id = Long.parseLong(idStr);
+        Optional<User> userOptional;
+        List<Long> orders;
+        try {
+            userOptional = userDao.selectById(id);
+            if(userOptional.isEmpty()) {
+                return 0;
+            }
+            User user = userOptional.get();
+            if(user.getUserStatus() == UserStatus.ADMIN){
+                return 0;
+            }
+            if(user.getUserStatus() == UserStatus.BANED){
+                result = userDao.updateStatus(id, UserStatus.NON_CONFIRMED);
+            }
+            else {
+                orders = orderDao.selectOrderByUser(id);
+                if (orders.size() == 0) {
+                    result = userDao.updateStatus(id, UserStatus.BANED);
+                    clientDao.deleteClientProductByClient(id);
+                } else {
+                    result = -1;
+                }
+            }
+        } catch (DaoException e) {
+            logger.error("DaoException to the update user status: ", e);
+            throw new ServiceException("DaoException to the update user status: ", e);
+        }
+        return result;
+    }
+
+    @Override
+    public List<User> selectAll() throws ServiceException {
+        try {
+            return userDao.selectAll();
+        } catch (DaoException e) {
+            logger.error("DaoException to the select all users: ", e);
+            throw new ServiceException("DaoException to the select all users: ", e);
         }
     }
 }

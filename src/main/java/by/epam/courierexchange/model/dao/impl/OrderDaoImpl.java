@@ -80,6 +80,12 @@ public class OrderDaoImpl implements OrderDao {
                   INNER JOIN addresses a on cp.address_id = a.id
             WHERE client_id=? AND orders.status_id=?
             """;
+    private static final String SQL_SELECT_ACTIVE_BY_USER="""
+            SELECT orders.id
+            FROM orders
+                  INNER JOIN client_product cp on orders.client_product_id = cp.id
+            WHERE client_id=? OR courier_id=? AND status_id!=?
+            """;
 
     private OrderDaoImpl(){}
 
@@ -458,4 +464,24 @@ public class OrderDaoImpl implements OrderDao {
         return orders;
     }
 
+    @Override
+    public List<Long> selectOrderByUser(long id) throws DaoException {
+        List<Long> orders = new ArrayList<>();
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_ACTIVE_BY_USER))
+        {
+            statement.setLong(1, id);
+            statement.setLong(2, id);
+            statement.setShort(3, OrderStatus.COMPLETED.getStatusId());
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()){
+                orders.add(resultSet.getLong(ORDERS_ID));
+            }
+        } catch (SQLException e){
+            logger.error("SQL exception in method in selectOrderByUser ", e);
+            throw new DaoException("SQL exception in method in selectOrderByUser ", e);
+        }
+        return orders;
+    }
 }

@@ -12,6 +12,9 @@ public final class PagePath {
     public static final String FORGOT_PASS_PAGE = "jsp/auth/forgot_pass.jsp";
 
     public static final String ADMIN_PAGE = "jsp/admin/admin.jsp";
+    public static final String ADMIN_ALL_USERS = "jsp/admin/all_users.jsp";
+    public static final String ADMIN_CLIENT_PRODUCTS = "jsp/admin/client_products.jsp";
+    public static final String ADMIN_COURIERS = "jsp/admin/couriers.jsp";
 
     public static final String COURIER_TRANSPORT = "jsp/courier/transport.jsp";
     public static final String COURIER_ALL_ORDERS_PAGE = "jsp/courier/orders.jsp";

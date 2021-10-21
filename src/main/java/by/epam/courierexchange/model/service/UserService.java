@@ -3,6 +3,7 @@ package by.epam.courierexchange.model.service;
 import by.epam.courierexchange.exception.ServiceException;
 import by.epam.courierexchange.model.entity.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -15,4 +16,6 @@ public interface UserService {
     Optional<User> changePassword(User user, String password, String newPassword) throws ServiceException;
     int confirmProfile(User user) throws ServiceException;
     Optional<User> changeRole(User user) throws ServiceException;
+    int banUser(String id) throws ServiceException;
+    List<User> selectAll() throws ServiceException;
 }

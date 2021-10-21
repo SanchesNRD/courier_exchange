@@ -4,6 +4,7 @@ import by.epam.courierexchange.exception.DaoException;
 import by.epam.courierexchange.exception.ServiceException;
 import by.epam.courierexchange.model.dao.impl.AddressDaoImpl;
 import by.epam.courierexchange.model.dao.impl.ClientDaoImpl;
+import by.epam.courierexchange.model.dao.impl.OrderDaoImpl;
 import by.epam.courierexchange.model.dao.impl.TransportDaoImpl;
 import by.epam.courierexchange.model.entity.*;
 import by.epam.courierexchange.model.service.ClientService;
@@ -33,7 +34,6 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public boolean createProductClient(Long idUser, Long idProduct, Long idAddress) throws ServiceException {
-        ClientProduct clientProduct = new ClientProduct();
         try {
             return clientDao.createClientProduct(idUser, idProduct, idAddress);
         } catch (DaoException e) {

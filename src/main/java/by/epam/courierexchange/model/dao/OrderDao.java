@@ -15,4 +15,5 @@ public interface OrderDao extends BaseDao<Long, Order>{
     int updateStatus(long id, OrderStatus status) throws DaoException;
     List<Order> selectHistoryByCourier(long id, OrderStatus status) throws DaoException;
     List<Order> selectHistoryByClient(long id, OrderStatus status) throws DaoException;
+    List<Long> selectOrderByUser(long id) throws DaoException;
 }

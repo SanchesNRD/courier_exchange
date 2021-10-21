@@ -48,14 +48,16 @@ public class ClientDaoImpl implements ClientDao {
 
     //client_product
     private static final String SQL_SELECT_ALL_CLIENT_PRODUCT="""
-            SELECT client_product.id, client_id, login, password, mail, users.name, surname, phone, image, status_id, 
-                clients.address_id, client_product.address_id, country, city, street, street_number, 
-                apartment, product_id, products.name, weight, length, width, height, type_id
-            FROM client_product
-                INNER JOIN users ON client_product.client_id = users.id
-                INNER JOIN addresses ON  client_product.address_id = addresses.id
-                INNER JOIN products ON client_product.product_id = products.id
-                INNER JOIN clients ON client_product.client_id = clients.id
+           SELECT client_product.id, client_id, login, password, mail, users.name, surname, phone, image, users.status_id,
+                  clients.address_id, client_product.address_id, country, city, street, street_number,
+                  apartment, product_id, products.name, weight, length, width, height, type_id
+           FROM client_product
+                    INNER JOIN users ON client_product.client_id = users.id
+                    INNER JOIN addresses ON  client_product.address_id = addresses.id
+                    INNER JOIN products ON client_product.product_id = products.id
+                    INNER JOIN clients ON client_product.client_id = clients.id
+                    LEFT JOIN orders o on client_product.id = o.client_product_id
+           WHERE o.id IS NULL
         """;
     private static final String SQL_SELECT_CLIENT_PRODUCT_BY_ID="""
             SELECT client_product.id, client_id, login, password, mail, users.name, surname, phone, image, status_id, 
@@ -94,6 +96,12 @@ public class ClientDaoImpl implements ClientDao {
             """;
     private static final String SQL_DELETE_CLIENT_PRODUCT_BY_ID=
             "DELETE FROM client_product WHERE id=?";
+    private static final String SQL_DELETE_CLIENT_PRODUCT_BY_CLIENT="""
+            DELETE client_product
+            FROM client_product
+                     LEFT JOIN orders ON client_product.id = orders.client_product_id
+            where orders.id IS NULL AND client_id=?
+            """;
     private static final String SQL_INSERT_CLIENT_PRODUCT="""
             INSERT INTO client_product (client_id, product_id, address_id)
             VALUES (?,?,?)
@@ -326,7 +334,7 @@ public class ClientDaoImpl implements ClientDao {
                                 .setSurname(resultSet.getString(USER_SURNAME))
                                 .setPhone(resultSet.getString(USER_PHONE))
                                 .setImage(resultSet.getString(USER_IMAGE))
-                                .setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID))))
+                                .setUserStatus(UserStatus.parseStatus(resultSet.getShort(USERS_STATUS_ID))))
                         .setAddress(resultSet.getLong(CLIENTS_ADDRESS_ID))
                         .build());
                 clientProduct.setAddress(new Address.AddressBuilder()
@@ -553,5 +561,19 @@ public class ClientDaoImpl implements ClientDao {
             throw new DaoException("SQL exception in method selectActiveClientProducts ", e);
         }
         return clientProducts;
+    }
+
+    @Override
+    public boolean deleteClientProductByClient(Long id) throws DaoException {
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_DELETE_CLIENT_PRODUCT_BY_CLIENT))
+        {
+            statement.setLong(1,id);
+            return statement.execute();
+        } catch (SQLException e){
+            logger.error("SQL exception in method deleteClientProductById ", e);
+            throw new DaoException("SQL exception in method deleteClientProductById ", e);
+        }
     }
 }
