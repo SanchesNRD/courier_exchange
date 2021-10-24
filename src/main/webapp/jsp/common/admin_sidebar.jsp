@@ -13,8 +13,10 @@
                 <fmt:message key="sidebar.admin.users"/></a></li>
             <li><a href="${pageContext.request.contextPath}/controller?command=go_to_admin_client_templates">
                 <fmt:message key="sidebar.admin.templates"/></a></li>
-            <li><a href="${pageContext.request.contextPath}/controller?command=go_to_admin_courier_transport">
+            <li><a href="${pageContext.request.contextPath}/controller?command=go_to_admin_transports">
                 <fmt:message key="sidebar.admin.transports"/></a></li>
+            <li><a href="${pageContext.request.contextPath}/controller?command=go_to_admin_products">
+                <fmt:message key="sidebar.admin.products"/></a></li>
 
             <li style="margin-top: 60px">
                 <a href="${pageContext.request.contextPath}/controller?command=change_locale&locale=${sessionScope.locale}&current_url=${pageContext.request.requestURL}">

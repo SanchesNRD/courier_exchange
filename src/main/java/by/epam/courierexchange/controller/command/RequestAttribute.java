@@ -12,6 +12,8 @@ public class RequestAttribute {
     public static final String NO_ORDER = "no_order";
     public static final String SAME_ADDRESS = "same_address";
     public static final String USER_HAVE_ORDER = "user_have_order";
+    public static final String PRODUCT_WAS_USED = "product_was_used";
+    public static final String TRANSPORT_WAS_USED = "transport_was_used";
 
     private RequestAttribute(){}
 }

@@ -1,7 +1,7 @@
 package by.epam.courierexchange.controller.command;
 
 import by.epam.courierexchange.controller.command.impl.*;
-import by.epam.courierexchange.controller.command.impl.admin.BanUser;
+import by.epam.courierexchange.controller.command.impl.admin.*;
 import by.epam.courierexchange.controller.command.impl.client.*;
 import by.epam.courierexchange.controller.command.impl.courier.CompleteOrder;
 import by.epam.courierexchange.controller.command.impl.courier.TakeCourierOrder;
@@ -36,9 +36,12 @@ public class CommandProvider {
         commands.put(COMPLETE_ORDER, new CompleteOrder());
         commands.put(DELETE_CLIENT_PRODUCT, new DeleteClientOrder());
         commands.put(BAN_USER, new BanUser());
+        commands.put(DELETE_PRODUCT, new DeleteProduct());
+        commands.put(DELETE_TRANSPORT, new DeleteTransport());
 
+        commands.put(GO_TO_ADMIN_PRODUCTS, new GoToAdminProducts());
         commands.put(GO_TO_ADMIN_CLIENT_TEMPLATES, new GoToAdminClientTemplates());
-        commands.put(GO_TO_ADMIN_COURIER_TRANSPORT, new GoToAdminCourierTransport());
+        commands.put(GO_TO_ADMIN_TRANSPORTS, new GoToAdminTransports());
         commands.put(GO_TO_ADMIN_PAGE, new GoToAdminPage());
         commands.put(GO_TO_ADMIN_ALL_USERS, new GoToAdminAllUsers());
         commands.put(GO_TO_MY_TEMPLATES, new GoToClientTemplates());

@@ -1,6 +1,7 @@
 package by.epam.courierexchange.model.dao.impl;
 
 import by.epam.courierexchange.exception.DaoException;
+import by.epam.courierexchange.exception.ServiceException;
 import by.epam.courierexchange.model.connection.ConnectionPool;
 import by.epam.courierexchange.model.dao.ProductDao;
 import by.epam.courierexchange.model.entity.ClientProduct;
@@ -46,6 +47,12 @@ public class ProductDaoImpl implements ProductDao {
     private static final String SQL_UPDATE="""
             UPDATE products SET weight=?, length=?, width=?, 
             height=?, type_id=? WHERE id=?
+            """;
+    private static  final String SQL_SELECT_USED_PRODUCT_BY_ID= """
+            SELECT client_product.id
+            FROM client_product
+                RIGHT JOIN orders o on client_product.id = o.client_product_id
+            WHERE product_id=?
             """;
 
 
@@ -216,5 +223,24 @@ public class ProductDaoImpl implements ProductDao {
             logger.error("SQL exception in method updateProduct ", e);
             throw new DaoException("SQL exception in method updateProduct ", e);
         }
+    }
+
+    @Override
+    public List<Long> selectUsedProductById(long id) throws DaoException {
+        List<Long> products = new ArrayList<>();
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_USED_PRODUCT_BY_ID))
+        {
+            statement.setLong(1,id);
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()){
+                products.add(resultSet.getLong(CLIENT_PRODUCT_ID));
+            }
+        } catch (SQLException e){
+            logger.error("SQL exception in method selectUsedProductByType", e);
+            throw new DaoException("SQL exception in method selectUsedProductByType", e);
+        }
+        return products;
     }
 }

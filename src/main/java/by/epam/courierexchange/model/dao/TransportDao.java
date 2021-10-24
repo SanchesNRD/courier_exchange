@@ -10,4 +10,5 @@ public interface TransportDao extends BaseDao<Long, Transport>{
     List<Transport> selectBySpeed(Integer speed) throws DaoException;
     List<Transport> selectByWeight(Integer weight) throws DaoException;
     long selectIdTransport(String name, int speed, int weight, short type) throws DaoException;
+    List<Long> selectUsedProductById(long id) throws DaoException;
 }

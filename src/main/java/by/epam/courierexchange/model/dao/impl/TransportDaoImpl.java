@@ -54,6 +54,12 @@ public class TransportDaoImpl implements TransportDao {
             SELECT id FROM transports 
             WHERE name=? AND average_speed=? AND max_product_weight=? AND type_id=?
             """;
+    private static  final String SQL_SELECT_USED_TRANSPORT_BY_ID= """
+            SELECT couriers.id
+            FROM couriers
+                     RIGHT JOIN orders o on couriers.id = o.courier_id
+            WHERE transport_id=?
+            """;
 
     private TransportDaoImpl(){}
 
@@ -259,5 +265,24 @@ public class TransportDaoImpl implements TransportDao {
             logger.error("SQL exception in method selectTransportById ", e);
             throw new DaoException("SQL exception in method selectTransportById ", e);
         }
+    }
+
+    @Override
+    public List<Long> selectUsedProductById(long id) throws DaoException {
+        List<Long> transports = new ArrayList<>();
+        try(
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_USED_TRANSPORT_BY_ID))
+        {
+            statement.setLong(1,id);
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()){
+                transports.add(resultSet.getLong(COURIERS_ID));
+            }
+        } catch (SQLException e){
+            logger.error("SQL exception in method selectUsedTransportByType", e);
+            throw new DaoException("SQL exception in method selectUsedTransportByType", e);
+        }
+        return transports;
     }
 }

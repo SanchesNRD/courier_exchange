@@ -28,7 +28,6 @@ public class ColumnName {
     public static final String PRODUCT_LENGTH = "length";
     public static final String PRODUCT_WIDTH = "width";
     public static final String PRODUCT_HEIGHT = "height";
-    public static final String PRODUCT_MULTIPLIER = "multiplier";
     //client_product
     public static final String CLIENT_ID ="client_id";
     public static final String PRODUCT_ID = "product_id";
@@ -41,13 +40,13 @@ public class ColumnName {
     public static final String ORDER_CLIENT_PRODUCT_ID = "client_product_id";
     //couriers
     public static final String COURIER_RATING = "rating";
+    public static final String COURIERS_ID = "couriers.id";
     //transport
     public static final String TRANSPORT_NAME = "name";
     public static final String TRANSPORT_AVERAGE_SPEED = "average_speed";
-    public static final String TRANSPORT_IMAGE = "image";
     public static final String TRANSPORT_MAX_PRODUCT_WEIGHT = "max_product_weight";
     //courier_transport
-    public static final String COURTIER_ID = "courier_id";
+    public static final String COURIER_ID = "courier_id";
     public static final String TRANSPORT_ID = "transport_id";
 
     //addresses

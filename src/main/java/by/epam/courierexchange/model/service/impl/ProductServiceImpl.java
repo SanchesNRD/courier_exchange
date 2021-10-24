@@ -11,6 +11,7 @@ import by.epam.courierexchange.model.validator.UserValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.List;
 import java.util.Optional;
 
 public class ProductServiceImpl implements ProductService {
@@ -64,6 +65,35 @@ public class ProductServiceImpl implements ProductService {
         } catch (DaoException e){
             logger.error("DaoException to the create product: ", e);
             throw new ServiceException("DaoException to the create product: ", e);
+        }
+    }
+
+    @Override
+    public int deleteProduct(String idStr) throws ServiceException {
+        if(!UserValidator.numberIsValid(idStr)){
+            return 0;
+        }
+        long id = Long.parseLong(idStr);
+        try {
+            List<Long> usedProduct = productDao.selectUsedProductById(id);
+            if(!usedProduct.isEmpty()){
+                return -1;
+            }
+            productDao.deleteById(id);
+        } catch (DaoException e) {
+            logger.error("DaoException to the delete or select used product: ", e);
+            throw new ServiceException("DaoException to the delete or select used product: ", e);
+        }
+        return 1;
+    }
+
+    @Override
+    public List<Product> selectAll() throws ServiceException {
+        try {
+            return productDao.selectAll();
+        } catch (DaoException e) {
+            logger.error("DaoException to the select all products: ", e);
+            throw new ServiceException("DaoException to the select all products: ", e);
         }
     }
 }
