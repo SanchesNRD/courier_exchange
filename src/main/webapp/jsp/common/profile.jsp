@@ -31,7 +31,7 @@
             <div class="content-confirm">
                 <fmt:message key="page.profile.confirm"/>
                 <p>
-                <a href="${pageContext.request.contextPath}/controller?command=confirm_profile">
+                <a href="${pageContext.request.contextPath}/controller?command=confirm_mail_message">
                     <fmt:message key="page.profile.confirm_but"/>
                 </a>
             </div>

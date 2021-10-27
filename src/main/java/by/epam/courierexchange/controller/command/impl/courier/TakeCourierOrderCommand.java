@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
-public class TakeCourierOrder implements Command {
+public class TakeCourierOrderCommand implements Command {
     @Override
     public CommandResult execute(HttpServletRequest request) {
         String clientOrderId = request.getParameter(RequestParameter.CLIENT_ORDER);

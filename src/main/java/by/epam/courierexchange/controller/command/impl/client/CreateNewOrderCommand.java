@@ -16,7 +16,7 @@ import java.util.Optional;
 
 import static by.epam.courierexchange.controller.command.CommandResult.ResponseType.*;
 
-public class CreateNewOrder implements Command {
+public class CreateNewOrderCommand implements Command {
     @Override
     public CommandResult execute(HttpServletRequest request) {
         ClientServiceImpl clientService = ClientServiceImpl.getInstance();

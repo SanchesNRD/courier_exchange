@@ -12,7 +12,7 @@ import static by.epam.courierexchange.controller.command.CommandResult.ResponseT
 import static by.epam.courierexchange.controller.command.PagePath.*;
 import static by.epam.courierexchange.controller.command.RequestAttribute.EXCEPTION;
 
-public class UpdatePassword implements Command {
+public class UpdatePasswordCommand implements Command {
     @Override
     public CommandResult execute(HttpServletRequest request) {
         UserServiceImpl userService = UserServiceImpl.getInstance();

@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.util.Optional;
 
-public class UpdateClientAddress implements Command {
+public class UpdateClientAddressCommand implements Command {
     @Override
     public CommandResult execute(HttpServletRequest request) {
         String country = request.getParameter(RequestParameter.COUNTRY);

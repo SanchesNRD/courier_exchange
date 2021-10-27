@@ -1,6 +1,5 @@
 package by.epam.courierexchange.model.service.impl;
 
-import by.epam.courierexchange.controller.command.PagePath;
 import by.epam.courierexchange.exception.DaoException;
 import by.epam.courierexchange.exception.ServiceException;
 import by.epam.courierexchange.model.dao.impl.ClientDaoImpl;
@@ -197,29 +196,9 @@ public class UserServiceImpl implements UserService {
         return optionalUser;
     }
 
-    @Override
-    public int confirmProfile(User user) throws ServiceException {
-        user = new User.UserBuilder()
-                .setUserStatus(UserStatus.CONFIRMED)
-                .setPhone(user.getPhone())
-                .setSurname(user.getSurname())
-                .setName(user.getName())
-                .setMail(user.getMail())
-                .setPassword(user.getPassword())
-                .setLogin(user.getLogin())
-                .setImage(user.getImage())
-                .setId(user.getId())
-                .build();
-        try{
-            return userDao.update(user);
-        } catch (DaoException e){
-            logger.error("DaoException to the update user status: ", e);
-            throw new ServiceException("DaoException to the user status: ", e);
-        }
-    }
 
     @Override
-    public Optional<User> changeRole(User user) throws ServiceException {
+    public Optional<User> changeConfirmedRole(User user) throws ServiceException {
         if(user.getUserStatus() != UserStatus.COURIER_CONFIRMED && user.getUserStatus() != UserStatus.CONFIRMED) {
             return Optional.empty();
         }
@@ -232,6 +211,20 @@ public class UserServiceImpl implements UserService {
             }
             userDao.updateStatus(user.getId(), userStatus);
             return userDao.selectById(user.getId());
+        } catch (DaoException e){
+            logger.error("DaoException to the update user status: ", e);
+            throw new ServiceException("DaoException to the update user status: ", e);
+        }
+    }
+
+    @Override
+    public int changeRole(String id, UserStatus userStatus) throws ServiceException {
+        if(!UserValidator.numberIsValid(id)) {
+            return 0;
+        }
+        try{
+            long userId = Long.parseLong(id);
+            return userDao.updateStatus(userId, userStatus);
         } catch (DaoException e){
             logger.error("DaoException to the update user status: ", e);
             throw new ServiceException("DaoException to the update user status: ", e);

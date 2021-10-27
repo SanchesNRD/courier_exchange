@@ -18,23 +18,8 @@ import static by.epam.courierexchange.controller.command.RequestAttribute.EXCEPT
 public class GoToNewPassword implements Command {
     @Override
     public CommandResult execute(HttpServletRequest request) {
-        String mail = request.getParameter(RequestParameter.MAIL);
-        Optional<User> optionalUser;
-        UserServiceImpl userService = UserServiceImpl.getInstance();
-        CommandResult commandResult;
-        try{
-            optionalUser = userService.selectByMail(mail);
-            if(optionalUser.isPresent()){
-                request.setAttribute(RequestAttribute.USER_ID, optionalUser.get().getId());
-                commandResult = new CommandResult(NEW_PASSWORD_PAGE, FORWARD);
-            }else{
-                request.setAttribute(RequestAttribute.WRONG_VALIDATION, true);
-                commandResult = new CommandResult(FORGOT_PASS_PAGE, FORWARD);
-            }
-        } catch(ServiceException e){
-            request.setAttribute(EXCEPTION, e);
-            commandResult = new CommandResult(ERROR_PAGE, FORWARD);
-        }
-        return commandResult;
+        String userId = request.getParameter(RequestParameter.ID);
+        request.setAttribute(RequestAttribute.USER_ID, userId);
+        return new CommandResult(NEW_PASSWORD_PAGE, FORWARD);
     }
 }

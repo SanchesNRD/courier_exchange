@@ -8,7 +8,7 @@ import by.epam.courierexchange.model.entity.OrderStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
-public class CompleteOrder implements Command {
+public class CompleteOrderCommand implements Command {
     @Override
     public CommandResult execute(HttpServletRequest request) {
         HttpSession session = request.getSession();

@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
-public class DeleteClientOrder implements Command {
+public class DeleteClientOrderCommand implements Command {
     @Override
     public CommandResult execute(HttpServletRequest request) {
         String id = request.getParameter(RequestParameter.ID);

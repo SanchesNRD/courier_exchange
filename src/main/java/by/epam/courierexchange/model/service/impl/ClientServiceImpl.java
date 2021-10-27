@@ -43,24 +43,13 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Optional<Client> createClient(User user) throws ServiceException {
+    public int createClient(String id) throws ServiceException {
+        if(!UserValidator.numberIsValid(id)){
+            return 0;
+        }
         try{
-            if(clientDao.createById(user.getId())){
-                Client client = new Client.ClientBuilder()
-                        .setBuilder(new User.UserBuilder()
-                                .setId(user.getId())
-                                .setLogin(user.getLogin())
-                                .setPassword(user.getPassword())
-                                .setMail(user.getMail())
-                                .setName(user.getName())
-                                .setSurname(user.getSurname())
-                                .setPhone(user.getPhone())
-                                .setUserStatus(user.getUserStatus()))
-                        .build();
-                return Optional.of(client);
-            }else{
-                return Optional.empty();
-            }
+            long userId = Long.parseLong(id);
+            return clientDao.createById(userId);
         }catch (DaoException e){
             logger.error("DaoException to the create client: ", e);
             throw new ServiceException("DaoException to the create client: ", e);

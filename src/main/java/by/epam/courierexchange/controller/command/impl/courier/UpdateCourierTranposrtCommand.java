@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.util.Optional;
 
-public class UpdateCourierTranposrt implements Command {
+public class UpdateCourierTranposrtCommand implements Command {
     @Override
     public CommandResult execute(HttpServletRequest request) {
         String name = request.getParameter(RequestParameter.NAME);

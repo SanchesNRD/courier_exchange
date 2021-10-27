@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.util.Optional;
 
-public class ChangePassword implements Command {
+public class ChangePasswordCommand implements Command {
     @Override
     public CommandResult execute(HttpServletRequest request) {
         UserServiceImpl userService = UserServiceImpl.getInstance();
@@ -23,11 +23,10 @@ public class ChangePassword implements Command {
             optionalUser = userService.changePassword(user, password, newPassword);
             if(optionalUser.isPresent()){
                 request.setAttribute(RequestAttribute.PASSWORD_CHANGE_SUC, true);
-                session.setAttribute(SessionAttribute.USER, optionalUser.get());
             }else{
                 request.setAttribute(RequestAttribute.WRONG_VALIDATION, true);
             }
-            commandResult = new CommandResult(PagePath.PROFILE_PAGE, CommandResult.ResponseType.FORWARD);
+            commandResult = new CommandResult(PagePath.LOGIN_PAGE, CommandResult.ResponseType.FORWARD);
         } catch (ServiceException e){
             request.setAttribute(RequestAttribute.EXCEPTION, e);
             commandResult = new CommandResult(PagePath.ERROR_PAGE, CommandResult.ResponseType.FORWARD);

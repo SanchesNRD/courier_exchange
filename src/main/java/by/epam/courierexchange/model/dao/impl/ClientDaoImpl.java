@@ -269,13 +269,13 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public boolean createById(long userId) throws DaoException {
+    public int createById(long userId) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_INSERT_CLIENT_BY_ID))
         {
             statement.setLong(1, userId);
-            return statement.execute();
+            return statement.executeUpdate();
         } catch (SQLException e){
             logger.error("SQL exception in method createClient ", e);
             throw new DaoException("SQL exception in method createClient ", e);

@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface ClientService {
     boolean createProductClient(Long idUser, Long idProduct, Long idAddress) throws ServiceException;
-    Optional<Client> createClient(User user) throws ServiceException;
+    int createClient(String id) throws ServiceException;
     Optional<Address>  updateAddress (Client client, String country, String city, String street, String number, String apartment)
         throws ServiceException;
     boolean deleteClientProduct (String id) throws ServiceException;

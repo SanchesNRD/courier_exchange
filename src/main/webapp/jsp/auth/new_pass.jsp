@@ -13,7 +13,6 @@
 <div class="limiter">
     <div class="container-login100">
         <div class="wrap-login100">
-            ${requestScope.user_id}
             <form action="${pageContext.request.contextPath}\controller" name="loginForm" method="POST" class="login100-form validate-form">
                 <input type="hidden" name="command" value="update_password"/>
                 <input type="hidden" name="user_id" value=${requestScope.user_id}>

@@ -10,11 +10,15 @@ import by.epam.courierexchange.model.service.impl.ClientServiceImpl;
 import by.epam.courierexchange.model.service.impl.ProductServiceImpl;
 import by.epam.courierexchange.model.service.impl.UserServiceImpl;
 import by.epam.courierexchange.model.validator.UserValidator;
+import by.epam.courierexchange.util.MailSender;
 import by.epam.courierexchange.util.PasswordEncryption;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
@@ -46,9 +50,14 @@ public class Main {
         Optional<ClientProduct> clientProductOptional;
         Optional<Product> productOptional;
 
+        String TEXT_CONFIRM_PROFILE = """
+            <h2>Confirm profile request </h2>"
+            <h3> Please click on the button to confirm your profile</h3> 
+            <a href= http://localhost:8080/courier_war_exploded/controller?command=confirm_profile&id=ID ><button>Confirm profile</button></a>
+            """;
 
         try {
-            System.out.println(productService.deleteProduct("1"));
+            System.out.println(userService.updatePassword("19", "a12345678"));
         } catch (ServiceException e) {
             e.printStackTrace();
         }
