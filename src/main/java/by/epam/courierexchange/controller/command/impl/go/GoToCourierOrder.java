@@ -16,19 +16,23 @@ public class GoToCourierOrder implements Command {
     public CommandResult execute(HttpServletRequest request) {
         CourierServiceImpl courierService = CourierServiceImpl.getInstance();
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(SessionAttribute.USER);
+        Courier courier = (Courier) session.getAttribute(SessionAttribute.COURIER);
         Optional<Order> orderOptional;
         CommandResult commandResult;
-        try{
-            orderOptional = courierService.selectActiveOrderByCourier(user.getId());
-            if(orderOptional.isPresent()){
-                session.setAttribute(SessionAttribute.ORDER, orderOptional.get());
-            }else{
-                request.setAttribute(RequestAttribute.NO_ORDER, true);
+        if(courier != null) {
+            try {
+                orderOptional = courierService.selectActiveOrderByCourier(courier.getId());
+                if (orderOptional.isPresent()) {
+                    session.setAttribute(SessionAttribute.ORDER, orderOptional.get());
+                } else {
+                    request.setAttribute(RequestAttribute.NO_ORDER, true);
+                }
+                commandResult = new CommandResult(PagePath.COURIER_ORDER, CommandResult.ResponseType.FORWARD);
+            } catch (ServiceException e) {
+                commandResult = new CommandResult(PagePath.ERROR_PAGE, CommandResult.ResponseType.FORWARD);
             }
-            commandResult = new CommandResult(PagePath.COURIER_ORDER, CommandResult.ResponseType.FORWARD);
-        }catch (ServiceException e){
-            commandResult = new CommandResult(PagePath.ERROR_PAGE, CommandResult.ResponseType.FORWARD);
+        }else{
+            commandResult = new CommandResult(PagePath.LOGIN_PAGE, CommandResult.ResponseType.FORWARD);
         }
 
         return commandResult;
