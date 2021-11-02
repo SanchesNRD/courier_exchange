@@ -25,7 +25,7 @@
         </section>
         <section class="content">
             <c:if test="${sessionScope.user.userStatus == 'CONFIRMED'}">
-                <form action="${pageContext.request.contextPath}/controller" class="wrap-login100">
+                <form method="post" action="${pageContext.request.contextPath}/controller" class="wrap-login100">
                     <input type="hidden" name="command" value="update_client_address"/>
                     <div class="form-group row">
                         <div class="col-md-2 txt1 text-right">

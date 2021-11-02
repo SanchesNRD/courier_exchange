@@ -34,13 +34,15 @@ public class CommandProvider {
         commands.put(UPDATE_COURIER_TRANSPORT, new UpdateCourierTranposrtCommand());
         commands.put(TAKE_COURIER_ORDER, new TakeCourierOrderCommand());
         commands.put(COMPLETE_ORDER, new CompleteOrderCommand());
-        commands.put(DELETE_CLIENT_PRODUCT, new DeleteClientOrderCommand());
+        commands.put(DELETE_CLIENT_PRODUCT, new DeleteClientProductCommand());
         commands.put(BAN_USER, new BanUserCommand());
         commands.put(DELETE_PRODUCT, new DeleteProductCommand());
         commands.put(DELETE_TRANSPORT, new DeleteTransportCommand());
         commands.put(CONFIRM_MAIL_MESSAGE, new ConfirmMailMessageCommand());
         commands.put(FORGOT_PASS_MAIL_MESSAGE, new ForgotPassMailMessageCommand());
+        commands.put(DELETE_ADMIN_CLIENT_PRODUCT, new DeleteAdminClientProductCommand());
 
+        commands.put(GO_TO_MAIL_MESSAGE, new GoToMailMessage());
         commands.put(GO_TO_ADMIN_PRODUCTS, new GoToAdminProducts());
         commands.put(GO_TO_ADMIN_CLIENT_TEMPLATES, new GoToAdminClientTemplates());
         commands.put(GO_TO_ADMIN_TRANSPORTS, new GoToAdminTransports());
@@ -58,9 +60,9 @@ public class CommandProvider {
         commands.put(GO_TO_FORGOT_PASS, new GoToForgotPassword());
         commands.put(GO_TO_USER_PROFILE, new GoToUserProfile());
         commands.put(GO_TO_USER_ALL_ORDERS, new GoToUserAllOrders());
-        commands.put(GO_TO_NEW_ORDER_PAGE, new GoToNewOrderPage());
+        commands.put(GO_TO_NEW_ORDER_PAGE, new GoToClientNewOrder());
         commands.put(GO_TO_MY_ORDERS_PAGE, new GoToClientOrders());
-        commands.put(GO_TO_HISTORY_PAGE, new GoToUserHistory());
+        commands.put(GO_TO_HISTORY_PAGE, new GoToClientHistory());
     }
 
     public static CommandProvider getInstance(){

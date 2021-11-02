@@ -4,6 +4,7 @@ import by.epam.courierexchange.controller.command.*;
 import by.epam.courierexchange.exception.ServiceException;
 import by.epam.courierexchange.model.entity.Courier;
 import by.epam.courierexchange.model.entity.Order;
+import by.epam.courierexchange.model.entity.User;
 import by.epam.courierexchange.model.service.impl.CourierServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -15,11 +16,11 @@ public class GoToCourierOrder implements Command {
     public CommandResult execute(HttpServletRequest request) {
         CourierServiceImpl courierService = CourierServiceImpl.getInstance();
         HttpSession session = request.getSession();
-        Courier courier = (Courier) session.getAttribute(SessionAttribute.COURIER);
+        User user = (User) session.getAttribute(SessionAttribute.USER);
         Optional<Order> orderOptional;
         CommandResult commandResult;
         try{
-            orderOptional = courierService.selectActiveOrderByCourier(courier.getId());
+            orderOptional = courierService.selectActiveOrderByCourier(user.getId());
             if(orderOptional.isPresent()){
                 session.setAttribute(SessionAttribute.ORDER, orderOptional.get());
             }else{
@@ -30,6 +31,6 @@ public class GoToCourierOrder implements Command {
             commandResult = new CommandResult(PagePath.ERROR_PAGE, CommandResult.ResponseType.FORWARD);
         }
 
-        return new CommandResult(PagePath.COURIER_ORDER, CommandResult.ResponseType.FORWARD);
+        return commandResult;
     }
 }

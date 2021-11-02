@@ -19,10 +19,7 @@ public class AddressDaoImpl implements AddressDao {
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
     private static final AddressDaoImpl instance = new AddressDaoImpl();
 
-    private static final String SQL_SELECT_ADDRESS_BY_CITY = """
-            SELECT id, country, city, street, street_number, apartment
-            FROM addresses WHERE city=?
-            """;
+
     private static final String SQL_SELECT_ALL_ADDRESSES = """
             SELECT id, country, city, street, street_number, apartment
             FROM addresses
@@ -51,33 +48,6 @@ public class AddressDaoImpl implements AddressDao {
         return instance;
     }
 
-    @Override
-    public List<Address> selectByCity(String patternCity) throws DaoException {
-        List<Address> addresses = new ArrayList<>();
-
-        try(
-                Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_ADDRESS_BY_CITY))
-        {
-            statement.setString(1, patternCity);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()){
-                Address address = new Address.AddressBuilder()
-                        .setId(resultSet.getLong(ID))
-                        .setCountry(resultSet.getString(ADDRESS_COUNTRY))
-                        .setCity(resultSet.getString(ADDRESS_CITY))
-                        .setStreet(resultSet.getString(ADDRESS_STREET))
-                        .setStreet_number(resultSet.getInt(ADDRESS_STREET_NUMBER))
-                        .setApartment(resultSet.getInt(ADDRESS_APARTMENT))
-                        .build();
-                addresses.add(address);
-            }
-        } catch(SQLException e){
-            logger.error("SQL exception in method selectAddressByCity ", e);
-            throw new DaoException("SQL exception in method selectAddressByCity ", e);
-        }
-        return addresses;
-    }
 
     @Override
     public List<Address> selectAll() throws DaoException {
@@ -147,7 +117,7 @@ public class AddressDaoImpl implements AddressDao {
     }
 
     @Override
-    public boolean create(Address address) throws DaoException {
+    public int create(Address address) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_CREAT_ADDRESS))
@@ -157,7 +127,7 @@ public class AddressDaoImpl implements AddressDao {
             statement.setString(3, address.getStreet());
             statement.setInt(4, address.getStreet_number());
             statement.setInt(5, address.getApartment());
-            return statement.execute();
+            return statement.executeUpdate();
         } catch (SQLException e){
             logger.error("SQL exception in method createAddress ", e);
             throw new DaoException("SQL exception in method createAddress ", e);

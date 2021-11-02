@@ -4,7 +4,6 @@ import by.epam.courierexchange.exception.DaoException;
 import by.epam.courierexchange.model.entity.Order;
 import by.epam.courierexchange.model.entity.OrderStatus;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 

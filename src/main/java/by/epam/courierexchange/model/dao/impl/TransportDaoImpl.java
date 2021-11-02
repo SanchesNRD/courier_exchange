@@ -28,18 +28,6 @@ public class TransportDaoImpl implements TransportDao {
             SELECT id, name, average_speed, max_product_weight, type_id 
             FROM transports WHERE id=?
             """;
-    private static final String SQL_SELECT_BY_TYPE="""
-            SELECT id, name, average_speed, max_product_weight, type_id 
-            FROM transports WHERE type_id=?
-            """;
-    private static final String SQL_SELECT_BY_SPEED="""
-            SELECT id, name, average_speed, max_product_weight, type_id 
-            FROM transports WHERE average_speed>=?
-            """;
-    private static final String SQL_SELECT_BY_WEIGHT="""
-            SELECT id, name, average_speed, max_product_weight, type_id 
-            FROM transports WHERE max_product_WEIGHT>=?
-            """;
     private static final String SQL_DELETE_BY_ID=
             "DELETE FROM transports WHERE id=?";
     private static final String SQL_INSERT="""
@@ -119,84 +107,6 @@ public class TransportDaoImpl implements TransportDao {
     }
 
     @Override
-    public List<Transport> selectByType(Integer type) throws DaoException {
-        List<Transport> transports = new ArrayList<>();
-        try(
-                Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_TYPE))
-        {
-            statement.setInt(1, type);
-            ResultSet resultSet = statement.executeQuery();
-            while(resultSet.next()){
-                Transport transport = new Transport.TransportBuilder()
-                        .setId(resultSet.getLong(ID))
-                        .setName(resultSet.getString(TRANSPORT_NAME))
-                        .setAverageSpeed(resultSet.getInt(TRANSPORT_AVERAGE_SPEED))
-                        .setMaxProductWeight(resultSet.getInt(TRANSPORT_MAX_PRODUCT_WEIGHT))
-                        .setTransportType(TransportType.parseType(resultSet.getShort(TYPE_ID)))
-                        .build();
-                transports.add(transport);
-            }
-        } catch (SQLException e){
-            logger.error("SQL exception in method selectTransportByType ", e);
-            throw new DaoException("SQL exception in method selectTransportByType ", e);
-        }
-        return transports;
-    }
-
-    @Override
-    public List<Transport> selectBySpeed(Integer speed) throws DaoException {
-        List<Transport> transports = new ArrayList<>();
-        try(
-                Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_SPEED))
-        {
-            statement.setInt(1, speed);
-            ResultSet resultSet = statement.executeQuery();
-            while(resultSet.next()){
-                Transport transport = new Transport.TransportBuilder()
-                        .setId(resultSet.getLong(ID))
-                        .setName(resultSet.getString(TRANSPORT_NAME))
-                        .setAverageSpeed(resultSet.getInt(TRANSPORT_AVERAGE_SPEED))
-                        .setMaxProductWeight(resultSet.getInt(TRANSPORT_MAX_PRODUCT_WEIGHT))
-                        .setTransportType(TransportType.parseType(resultSet.getShort(TYPE_ID)))
-                        .build();
-                transports.add(transport);
-            }
-        } catch (SQLException e){
-            logger.error("SQL exception in method selectTransportBySpeed ", e);
-            throw new DaoException("SQL exception in method selectTransportBySpeed ", e);
-        }
-        return transports;
-    }
-
-    @Override
-    public List<Transport> selectByWeight(Integer weight) throws DaoException {
-        List<Transport> transports = new ArrayList<>();
-        try(
-                Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_WEIGHT))
-        {
-            statement.setInt(1, weight);
-            ResultSet resultSet = statement.executeQuery();
-            while(resultSet.next()){
-                Transport transport = new Transport.TransportBuilder()
-                        .setId(resultSet.getLong(ID))
-                        .setName(resultSet.getString(TRANSPORT_NAME))
-                        .setAverageSpeed(resultSet.getInt(TRANSPORT_AVERAGE_SPEED))
-                        .setMaxProductWeight(resultSet.getInt(TRANSPORT_MAX_PRODUCT_WEIGHT))
-                        .setTransportType(TransportType.parseType(resultSet.getShort(TYPE_ID)))
-                        .build();
-                transports.add(transport);
-            }
-        } catch (SQLException e){
-            logger.error("SQL exception in method selectTransportByWeight ", e);
-            throw new DaoException("SQL exception in method selectTransportByWeight ", e);
-        }
-        return transports;
-    }
-
-    @Override
     public boolean deleteById(Long id) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
@@ -211,7 +121,7 @@ public class TransportDaoImpl implements TransportDao {
     }
 
     @Override
-    public boolean create(Transport transport) throws DaoException {
+    public int create(Transport transport) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_INSERT))
@@ -220,7 +130,7 @@ public class TransportDaoImpl implements TransportDao {
             statement.setInt(2, transport.getAverageSpeed());
             statement.setInt(3, transport.getMaxProductWeight());
             statement.setInt(4, transport.getTransportType().getId());
-            return statement.execute();
+            return statement.executeUpdate();
         } catch (SQLException e){
             logger.error("SQL exception in method createTransport ", e);
             throw new DaoException("SQL exception in method createTransport ", e);

@@ -6,11 +6,7 @@ import by.epam.courierexchange.controller.command.PagePath;
 import by.epam.courierexchange.controller.command.SessionAttribute;
 import by.epam.courierexchange.exception.DaoException;
 import by.epam.courierexchange.model.dao.impl.ClientDaoImpl;
-import by.epam.courierexchange.model.dao.impl.OrderDaoImpl;
-import by.epam.courierexchange.model.entity.ClientProduct;
-import by.epam.courierexchange.model.entity.Order;
-import by.epam.courierexchange.model.entity.OrderStatus;
-import by.epam.courierexchange.model.entity.User;
+import by.epam.courierexchange.model.entity.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -26,11 +22,11 @@ public class GoToClientTemplates implements Command {
         ClientDaoImpl clientDao = ClientDaoImpl.getInstance();
         List<ClientProduct> clientProducts;
         HttpSession session = request.getSession();
-        User user = (User)session.getAttribute(SessionAttribute.USER);
+        Client client = (Client) session.getAttribute(SessionAttribute.CLIENT);
         CommandResult commandResult;
-        if(user != null) {
+        if(client != null) {
             try {
-                clientProducts = clientDao.selectActiveClientProductById(user.getId());
+                clientProducts = clientDao.selectActiveClientProductById(client.getId());
                 session.setAttribute(SessionAttribute.CLIENT_PRODUCT, clientProducts);
                 commandResult = new CommandResult(PagePath.USER_TEMPLATE, FORWARD);
             } catch (DaoException e) {

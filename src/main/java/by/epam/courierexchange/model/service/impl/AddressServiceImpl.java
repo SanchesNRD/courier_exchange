@@ -3,14 +3,11 @@ package by.epam.courierexchange.model.service.impl;
 import by.epam.courierexchange.exception.DaoException;
 import by.epam.courierexchange.exception.ServiceException;
 import by.epam.courierexchange.model.dao.impl.AddressDaoImpl;
-import by.epam.courierexchange.model.dao.impl.ClientDaoImpl;
 import by.epam.courierexchange.model.entity.Address;
 import by.epam.courierexchange.model.service.AddressService;
-import by.epam.courierexchange.model.validator.UserValidator;
+import by.epam.courierexchange.model.validator.CourierExchangeValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Optional;
 
 public class AddressServiceImpl implements AddressService {
     private static final Logger logger = LogManager.getLogger();
@@ -27,9 +24,9 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public long createAddress(String country, String city, String street, String number, String apartment)
             throws ServiceException {
-        if(!UserValidator.nameIsValid(country) || !UserValidator.nameIsValid(city)
-                || !UserValidator.nameIsValid(street) || !UserValidator.numberIsValid(number)
-                || !UserValidator.numberIsValid(apartment)){
+        if(CourierExchangeValidator.nameIsInvalid(country) || CourierExchangeValidator.nameIsInvalid(city)
+                || CourierExchangeValidator.nameIsInvalid(street) || CourierExchangeValidator.numberIsInvalid(number)
+                || CourierExchangeValidator.numberIsInvalid(apartment)){
             return 0;
         }
         Address address;

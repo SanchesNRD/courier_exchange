@@ -38,6 +38,11 @@
                             <fmt:message key="page.login.wrong"/>
                         </span>
                     </c:if>
+                    <c:if test="${requestScope.banned_user == true}">
+                        <span class="error-content">
+                            <fmt:message key="page.login.banned"/>
+                        </span>
+                    </c:if>
                     <a href="${pageContext.request.contextPath}/controller?command=go_to_forgot_pass" class="txt3">
                         <fmt:message key="page.login.forgot"/>
                     </a>

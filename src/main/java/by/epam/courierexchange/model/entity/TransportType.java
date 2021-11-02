@@ -3,15 +3,15 @@ package by.epam.courierexchange.model.entity;
 import java.util.Arrays;
 
 public enum TransportType{
-    BIKE((short)1), CAR((short)2), TRUCK((short)3);
+    BIKE(1), CAR(2), TRUCK(3);
 
-    private short id;
+    private int id;
 
-    TransportType(short id){
+    TransportType(int id){
         this.id=id;
     }
 
-    public short getId() {
+    public int getId() {
         return id;
     }
 

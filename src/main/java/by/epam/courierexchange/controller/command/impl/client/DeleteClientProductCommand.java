@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
-public class DeleteClientOrderCommand implements Command {
+public class DeleteClientProductCommand implements Command {
     @Override
     public CommandResult execute(HttpServletRequest request) {
         String id = request.getParameter(RequestParameter.ID);
@@ -25,14 +25,12 @@ public class DeleteClientOrderCommand implements Command {
         List<ClientProduct> clientProducts;
         CommandResult commandResult;
         try{
-            clientService.deleteClientProduct(id);
+            if(clientService.deleteClientProduct(id)==0){
+                request.setAttribute(RequestAttribute.WRONG_VALIDATION, true);
+            }
             clientProducts = clientDao.selectActiveClientProductById(user.getId());
             session.setAttribute(SessionAttribute.CLIENT_PRODUCT, clientProducts);
-            if(user.getUserStatus()== UserStatus.ADMIN){
-                commandResult = new CommandResult(PagePath.ADMIN_CLIENT_PRODUCTS, CommandResult.ResponseType.FORWARD);
-            }else{
-                commandResult = new CommandResult(PagePath.USER_TEMPLATE, CommandResult.ResponseType.FORWARD);
-            }
+            commandResult = new CommandResult(PagePath.USER_TEMPLATE, CommandResult.ResponseType.FORWARD);
         }catch (ServiceException | DaoException e){
             request.setAttribute(RequestAttribute.EXCEPTION, e);
             commandResult = new CommandResult(PagePath.ERROR_PAGE, CommandResult.ResponseType.FORWARD);

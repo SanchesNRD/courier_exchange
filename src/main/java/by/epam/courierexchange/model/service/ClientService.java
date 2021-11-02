@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ClientService {
-    boolean createProductClient(Long idUser, Long idProduct, Long idAddress) throws ServiceException;
+    int createProductClient(Long idUser, Long idProduct, Long idAddress) throws ServiceException;
     int createClient(String id) throws ServiceException;
     Optional<Address>  updateAddress (Client client, String country, String city, String street, String number, String apartment)
         throws ServiceException;
-    boolean deleteClientProduct (String id) throws ServiceException;
+    int deleteClientProduct (String id) throws ServiceException;
     List<ClientProduct> selectClientProductForCourier(long idCourier, long idTransport) throws ServiceException;
 }

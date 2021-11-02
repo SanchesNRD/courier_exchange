@@ -20,12 +20,20 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                <fmt:message key="page.templates.heading"/>
+                <fmt:message key="page.admin.client_product"/>
             </h1>
         </section>
         <section class="content">
+            <c:if test="${requestScope.wrong_validation}">
+                <div class="wrap-login100 error-content">
+                    <fmt:message key="page.signup.validation"/>
+                </div>
+            </c:if>
             <div class="wrap-login100">
                 <div class="row">
+                    <div class="col-md-2 txt1 text-font text-left">
+                        <fmt:message key="page.profile.login"/>
+                    </div>
                     <div class="col-md-2 txt1 text-font text-left">
                         <fmt:message key="page.orders.name_product"/>
                     </div>
@@ -37,10 +45,10 @@
                             <fmt:message key="page.orders.lwh"/>
                         </div>
                     </div>
-                    <div class="col-md-2 txt1 text-font text-left">
+                    <div class="col-md-1 txt1 text-font text-left">
                         <fmt:message key="page.orders.weight"/>
                     </div>
-                    <div class="col-md-4 txt1 text-font text-left">
+                    <div class="col-md-3 txt1 text-font text-left">
                         <fmt:message key="page.orders.address"/>
                     </div>
                     <div class="col-md-2 txt1 text-font text-left">
@@ -70,7 +78,7 @@
                         </div>
                         <div class="col-md-2 text-left">
                             <a class="order-client-btn"
-                               href="${pageContext.request.contextPath}/controller?command=delete_client_product&id=${clientProducts.id}">
+                               href="${pageContext.request.contextPath}/controller?command=delete_admin_client_product&id=${clientProducts.id}">
                                 <fmt:message key="page.orders.delete"/>
                             </a>
                         </div>

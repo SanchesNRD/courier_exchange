@@ -6,10 +6,8 @@ import by.epam.courierexchange.controller.command.PagePath;
 import by.epam.courierexchange.controller.command.SessionAttribute;
 import by.epam.courierexchange.exception.DaoException;
 import by.epam.courierexchange.model.dao.impl.AddressDaoImpl;
-import by.epam.courierexchange.model.dao.impl.ClientDaoImpl;
 import by.epam.courierexchange.model.entity.Address;
 import by.epam.courierexchange.model.entity.Client;
-import by.epam.courierexchange.model.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -22,22 +20,16 @@ import static by.epam.courierexchange.controller.command.RequestAttribute.EXCEPT
 public class GoToClientAddress implements Command {
     @Override
     public CommandResult execute(HttpServletRequest request) {
-        ClientDaoImpl clientDao = ClientDaoImpl.getInstance();
         AddressDaoImpl addressDao = AddressDaoImpl.getInstance();
-        Optional<Client> client;
         Optional<Address> address;
         HttpSession session = request.getSession();
-        User user = (User)session.getAttribute(SessionAttribute.USER);
+        Client client = (Client)session.getAttribute(SessionAttribute.CLIENT);
         CommandResult commandResult;
-        if(user != null) {
+        if(client != null) {
             try {
-                client = clientDao.selectById(user.getId());
-                if(client.isPresent()){
-                    session.setAttribute(SessionAttribute.CLIENT, client.get());
-                    long addressId = client.get().getAddress();
-                    address = addressDao.selectById(addressId);
-                    address.ifPresent(value -> session.setAttribute(SessionAttribute.ADDRESS, value));
-                }
+                long addressId = client.getAddress();
+                address = addressDao.selectById(addressId);
+                address.ifPresent(value -> session.setAttribute(SessionAttribute.ADDRESS, value));
                 commandResult =  new CommandResult(PagePath.CLIENT_ADDRESS, FORWARD);
             } catch (DaoException e) {
                 request.setAttribute(EXCEPTION, e);

@@ -203,7 +203,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean create(User user) throws DaoException {
+    public int create(User user) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_INSERT))
@@ -215,8 +215,8 @@ public class UserDaoImpl implements UserDao {
             statement.setString(5, user.getName());
             statement.setString(6, user.getSurname());
             statement.setString(7, user.getPhone());
-            statement.setShort(8, user.getUserStatus().getStatusId());
-            return statement.execute();
+            statement.setInt(8, user.getUserStatus().getStatusId());
+            return statement.executeUpdate();
         } catch (SQLException e){
             logger.error("SQL exception in method createUser ", e);
             throw new DaoException("SQL exception in method createUser ", e);
@@ -236,7 +236,7 @@ public class UserDaoImpl implements UserDao {
             statement.setString(5, user.getSurname());
             statement.setString(6, user.getPhone());
             statement.setString(7, user.getImage());
-            statement.setShort(8, user.getUserStatus().getStatusId());
+            statement.setInt(8, user.getUserStatus().getStatusId());
             statement.setLong(9, user.getId());
             return statement.executeUpdate();
         } catch (SQLException e){
@@ -300,7 +300,7 @@ public class UserDaoImpl implements UserDao {
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_STATUS))
         {
-            statement.setShort(1, userStatus.getStatusId());
+            statement.setInt(1, userStatus.getStatusId());
             statement.setLong(2, id);
             return statement.executeUpdate();
         } catch (SQLException e){

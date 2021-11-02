@@ -447,6 +447,31 @@ label {
 }
 
 /*---------------------------------------------*/
+.error-content{
+  color: red;
+  font-size: 14px;
+  text-decoration: none;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+}
+
+.success-content{
+  color: green;
+  font-size: 14px;
+  text-decoration: none;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+}
+
+/*---------------------------------------------*/
 button {
   outline: none !important;
   border: none;

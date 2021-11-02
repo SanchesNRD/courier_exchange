@@ -22,6 +22,7 @@ public class CreateNewOrderCommand implements Command {
         ClientServiceImpl clientService = ClientServiceImpl.getInstance();
         ProductServiceImpl productService = ProductServiceImpl.getInstance();
         AddressServiceImpl addressService = AddressServiceImpl.getInstance();
+        ClientDaoImpl clientDao = ClientDaoImpl.getInstance();
         HttpSession session = request.getSession();
         CommandResult commandResult;
         String name = request.getParameter(RequestParameter.NAME);
@@ -39,7 +40,6 @@ public class CreateNewOrderCommand implements Command {
             long productId = productService.createProduct(name, weight, width, height, length, type);
             long addressId = addressService.createAddress(country, city, street, number, apartment);
             commandResult = new CommandResult(PagePath.NEW_ORDER_PAGE, FORWARD);
-            ClientDaoImpl clientDao = ClientDaoImpl.getInstance();
 
             if(productId != 0 && addressId != 0){
                 User user = (User)session.getAttribute(SessionAttribute.USER);
@@ -47,7 +47,9 @@ public class CreateNewOrderCommand implements Command {
                 if(clientOptional.isPresent()){
                     long clientAddress = clientOptional.get().getAddress();
                     if(clientAddress != addressId){
-                        clientService.createProductClient(user.getId(), productId, addressId);
+                        if(clientService.createProductClient(user.getId(), productId, addressId)==0){
+                            request.setAttribute(RequestAttribute.WRONG_VALIDATION, true);
+                        }
                     }
                     else{
                         request.setAttribute(RequestAttribute.SAME_ADDRESS, true);

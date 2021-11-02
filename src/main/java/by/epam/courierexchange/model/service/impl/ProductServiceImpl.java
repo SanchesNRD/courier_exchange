@@ -3,11 +3,10 @@ package by.epam.courierexchange.model.service.impl;
 import by.epam.courierexchange.exception.DaoException;
 import by.epam.courierexchange.exception.ServiceException;
 import by.epam.courierexchange.model.dao.impl.ProductDaoImpl;
-import by.epam.courierexchange.model.dao.impl.UserDaoImpl;
 import by.epam.courierexchange.model.entity.Product;
 import by.epam.courierexchange.model.entity.ProductType;
 import by.epam.courierexchange.model.service.ProductService;
-import by.epam.courierexchange.model.validator.UserValidator;
+import by.epam.courierexchange.model.validator.CourierExchangeValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,24 +25,12 @@ public class ProductServiceImpl implements ProductService {
         return instance;
     }
 
-    @Override
-    public Optional<Product> findProductByName(String name) throws ServiceException {
-        if(!UserValidator.nameIsValid(name)){
-            return Optional.empty();
-        }
-        try {
-            return productDao.selectByName(name);
-        } catch (DaoException e) {
-            logger.error("DaoException to the select product by name: ", e);
-            throw new ServiceException("DaoException to the select product by name: ", e);
-        }
-    }
 
     @Override
     public long createProduct(String name, String weight, String width, String height, String length, String type) throws ServiceException {
-        if(!UserValidator.numberIsValid(weight) || !UserValidator.numberIsValid(width)
-                || !UserValidator.numberIsValid(height) || !UserValidator.numberIsValid(length)
-                || !UserValidator.typeIsValid(type) || !UserValidator.nameIsValid(name)){
+        if(CourierExchangeValidator.numberIsInvalid(weight) || CourierExchangeValidator.numberIsInvalid(width)
+                || CourierExchangeValidator.numberIsInvalid(height) || CourierExchangeValidator.numberIsInvalid(length)
+                || CourierExchangeValidator.typeIsInvalid(type) || CourierExchangeValidator.nameIsInvalid(name)){
             return 0;
         }
         Optional<Product> optionalProduct;
@@ -70,7 +57,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public int deleteProduct(String idStr) throws ServiceException {
-        if(!UserValidator.numberIsValid(idStr)){
+        if(CourierExchangeValidator.numberIsInvalid(idStr)){
             return 0;
         }
         long id = Long.parseLong(idStr);

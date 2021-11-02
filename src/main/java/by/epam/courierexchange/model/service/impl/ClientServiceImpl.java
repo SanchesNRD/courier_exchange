@@ -4,18 +4,15 @@ import by.epam.courierexchange.exception.DaoException;
 import by.epam.courierexchange.exception.ServiceException;
 import by.epam.courierexchange.model.dao.impl.AddressDaoImpl;
 import by.epam.courierexchange.model.dao.impl.ClientDaoImpl;
-import by.epam.courierexchange.model.dao.impl.OrderDaoImpl;
 import by.epam.courierexchange.model.dao.impl.TransportDaoImpl;
 import by.epam.courierexchange.model.entity.*;
 import by.epam.courierexchange.model.service.ClientService;
-import by.epam.courierexchange.model.validator.UserValidator;
+import by.epam.courierexchange.model.validator.CourierExchangeValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Optional;
-
-import static by.epam.courierexchange.model.dao.ColumnName.*;
 
 public class ClientServiceImpl implements ClientService {
     private static final Logger logger = LogManager.getLogger();
@@ -33,7 +30,7 @@ public class ClientServiceImpl implements ClientService {
 
 
     @Override
-    public boolean createProductClient(Long idUser, Long idProduct, Long idAddress) throws ServiceException {
+    public int createProductClient(Long idUser, Long idProduct, Long idAddress) throws ServiceException {
         try {
             return clientDao.createClientProduct(idUser, idProduct, idAddress);
         } catch (DaoException e) {
@@ -44,7 +41,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public int createClient(String id) throws ServiceException {
-        if(!UserValidator.numberIsValid(id)){
+        if(CourierExchangeValidator.numberIsInvalid(id)){
             return 0;
         }
         try{
@@ -58,9 +55,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Optional<Address>  updateAddress(Client client, String country, String city, String street, String number, String apartment) throws ServiceException {
-        if(!UserValidator.nameIsValid(country) || !UserValidator.nameIsValid(city)
-                || !UserValidator.nameIsValid(street) || !UserValidator.numberIsValid(number)
-                || !UserValidator.numberIsValid(apartment)){
+        if(CourierExchangeValidator.nameIsInvalid(country) || CourierExchangeValidator.nameIsInvalid(city)
+                || CourierExchangeValidator.nameIsInvalid(street) || CourierExchangeValidator.numberIsInvalid(number)
+                || CourierExchangeValidator.numberIsInvalid(apartment)){
             return Optional.empty();
         }
         Address address;
@@ -89,9 +86,9 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public boolean deleteClientProduct(String idStr) throws ServiceException {
-        if(!UserValidator.numberIsValid(idStr)){
-            return false;
+    public int deleteClientProduct(String idStr) throws ServiceException {
+        if(CourierExchangeValidator.numberIsInvalid(idStr)){
+            return 0;
         }
         long id = Long.parseLong(idStr);
         ClientDaoImpl clientDao = ClientDaoImpl.getInstance();

@@ -27,8 +27,13 @@
             <c:if test="${sessionScope.user.userStatus == 'CONFIRMED'
                     && sessionScope.client.address != 0}">
                 <c:if test="${requestScope.same_address}">
-                    <div class="wrap-login100" style="background-color: #d0908f">
+                    <div class="wrap-login100 error-content">
                        <fmt:message key="page.neworder.same_address"/>
+                    </div>
+                </c:if>
+                <c:if test="${requestScope.wrong_validation}">
+                    <div class="wrap-login100 error-content">
+                        <fmt:message key="page.signup.validation"/>
                     </div>
                 </c:if>
                 <form action="${pageContext.request.contextPath}/controller">

@@ -19,16 +19,7 @@ public class ClientDaoImpl implements ClientDao {
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
     private static final ClientDaoImpl instance = new ClientDaoImpl();
 
-    private static final String SQL_SELECT_CLIENT_BY_LOGIN= """
-            SELECT clients.id, clients.address_id, users.login, users.mail, 
-            users.name, users.surname, users.phone, users.status_id 
-            FROM clients, users WHERE users.login=?
-            """;
-    private static final String SQL_SELECT_CLIENTS_BY_STATUS= """
-            SELECT clients.id, clients.address_id, users.login, users.mail, 
-            users.name, users.surname, users.phone, users.status_id 
-            FROM clients, users WHERE users.status_id=?
-            """;
+
     private static final String SQL_SELECT_ALL_CLIENTS= """
             SELECT clients.id, address_id, login, password, mail, name, surname, phone, status_id
             FROM clients INNER JOIN users WHERE clients.id=users.id
@@ -94,8 +85,12 @@ public class ClientDaoImpl implements ClientDao {
                      LEFT JOIN orders ON client_product.id = orders.client_product_id
             where orders.id IS NULL AND client_id=?
             """;
-    private static final String SQL_DELETE_CLIENT_PRODUCT_BY_ID=
-            "DELETE FROM client_product WHERE id=?";
+    private static final String SQL_DELETE_CLIENT_PRODUCT_BY_ID="""
+            DELETE client_product
+            FROM client_product
+                     LEFT JOIN orders ON client_product.id = orders.client_product_id
+            where orders.id IS NULL AND client_product.id=?
+            """;
     private static final String SQL_DELETE_CLIENT_PRODUCT_BY_CLIENT="""
             DELETE client_product
             FROM client_product
@@ -106,77 +101,11 @@ public class ClientDaoImpl implements ClientDao {
             INSERT INTO client_product (client_id, product_id, address_id)
             VALUES (?,?,?)
             """;
-    private static final String SQL_UPDATE_CLIENT_PRODUCT="""
-            UPDATE client_product SET product_id=?, address_id=?
-            WHERE client_id=?
-            """;
 
     private ClientDaoImpl(){}
 
     public static ClientDaoImpl getInstance(){
         return instance;
-    }
-
-    @Override
-    public Optional<Client> selectClientByLogin(String loginPattern) throws DaoException {
-        try(
-                Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_CLIENT_BY_LOGIN))
-        {
-            statement.setString(1, loginPattern);
-            ResultSet resultSet = statement.executeQuery();
-            if(!resultSet.next()){
-                return Optional.empty();
-            } else{
-                Client client = new Client.ClientBuilder()
-                        .setAddress(resultSet.getLong(ADDRESS_ID))
-                        .setBuilder(new User.UserBuilder()
-                                .setId(resultSet.getLong(USER_ID))
-                                .setLogin(resultSet.getString(USER_LOGIN))
-                                .setPassword(resultSet.getString(USER_PASSWORD))
-                                .setMail(resultSet.getString(USER_MAIL))
-                                .setName(resultSet.getString(USER_NAME))
-                                .setSurname(resultSet.getString(USER_SURNAME))
-                                .setPhone(resultSet.getString(USER_PHONE))
-                                .setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID))))
-                        .build();
-                return Optional.of(client);
-            }
-        } catch (SQLException e){
-            logger.error("SQL exception in method selectClientByLogin ", e);
-            throw new DaoException("SQL exception in method selectClientByLogin ", e);
-        }
-    }
-
-    @Override
-    public List<Client> selectClientsByStatus(Integer id) throws DaoException {
-        List<Client> clients = new ArrayList<>();
-        try(
-                Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_CLIENTS_BY_STATUS))
-        {
-            statement.setInt(1, id);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()){
-                Client client = new Client.ClientBuilder()
-                        .setAddress(resultSet.getLong(ADDRESS_ID))
-                        .setBuilder(new User.UserBuilder()
-                                .setId(resultSet.getLong(USER_ID))
-                                .setLogin(resultSet.getString(USER_LOGIN))
-                                .setPassword(resultSet.getString(USER_PASSWORD))
-                                .setMail(resultSet.getString(USER_MAIL))
-                                .setName(resultSet.getString(USER_NAME))
-                                .setSurname(resultSet.getString(USER_SURNAME))
-                                .setPhone(resultSet.getString(USER_PHONE))
-                                .setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID))))
-                        .build();
-                clients.add(client);
-            }
-        } catch (SQLException e){
-            logger.error("SQL exception in method selectClientsByStatus ", e);
-            throw new DaoException("SQL exception in method selectClientsByStatus ", e);
-        }
-        return clients;
     }
 
     @Override
@@ -254,14 +183,14 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public boolean create(Client client) throws DaoException {
+    public int create(Client client) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_INSERT_CLIENT))
         {
             statement.setLong(1, client.getId());
             statement.setLong(2, client.getAddress());
-            return statement.execute();
+            return statement.executeUpdate();
         } catch (SQLException e){
             logger.error("SQL exception in method createClient ", e);
             throw new DaoException("SQL exception in method createClient ", e);
@@ -467,13 +396,13 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public boolean deleteClientProductById(Long id) throws DaoException {
+    public int deleteClientProductById(Long id) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_DELETE_CLIENT_PRODUCT_BY_ID))
         {
             statement.setLong(1,id);
-            return statement.execute();
+            return statement.executeUpdate();
         } catch (SQLException e){
             logger.error("SQL exception in method deleteClientProductById ", e);
             throw new DaoException("SQL exception in method deleteClientProductById ", e);
@@ -481,7 +410,7 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public boolean createClientProduct(Long clientId, Long productId, Long addressId) throws DaoException {
+    public int createClientProduct(Long clientId, Long productId, Long addressId) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_INSERT_CLIENT_PRODUCT))
@@ -489,28 +418,13 @@ public class ClientDaoImpl implements ClientDao {
             statement.setLong(1,clientId);
             statement.setLong(2, productId);
             statement.setLong(3, addressId);
-            return statement.execute();
-        } catch (SQLException e){
-            logger.error("SQL exception in method createClientProduct ", e);
-            throw new DaoException("SQL exception in method createClientProduct ", e);
-        }
-    }
-
-    @Override
-    public int updateClientProduct(ClientProduct clientProduct) throws DaoException {
-        try(
-                Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_CLIENT_PRODUCT))
-        {
-            statement.setLong(1,clientProduct.getClient().getId());
-            statement.setLong(2, clientProduct.getProduct().getId());
-            statement.setLong(3, clientProduct.getAddress().getId());
             return statement.executeUpdate();
         } catch (SQLException e){
             logger.error("SQL exception in method createClientProduct ", e);
             throw new DaoException("SQL exception in method createClientProduct ", e);
         }
     }
+
 
     @Override
     public List<ClientProduct> selectActiveClientProductById(long id) throws DaoException {

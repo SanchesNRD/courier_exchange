@@ -161,7 +161,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public boolean create(Order order) throws DaoException {
+    public int create(Order order) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_INSERT))
@@ -170,8 +170,8 @@ public class OrderDaoImpl implements OrderDao {
             statement.setLong(2, order.getClientProduct().getId());
             statement.setLong(3, order.getCourier().getId());
             statement.setDate(4, order.getDate());
-            statement.setShort(5, order.getOrderStatus().getStatusId());
-            return statement.execute();
+            statement.setInt(5, order.getOrderStatus().getStatusId());
+            return statement.executeUpdate();
         } catch (SQLException e){
             logger.error("SQL exception in method in createOrder ", e);
             throw new DaoException("SQL exception in method in createOrder ", e);
@@ -187,7 +187,7 @@ public class OrderDaoImpl implements OrderDao {
             statement.setLong(1, clientProduct);
             statement.setLong(2, courier);
             statement.setObject(3, date);
-            statement.setShort(4, status.getStatusId());
+            statement.setInt(4, status.getStatusId());
             return statement.executeUpdate();
         } catch (SQLException e){
             logger.error("SQL exception in method in createOrder ", e);
@@ -204,7 +204,7 @@ public class OrderDaoImpl implements OrderDao {
             statement.setLong(1, order.getClientProduct().getId());
             statement.setLong(2, order.getCourier().getId());
             statement.setDate(3, order.getDate());
-            statement.setShort(4, order.getOrderStatus().getStatusId());
+            statement.setInt(4, order.getOrderStatus().getStatusId());
             statement.setLong(5, order.getId());
             return statement.executeUpdate();
         } catch (SQLException e){
@@ -220,7 +220,7 @@ public class OrderDaoImpl implements OrderDao {
                 PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_COURIER))
         {
             statement.setLong(1, courier);
-            statement.setShort(2, status.getStatusId());
+            statement.setInt(2, status.getStatusId());
             ResultSet resultSet = statement.executeQuery();
             if(!resultSet.next()){
                 return 0;
@@ -240,7 +240,7 @@ public class OrderDaoImpl implements OrderDao {
                 PreparedStatement statement = connection.prepareStatement(SQL_SELECT_ACTIVE_BY_COURIER))
         {
             statement.setLong(1, courier);
-            statement.setShort(2, status.getStatusId());
+            statement.setInt(2, status.getStatusId());
             ResultSet resultSet = statement.executeQuery();
             if(!resultSet.next()){
                 return Optional.empty();
@@ -311,7 +311,7 @@ public class OrderDaoImpl implements OrderDao {
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_UPDATE_STATUS))
         {
-            statement.setShort(1, status.getStatusId());
+            statement.setInt(1, status.getStatusId());
             statement.setLong(2, id);
             return statement.executeUpdate();
         } catch (SQLException e){
@@ -328,7 +328,7 @@ public class OrderDaoImpl implements OrderDao {
                 PreparedStatement statement = connection.prepareStatement(SQL_SELECT_ACTIVE_BY_COURIER))
         {
             statement.setLong(1, id);
-            statement.setShort(2, status.getStatusId());
+            statement.setInt(2, status.getStatusId());
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()){
                 ClientProduct clientProduct = new ClientProduct();
@@ -400,7 +400,7 @@ public class OrderDaoImpl implements OrderDao {
                 PreparedStatement statement = connection.prepareStatement(SQL_SELECT_ACTIVE_BY_CLIENT))
         {
             statement.setLong(1, id);
-            statement.setShort(2, status.getStatusId());
+            statement.setInt(2, status.getStatusId());
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()){
                 ClientProduct clientProduct = new ClientProduct();
@@ -473,7 +473,7 @@ public class OrderDaoImpl implements OrderDao {
         {
             statement.setLong(1, id);
             statement.setLong(2, id);
-            statement.setShort(3, OrderStatus.COMPLETED.getStatusId());
+            statement.setInt(3, OrderStatus.COMPLETED.getStatusId());
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()){
                 orders.add(resultSet.getLong(ORDERS_ID));

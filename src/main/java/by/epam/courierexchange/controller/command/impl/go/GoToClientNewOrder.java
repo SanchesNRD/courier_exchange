@@ -4,22 +4,24 @@ import by.epam.courierexchange.controller.command.Command;
 import by.epam.courierexchange.controller.command.CommandResult;
 import by.epam.courierexchange.controller.command.PagePath;
 import by.epam.courierexchange.controller.command.SessionAttribute;
-import by.epam.courierexchange.model.entity.User;
+import by.epam.courierexchange.model.entity.Client;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import static by.epam.courierexchange.controller.command.CommandResult.ResponseType.FORWARD;
 
-public class GoToUserProfile implements Command {
+public class GoToClientNewOrder implements Command {
     @Override
     public CommandResult execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        User user = (User)session.getAttribute(SessionAttribute.USER);
-        if(user != null) {
-            return new CommandResult(PagePath.PROFILE_PAGE, FORWARD);
+        Client client = (Client) session.getAttribute(SessionAttribute.CLIENT);
+        CommandResult commandResult;
+        if(client != null) {
+                commandResult =  new CommandResult(PagePath.NEW_ORDER_PAGE, FORWARD);
         }
         else{
-            return new CommandResult(PagePath.LOGIN_PAGE, FORWARD);
+            commandResult = new CommandResult(PagePath.LOGIN_PAGE, FORWARD);
         }
+        return commandResult;
     }
 }

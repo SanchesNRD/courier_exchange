@@ -3,20 +3,20 @@ package by.epam.courierexchange.model.entity;
 import java.util.Arrays;
 
 public enum OrderStatus {
-    AGREED((short)1), DELIVERED((short)2), COMPLETED((short)3);
+    AGREED(1), DELIVERED(2), COMPLETED(3);
 
-    private final short id;
+    private final int id;
 
-    OrderStatus(short id){
+    OrderStatus(int id){
         this.id=id;
     }
 
-    public short getStatusId() {
+    public int getStatusId() {
         return id;
     }
 
 
-    public static OrderStatus parseStatus(short statusId) {
+    public static OrderStatus parseStatus(int statusId) {
         return Arrays.stream(OrderStatus.values())
                 .filter(status -> status.id == statusId)
                 .findFirst()

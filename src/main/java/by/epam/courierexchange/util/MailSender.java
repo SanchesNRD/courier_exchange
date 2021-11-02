@@ -67,4 +67,6 @@ public class MailSender {
             logger.error("MessagingException: " + e.getMessage());
         }
     }
+
+    private MailSender(){};
 }

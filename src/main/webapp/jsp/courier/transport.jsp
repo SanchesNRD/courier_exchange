@@ -66,19 +66,31 @@
                             <fmt:message key="page.neworder.type"/></div>
                         <div class="col-md-6">
                             <div class="radio-content">
-                                <input id="Bike" class="validate-input radio100" value="1" type="radio" name="transport_type"/>
+                                <input id="Bike" class="validate-input radio100" value="1" type="radio"
+                                        <c:if test="${sessionScope.transport.transportType.id==1}">
+                                            checked="checked"
+                                        </c:if>
+                                       name="transport_type"/>
                                 <label for="Bike" class="radio-label100">
                                     <fmt:message key="page.transport.bike"/>
                                 </label>
                             </div>
                             <div class="radio-content">
-                                <input id="Car" class="validate-input radio100" value="2" type="radio" name="transport_type"/>
+                                <input id="Car" class="validate-input radio100" value="2" type="radio"
+                                        <c:if test="${sessionScope.transport.transportType.id==2}">
+                                            checked="checked"
+                                        </c:if>
+                                       name="transport_type"/>
                                 <label for="Car"  class="radio-label100">
                                     <fmt:message key="page.transport.car"/>
                                 </label>
                             </div>
                             <div class="radio-content">
-                                <input id="Truck" class="validate-input radio100" value="3" type="radio" name="transport_type"/>
+                                <input id="Truck" class="validate-input radio100" value="3" type="radio"
+                                        <c:if test="${sessionScope.transport.transportType.id==3}">
+                                            checked="checked"
+                                        </c:if>
+                                       name="transport_type"/>
                                 <label for="Truck"  class="radio-label100">
                                     <fmt:message key="page.transport.truck"/>
                                 </label>

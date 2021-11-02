@@ -34,20 +34,6 @@ public class CourierDaoImpl implements CourierDao {
             INNER JOIN users ON couriers.id = users.id
             WHERE couriers.id=?
             """;
-    private static final String SQL_SELECT_BY_LOGIN="""
-           SELECT users.id, rating, transport_id, login, mail, 
-            password, name, surname, phone, status_id 
-            FROM couriers
-            INNER JOIN users ON couriers.id = users.id
-            WHERE users.login=?
-            """;
-    private static final String SQL_SELECT_BY_RATING="""
-           SELECT users.id, rating, transport_id, login, mail, 
-            password, name, surname, phone, status_id 
-            FROM couriers
-            INNER JOIN users ON couriers.id = users.id
-            WHERE couriers.rating>=?
-            """;
     private static final String SQL_DELETE_BY_ID=
             "DELETE FROM couriers WHERE id=?";
     private static final String SQL_INSERT=
@@ -129,70 +115,6 @@ public class CourierDaoImpl implements CourierDao {
     }
 
     @Override
-    public Optional<Courier> selectCourierByLogin(String loginPattern) throws DaoException {
-        try(
-                Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_LOGIN))
-        {
-            statement.setString(1, loginPattern);
-            ResultSet resultSet = statement.executeQuery();
-            if(!resultSet.next()){
-                return Optional.empty();
-            }else {
-                Courier courier = new Courier.CourierBuilder()
-                        .setRating(resultSet.getLong(COURIER_RATING))
-                        .setTransport(resultSet.getLong(TRANSPORT_ID))
-                        .setBuilder(new User.UserBuilder()
-                                .setId(resultSet.getLong(USER_ID))
-                                .setLogin(resultSet.getString(USER_LOGIN))
-                                .setPassword(resultSet.getString(USER_PASSWORD))
-                                .setMail(resultSet.getString(USER_MAIL))
-                                .setName(resultSet.getString(USER_NAME))
-                                .setSurname(resultSet.getString(USER_SURNAME))
-                                .setPhone(resultSet.getString(USER_PHONE))
-                                .setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID))))
-                        .build();
-                return Optional.of(courier);
-            }
-        } catch (SQLException e){
-            logger.error("SQL exception in method in selectCourierByLogin ", e);
-            throw new DaoException("SQL exception in method in selectCourierByLogin ", e);
-        }
-    }
-
-    @Override
-    public List<Courier> selectCourierByRating(Double rating) throws DaoException {
-        List<Courier> couriers = new ArrayList<>();
-        try(
-                Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_RATING))
-        {
-            statement.setDouble(1, rating);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()){
-                Courier courier = new Courier.CourierBuilder()
-                        .setRating(resultSet.getLong(COURIER_RATING))
-                        .setTransport(resultSet.getLong(TRANSPORT_ID))
-                        .setBuilder(new User.UserBuilder()
-                                .setId(resultSet.getLong(USER_ID))
-                                .setLogin(resultSet.getString(USER_LOGIN))
-                                .setPassword(resultSet.getString(USER_PASSWORD))
-                                .setMail(resultSet.getString(USER_MAIL))
-                                .setName(resultSet.getString(USER_NAME))
-                                .setSurname(resultSet.getString(USER_SURNAME))
-                                .setPhone(resultSet.getString(USER_PHONE))
-                                .setUserStatus(UserStatus.parseStatus(resultSet.getShort(STATUS_ID))))
-                        .build();
-                couriers.add(courier);
-            }
-        } catch (SQLException e){
-            logger.error("SQL exception in method in selectCourierByRating ", e);
-            throw new DaoException("SQL exception in method in selectCourierByRating ", e);
-        }
-        return couriers;
-    }
-
-    @Override
     public boolean deleteById(Long id) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
@@ -207,7 +129,7 @@ public class CourierDaoImpl implements CourierDao {
     }
 
     @Override
-    public boolean create(Courier courier) throws DaoException {
+    public int create(Courier courier) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_INSERT))
@@ -215,7 +137,7 @@ public class CourierDaoImpl implements CourierDao {
             statement.setLong(1, courier.getId());
             statement.setDouble(2, courier.getRating());
             statement.setLong(3, courier.getTransport());
-            return statement.execute();
+            return statement.executeUpdate();
         } catch (SQLException e){
             logger.error("SQL exception in method in createCourier ", e);
             throw new DaoException("SQL exception in method in createCourier ", e);

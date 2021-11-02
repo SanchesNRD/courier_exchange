@@ -2,11 +2,10 @@ package by.epam.courierexchange.model.service.impl;
 
 import by.epam.courierexchange.exception.DaoException;
 import by.epam.courierexchange.exception.ServiceException;
-import by.epam.courierexchange.model.dao.impl.ProductDaoImpl;
 import by.epam.courierexchange.model.dao.impl.TransportDaoImpl;
 import by.epam.courierexchange.model.entity.Transport;
 import by.epam.courierexchange.model.service.TransportService;
-import by.epam.courierexchange.model.validator.UserValidator;
+import by.epam.courierexchange.model.validator.CourierExchangeValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,7 +25,7 @@ public class TransportServiceImpl implements TransportService {
 
     @Override
     public int deleteTransport(String idStr) throws ServiceException {
-        if(!UserValidator.numberIsValid(idStr)){
+        if(CourierExchangeValidator.numberIsInvalid(idStr)){
             return 0;
         }
         long id = Long.parseLong(idStr);

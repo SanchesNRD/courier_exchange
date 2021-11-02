@@ -42,7 +42,7 @@
             </h1>
         </section>
         <section class="content">
-            <form action="${pageContext.request.contextPath}/controller" class="wrap-login100">
+            <form method="post" action="${pageContext.request.contextPath}/controller" class="wrap-login100">
                 <input type="hidden" name="command" value="update_profile"/>
                 <div class="form-group row">
                     <div class="col-md-2 txt1 text-right">
@@ -99,11 +99,16 @@
                         </div>
                     </div>
                 </div>
+                <c:if test="${requestScope.wrong_validation == true}">
+                    <div class="error-content">
+                        <fmt:message key="page.signup.validation"/>
+                    </div>
+                </c:if>
                 <div class="col-md-offset-2 container-login100-form-btn ">
                     <input type="submit" value="<fmt:message key="page.profile.update"/>" class="login100-form-btn"/>
                 </div>
             </form>
-            <form action="${pageContext.request.contextPath}/controller" class="wrap-login100">
+            <form method="post" action="${pageContext.request.contextPath}/controller" class="wrap-login100">
                 <input type="hidden" name="command" value="change_password"/>
                 <div class="form-group row">
                     <div class="col-md-2 txt1 text-right">
@@ -127,6 +132,16 @@
                         </div>
                     </div>
                 </div>
+                <c:if test="${requestScope.password_change_suc == true}">
+                    <div class="success-content">
+                        <fmt:message key="page.profile.suc_change_pass"/>
+                    </div>
+                </c:if>
+                <c:if test="${requestScope.wrong_password_validation == true}">
+                    <div class="error-content">
+                        <fmt:message key="page.profile.wrong_change_pass"/>
+                    </div>
+                </c:if>
                 <div class="col-md-offset-2 container-login100-form-btn ">
                     <input type="submit" value="<fmt:message key="page.profile.change"/>" class="login100-form-btn"/>
                 </div>

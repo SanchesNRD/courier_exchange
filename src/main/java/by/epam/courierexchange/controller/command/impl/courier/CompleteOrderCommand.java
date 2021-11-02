@@ -16,7 +16,9 @@ public class CompleteOrderCommand implements Command {
         OrderDaoImpl orderDao = OrderDaoImpl.getInstance();
         CommandResult commandResult;
         try {
-            orderDao.updateStatus(order.getId(), OrderStatus.COMPLETED);
+            if(orderDao.updateStatus(order.getId(), OrderStatus.COMPLETED)==0){
+                request.setAttribute(RequestAttribute.WRONG_VALIDATION, true);
+            };
             commandResult = new CommandResult(PagePath.COURIER_ORDER, CommandResult.ResponseType.FORWARD);
         } catch (DaoException e) {
             request.setAttribute(RequestAttribute.EXCEPTION, e);

@@ -8,7 +8,7 @@ import by.epam.courierexchange.model.dao.impl.UserDaoImpl;
 import by.epam.courierexchange.model.entity.User;
 import by.epam.courierexchange.model.entity.UserStatus;
 import by.epam.courierexchange.model.service.UserService;
-import by.epam.courierexchange.model.validator.UserValidator;
+import by.epam.courierexchange.model.validator.CourierExchangeValidator;
 import by.epam.courierexchange.util.PasswordEncryption;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     public Optional<User> authorization(String login, String password) throws ServiceException {
         Optional<User> optionalUser;
         User user;
-        if (!UserValidator.loginIsValid(login) && !UserValidator.passwordIsValid(password)){
+        if (CourierExchangeValidator.loginIsInvalid(login) || CourierExchangeValidator.passwordIsInvalid(password)){
             return Optional.empty();
         }
 
@@ -60,14 +60,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> registration(String login, String password, String name, String surname, String mail, String phone)
+    public int registration(String login, String password, String name, String surname, String mail, String phone)
             throws ServiceException {
-        Optional<User> optionalUser;
         User user;
-        if(!UserValidator.loginIsValid(login) && !UserValidator.passwordIsValid(password)
-                && !UserValidator.emailIsValid(mail) && !UserValidator.nameIsValid(name)
-                && !UserValidator.surnameIsValid(surname) && !UserValidator.phoneIsValid(phone)){
-            return Optional.empty();
+        if(CourierExchangeValidator.loginIsInvalid(login) || CourierExchangeValidator.passwordIsInvalid(password)
+                || CourierExchangeValidator.emailIsInvalid(mail) || CourierExchangeValidator.nameIsInvalid(name)
+                || CourierExchangeValidator.surnameIsInvalid(surname) || CourierExchangeValidator.phoneIsInvalid(phone)){
+            return 0;
         }
         try{
             user = new User.UserBuilder()
@@ -79,18 +78,16 @@ public class UserServiceImpl implements UserService {
                     .setPhone(phone)
                     .setUserStatus(UserStatus.NON_CONFIRMED)
                     .build();
-            userDao.create(user);
-            optionalUser = Optional.of(user);
+            return userDao.create(user);
         } catch (DaoException e){
             logger.error("Exception wile working with database ", e);
             throw new ServiceException("Exception wile working with database ", e);
         }
-        return optionalUser;
     }
 
     @Override
     public boolean updatePassword(String id, String password) throws ServiceException {
-        if(!UserValidator.passwordIsValid(password) && !UserValidator.numberIsValid(id)){
+        if(CourierExchangeValidator.passwordIsInvalid(password) && CourierExchangeValidator.numberIsInvalid(id)){
             return false;
         }
         try{
@@ -102,7 +99,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public Optional<User> selectByMail(String mail) throws ServiceException{
-        if (!UserValidator.emailIsValid(mail)){
+        if (CourierExchangeValidator.emailIsInvalid(mail)){
             return Optional.empty();
         }
         try{
@@ -142,7 +139,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> changePassword(User user, String password, String newPassword) throws ServiceException {
-        if(!UserValidator.passwordIsValid(password) && !UserValidator.passwordIsValid(newPassword)){
+        if(CourierExchangeValidator.passwordIsInvalid(password) || CourierExchangeValidator.passwordIsInvalid(newPassword)){
             return Optional.empty();
         }
         if(!user.getPassword().equals(PasswordEncryption.encode(password))){
@@ -171,8 +168,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> updateProfile(String name, String surname, String phone, User user) throws ServiceException {
         Optional<User> optionalUser;
-        if(!UserValidator.nameIsValid(name) && !UserValidator.surnameIsValid(surname)
-                && !UserValidator.phoneIsValid(phone)){
+        if(CourierExchangeValidator.nameIsInvalid(name) || CourierExchangeValidator.surnameIsInvalid(surname)
+                || CourierExchangeValidator.phoneIsInvalid(phone)){
             return Optional.empty();
         }
         try{
@@ -219,7 +216,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int changeRole(String id, UserStatus userStatus) throws ServiceException {
-        if(!UserValidator.numberIsValid(id)) {
+        if(CourierExchangeValidator.numberIsInvalid(id)) {
             return 0;
         }
         try{
@@ -233,7 +230,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int banUser(String idStr) throws ServiceException {
-        if(!UserValidator.numberIsValid(idStr)){
+        if(CourierExchangeValidator.numberIsInvalid(idStr)){
             return 0;
         }
         int result;

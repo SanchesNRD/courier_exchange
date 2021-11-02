@@ -24,9 +24,9 @@ public class ChangePasswordCommand implements Command {
             if(optionalUser.isPresent()){
                 request.setAttribute(RequestAttribute.PASSWORD_CHANGE_SUC, true);
             }else{
-                request.setAttribute(RequestAttribute.WRONG_VALIDATION, true);
+                request.setAttribute(RequestAttribute.WRONG_PASSWORD_VALIDATION, true);
             }
-            commandResult = new CommandResult(PagePath.LOGIN_PAGE, CommandResult.ResponseType.FORWARD);
+            commandResult = new CommandResult(PagePath.PROFILE_PAGE, CommandResult.ResponseType.FORWARD);
         } catch (ServiceException e){
             request.setAttribute(RequestAttribute.EXCEPTION, e);
             commandResult = new CommandResult(PagePath.ERROR_PAGE, CommandResult.ResponseType.FORWARD);

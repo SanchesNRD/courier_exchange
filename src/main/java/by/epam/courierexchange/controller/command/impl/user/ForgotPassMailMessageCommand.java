@@ -26,7 +26,7 @@ public class ForgotPassMailMessageCommand implements Command {
             if(optionalUser.isPresent()){
                 User user = optionalUser.get();
                 MailSender.send(user.getMail(), MailSender.forgotPasswordMessage(user.getId()));
-                commandResult = new CommandResult(LOGIN_PAGE, FORWARD);
+                commandResult = new CommandResult(MAIL_MESSAGE_PAGE, FORWARD);
             }else{
                 request.setAttribute(RequestAttribute.WRONG_VALIDATION, true);
                 commandResult = new CommandResult(FORGOT_PASS_PAGE, FORWARD);

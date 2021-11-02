@@ -11,18 +11,22 @@ import static by.epam.courierexchange.controller.command.CommandResult.ResponseT
 import static by.epam.courierexchange.controller.command.RequestParameter.*;
 
 public class ChangeLocaleCommand implements Command {
+    private static final String RU_LOCALE = "ru_RU";
+    private static final String EN_LOCALE = "en_EN";
+    private static final String CURRENT_URL = "current_url";
+    private static final int POSITION_OF_URL = 52;
+
     @Override
     public CommandResult execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        String currentUrl = request.getParameter("current_url");
-        String url = currentUrl.substring(52);
+        String currentUrl = request.getParameter(CURRENT_URL);
+        String url = currentUrl.substring(POSITION_OF_URL);
         String locale = request.getParameter(LOCALE);
-        if(locale.equals("ru_RU")){
-            session.setAttribute(SessionAttribute.LOCALE, "EN_en");
+        if(locale.equals(RU_LOCALE)){
+            session.setAttribute(SessionAttribute.LOCALE, EN_LOCALE);
         }else{
-            session.setAttribute(SessionAttribute.LOCALE, "ru_RU");
+            session.setAttribute(SessionAttribute.LOCALE, RU_LOCALE);
         }
-        CommandResult commandResult = new CommandResult(url, FORWARD);
-        return commandResult;
+        return new CommandResult(url, FORWARD);
     }
 }

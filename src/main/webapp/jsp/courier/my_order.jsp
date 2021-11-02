@@ -28,6 +28,11 @@
                 <c:if test="${requestScope.courier_have_order}">
                     <fmt:message key="page.my_order.have_order"/>
                 </c:if>
+                <c:if test="${requestScope.wrong_validation}">
+                    <div class="wrap-login100 error-content">
+                        <fmt:message key="page.signup.validation"/>
+                    </div>
+                </c:if>
                 <c:if test = "${!requestScope.no_order}">
                     <form action="${pageContext.request.contextPath}/controller">
                         <input type="hidden" name="command" value="complete_order"/>

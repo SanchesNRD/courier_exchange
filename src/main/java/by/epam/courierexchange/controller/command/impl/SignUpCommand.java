@@ -28,12 +28,8 @@ public class SignUpCommand implements Command {
         UserServiceImpl userService = UserServiceImpl.getInstance();
         CommandResult commandResult;
         try{
-            Optional<User> optionalUser = userService.registration(login, password, name, surname, mail, phone);
-            if(optionalUser.isPresent()){
-                User user = optionalUser.get();
-                HttpSession session = request.getSession(true);
-                session.setAttribute(SessionAttribute.USER, user);
-                commandResult = new CommandResult(PROFILE_PAGE, FORWARD);
+            if(userService.registration(login, password, name, surname, mail, phone)!=0){
+                commandResult = new CommandResult(LOGIN_PAGE, FORWARD);
             } else{
                 request.setAttribute(WRONG_VALIDATION,true);
                 commandResult = new CommandResult(SIGN_UP_PAGE, FORWARD);

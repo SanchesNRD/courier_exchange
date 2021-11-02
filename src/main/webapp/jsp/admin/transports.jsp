@@ -26,12 +26,12 @@
         <section class="content">
             <c:if test="${requestScope.transport_was_used}">
                 <div class="wrap-login100">
-                    transport was used
+                    <fmt:message key="page.admin.transport_was_used"/>
                 </div>
             </c:if>
             <c:if test="${requestScope.wrong_validation}">
-                <div class="wrap-login100">
-                    wrong validation
+                <div class="wrap-login100 error-content">
+                    <fmt:message key="page.signup.validation"/>
                 </div>
             </c:if>
             <div class="wrap-login100">

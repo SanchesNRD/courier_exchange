@@ -41,7 +41,7 @@ public class Client extends User{
     public String toString() {
         final StringBuilder sb = new StringBuilder("Client{");
         sb.append(super.toString());
-        sb.append("").append(address_id);
+        sb.append(",").append(address_id);
         sb.append('}');
         return sb.toString();
     }

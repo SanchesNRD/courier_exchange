@@ -3,15 +3,15 @@ package by.epam.courierexchange.model.entity;
 import java.util.Arrays;
 
 public enum ProductType{
-    DEFAULT((short)1,1),
-    FRAGILE((short)2,5),
-    EXPLOSIVE((short)3,10),
-    POISONOUS((short)4,10);
+    DEFAULT(1,1),
+    FRAGILE(2,5),
+    EXPLOSIVE(3,10),
+    POISONOUS(4,10);
 
-    private short id;
+    private int id;
     private int multiplier;
 
-    ProductType(short id, int multiplier){
+    ProductType(int id, int multiplier){
         this.id = id;
         this.multiplier = multiplier;
     }
@@ -20,7 +20,7 @@ public enum ProductType{
         return multiplier;
     }
 
-    public short getId() {
+    public int getId() {
         return id;
     }
 

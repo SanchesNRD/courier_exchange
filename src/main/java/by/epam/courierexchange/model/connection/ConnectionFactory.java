@@ -22,9 +22,9 @@ class ConnectionFactory {
     static {
         try(InputStream inputStream = ConnectionPool.class.getClassLoader().getResourceAsStream(POOL_RESOURCE)) {
             properties.load(inputStream);
-            String driveName = (String)properties.getProperty(DRIVER_KEY);
+            String driveName = properties.getProperty(DRIVER_KEY);
             Class.forName(driveName);
-            URL = (String)properties.getProperty(URL_KEY);
+            URL = properties.getProperty(URL_KEY);
         }catch (IOException e){
             logger.fatal("Property file not load. file path = " + POOL_RESOURCE, e);
             throw new RuntimeException("Property file not load. file path = " + POOL_RESOURCE, e);
@@ -35,7 +35,7 @@ class ConnectionFactory {
     }
 
     static ProxyConnection createConnection() throws DatabaseConnectionException {
-        Connection connection = null;
+        Connection connection;
         try {
             connection = DriverManager.getConnection(URL, properties);
         } catch (SQLException e) {

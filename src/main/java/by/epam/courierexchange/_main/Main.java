@@ -1,33 +1,18 @@
 package by.epam.courierexchange._main;
 
-import by.epam.courierexchange.controller.command.PagePath;
-import by.epam.courierexchange.controller.command.SessionAttribute;
-import by.epam.courierexchange.exception.DaoException;
 import by.epam.courierexchange.exception.ServiceException;
 import by.epam.courierexchange.model.dao.impl.*;
 import by.epam.courierexchange.model.entity.*;
 import by.epam.courierexchange.model.service.impl.ClientServiceImpl;
 import by.epam.courierexchange.model.service.impl.ProductServiceImpl;
 import by.epam.courierexchange.model.service.impl.UserServiceImpl;
-import by.epam.courierexchange.model.validator.UserValidator;
-import by.epam.courierexchange.util.MailSender;
-import by.epam.courierexchange.util.PasswordEncryption;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import static by.epam.courierexchange.controller.command.RequestParameter.*;
-import static by.epam.courierexchange.controller.command.RequestParameter.PHONE;
 
 public class Main {
     private static final Logger logger = LogManager.getLogger(Main.class);
@@ -43,6 +28,8 @@ public class Main {
         ProductServiceImpl productService = ProductServiceImpl.getInstance();
         OrderDaoImpl orderDao = OrderDaoImpl.getInstance();
         ProductDaoImpl productDao = ProductDaoImpl.getInstance();
+        CourierDaoImpl courierDao = CourierDaoImpl.getInstance();
+        TransportDaoImpl transportDao = TransportDaoImpl.getInstance();
 
         Date date = new Date();
         Object dateSql = new Timestamp(date.getTime());
@@ -50,17 +37,13 @@ public class Main {
         Optional<ClientProduct> clientProductOptional;
         Optional<Product> productOptional;
 
-        String TEXT_CONFIRM_PROFILE = """
-            <h2>Confirm profile request </h2>"
-            <h3> Please click on the button to confirm your profile</h3> 
-            <a href= http://localhost:8080/courier_war_exploded/controller?command=confirm_profile&id=ID ><button>Confirm profile</button></a>
-            """;
-
+        Optional<Transport> transport;
+        Optional<Courier> courier;
+        OrderStatus orderStatus = OrderStatus.COMPLETED;
         try {
-            System.out.println(userService.updatePassword("19", "a12345678"));
+            System.out.println(userService.registration("login", "a12345678", "name", "surname", "mail@mail.ru", "+375291234567"));
         } catch (ServiceException e) {
             e.printStackTrace();
         }
-
     }
 }

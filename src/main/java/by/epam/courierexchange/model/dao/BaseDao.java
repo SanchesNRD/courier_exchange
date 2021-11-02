@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BaseDao<K, T extends AbstractEntity> {
-    static final Logger logger= LogManager.getLogger();
+    Logger logger= LogManager.getLogger();
     List<T> selectAll() throws DaoException;
     Optional<T> selectById(K id) throws DaoException;
     boolean deleteById(K id) throws DaoException;
-    boolean create(T t) throws DaoException;
+    int create(T t) throws DaoException;
     int update(T t) throws DaoException;
 
     default void close(Connection connection){

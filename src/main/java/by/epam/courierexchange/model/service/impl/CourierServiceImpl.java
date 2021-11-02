@@ -5,7 +5,7 @@ import by.epam.courierexchange.exception.ServiceException;
 import by.epam.courierexchange.model.dao.impl.*;
 import by.epam.courierexchange.model.entity.*;
 import by.epam.courierexchange.model.service.CourierService;
-import by.epam.courierexchange.model.validator.UserValidator;
+import by.epam.courierexchange.model.validator.CourierExchangeValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,9 +28,10 @@ public class CourierServiceImpl implements CourierService {
         return instance;
     }
 
+
     @Override
     public int createOrder(String clientProductStr, long courier) throws ServiceException {
-        if (!UserValidator.numberIsValid(clientProductStr)) {
+        if (CourierExchangeValidator.numberIsInvalid(clientProductStr)) {
             return 0;
         }
         Optional<ClientProduct> clientProductOptional;
@@ -56,8 +57,8 @@ public class CourierServiceImpl implements CourierService {
 
     @Override
     public Optional<Transport> updateTransport(Courier courier, String name, String speed, String weight, String type) throws ServiceException {
-        if(!UserValidator.nameIsValid(name) || !UserValidator.numberIsValid(speed)
-                || !UserValidator.numberIsValid(weight) || !UserValidator.typeIsValid(type)){
+        if(CourierExchangeValidator.nameIsInvalid(name) || CourierExchangeValidator.numberIsInvalid(speed)
+                || CourierExchangeValidator.numberIsInvalid(weight) || CourierExchangeValidator.typeIsInvalid(type)){
             return Optional.empty();
         }
         Transport transport;

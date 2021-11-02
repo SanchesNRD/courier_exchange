@@ -25,13 +25,13 @@
         </section>
         <section class="content">
             <c:if test="${requestScope.product_was_used}">
-                <div class="wrap-login100">
-                    products was used
+                <div class="wrap-login100 error-content">
+                    <fmt:message key="page.admin.product_was_used"/>
                 </div>
             </c:if>
             <c:if test="${requestScope.wrong_validation}">
-                <div class="wrap-login100">
-                    wrong validation
+                <div class="wrap-login100 error-content">
+                    <fmt:message key="page.signup.validation"/>
                 </div>
             </c:if>
             <div class="wrap-login100">

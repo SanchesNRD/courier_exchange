@@ -20,18 +20,18 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                <fmt:message key="page.orders.title"/>
+                <fmt:message key="page.admin.all_users"/>
             </h1>
         </section>
         <section class="content">
             <c:if test="${requestScope.user_have_order}">
-                <div class="wrap-login100">
-                    user have order
+                <div class="wrap-login100 error-content">
+                    <fmt:message key="page.admin.user_have_order"/>
                 </div>
             </c:if>
             <c:if test="${requestScope.wrong_validation}">
-                <div class="wrap-login100">
-                    wrong validation
+                <div class="wrap-login100 error-content">
+                    <fmt:message key="page.signup.validation"/>
                 </div>
             </c:if>
             <div class="wrap-login100">
@@ -68,7 +68,7 @@
                             <c:out value="${users.phone}"/>
                         </div>
                         <div class="col-md-2 text-left">
-                            <form action="${pageContext.request.contextPath}/controller">
+                            <form method="post" action="${pageContext.request.contextPath}/controller">
                                 <input type="hidden" name="command" value="ban_user">
                                 <input type="hidden" name="user_id" value="${users.id}">
                                 <c:if test="${users.userStatus != 'BANED'}">

@@ -30,10 +30,6 @@ public class ProductDaoImpl implements ProductDao {
             SELECT id, name, weight, length, width, height, type_id 
             FROM products WHERE id=?
             """;
-    private static final String SQL_SELECT_BY_TYPE="""
-            SELECT id, name, weight, length, width, height, type_id 
-            FROM products WHERE type_id=?
-            """;
     private static final String SQL_SELECT_BY_NAME="""
             SELECT id, name, weight, length, width, height, type_id 
             FROM products WHERE name=?
@@ -144,33 +140,6 @@ public class ProductDaoImpl implements ProductDao {
         }
     }
 
-    @Override
-    public List<Product> selectByType(Integer type) throws DaoException {
-        List<Product> products = new ArrayList<>();
-        try(
-                Connection connection = connectionPool.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_SELECT_BY_TYPE))
-        {
-            statement.setInt(1,type);
-            ResultSet resultSet = statement.executeQuery();
-            while(resultSet.next()){
-                Product product = new Product.ProductBuilder()
-                        .setId(resultSet.getLong(ID))
-                        .setName(resultSet.getString(PRODUCT_NAME))
-                        .setWeight(resultSet.getInt(PRODUCT_WEIGHT))
-                        .setLength(resultSet.getInt(PRODUCT_LENGTH))
-                        .setWidth(resultSet.getInt(PRODUCT_WIDTH))
-                        .setHeight(resultSet.getInt(PRODUCT_HEIGHT))
-                        .setProductType(ProductType.parseType(resultSet.getShort(TYPE_ID)))
-                        .build();
-                products.add(product);
-            }
-        } catch (SQLException e){
-            logger.error("SQL exception in method selectProductByType", e);
-            throw new DaoException("SQL exception in method selectProductByType", e);
-        }
-        return products;
-    }
 
     @Override
     public boolean deleteById(Long id) throws DaoException {
@@ -187,7 +156,7 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public boolean create(Product product) throws DaoException {
+    public int create(Product product) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_INSERT))
@@ -199,7 +168,7 @@ public class ProductDaoImpl implements ProductDao {
             statement.setInt(5, product.getWidth());
             statement.setInt(6, product.getHeight());
             statement.setInt(7, product.getProductType().getId());
-            return statement.execute();
+            return statement.executeUpdate();
         } catch (SQLException e){
             logger.error("SQL exception in method createProducts", e);
             throw new DaoException("SQL exception in method createProduct", e);

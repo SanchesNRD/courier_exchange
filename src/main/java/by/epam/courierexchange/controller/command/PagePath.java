@@ -10,6 +10,7 @@ public final class PagePath {
     public static final String NEW_PASSWORD_PAGE = "jsp/auth/new_pass.jsp";
     public static final String SIGN_UP_PAGE = "jsp/auth/signup.jsp";
     public static final String FORGOT_PASS_PAGE = "jsp/auth/forgot_pass.jsp";
+    public static final String MAIL_MESSAGE_PAGE = "jsp/auth/mail_message.jsp";
 
     public static final String ADMIN_PAGE = "jsp/admin/admin.jsp";
     public static final String ADMIN_ALL_USERS = "jsp/admin/all_users.jsp";
