@@ -7,9 +7,8 @@ public class CourierExchangeValidator {
     private static final String EMAIL_PATTERN =
             "^([a-z0-9_-]+\\.)*[a-z0-9_-]+@[a-z0-9_-]+(\\.[a-z0-9_-]+)*\\.[a-z]{2,6}$";
     private static final String NAME_PATTERN = "[a-zA-Zа-яА-я]{2,20}";
-    private static final String SURNAME_PATTERN = "[a-zA-Zа-яА-я]{2,20}";
-    private static final String NUMBER_PATTERN = "[+]?\\d+";
-    private static final String TYPE_PATTERN = "[1234]{1}";
+    private static final String NUMBER_PATTERN = "^[1-9]\\d*$";
+    private static final String TYPE_PATTERN = "[1234]";
 
     public static boolean loginIsInvalid(String login){
         return login == null || !login.matches(LOGIN_PATTERN);
@@ -39,9 +38,6 @@ public class CourierExchangeValidator {
         return name == null || !name.matches(NAME_PATTERN);
     }
 
-    public static boolean surnameIsInvalid(String surname){
-        return surname == null || !surname.matches(SURNAME_PATTERN);
-    }
 
-    private CourierExchangeValidator(){};
+    private CourierExchangeValidator(){}
 }

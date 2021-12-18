@@ -3,7 +3,7 @@ package by.epam.courierexchange.controller.command;
 public final class PagePath {
     public static final String INDEX = "index.jsp";
     public static final String PROFILE_PAGE = "jsp/common/profile.jsp";
-    public static final String ERROR_PAGE = "jsp/error/error.jsp";
+    public static final String ERROR_PAGE = "jsp/error/error500.jsp";
 
 
     public static final String LOGIN_PAGE = "jsp/auth/login.jsp";

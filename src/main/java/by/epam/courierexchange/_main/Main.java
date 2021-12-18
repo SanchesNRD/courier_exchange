@@ -1,5 +1,6 @@
 package by.epam.courierexchange._main;
 
+import by.epam.courierexchange.exception.DaoException;
 import by.epam.courierexchange.exception.ServiceException;
 import by.epam.courierexchange.model.dao.impl.*;
 import by.epam.courierexchange.model.entity.*;
@@ -37,13 +38,7 @@ public class Main {
         Optional<ClientProduct> clientProductOptional;
         Optional<Product> productOptional;
 
-        Optional<Transport> transport;
-        Optional<Courier> courier;
-        OrderStatus orderStatus = OrderStatus.COMPLETED;
-        try {
-            System.out.println(userService.registration("login", "a12345678", "name", "surname", "mail@mail.ru", "+375291234567"));
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
+
+
     }
 }

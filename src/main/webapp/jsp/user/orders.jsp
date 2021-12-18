@@ -1,8 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="/WEB-INF/tld/footer.tld" prefix="ftg"%>
+
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="prop.pagecontent"/>
+
 <html>
 <head>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/lib/bootstrap/dist/css/bootstrap.min.css">
@@ -74,7 +77,7 @@
         </section>
     </div>
 
-    <jsp:include page="../common/footer.jsp"/>
+    <ftg:footer/>
 </div>
 
 <script src="${pageContext.request.contextPath}/lib/bootstrap/dist/js/bootstrap.js"></script>

@@ -43,7 +43,9 @@ public class CourierServiceImpl implements CourierService {
         try {
             clientProductOptional = clientDao.selectClientProductById(clientProduct);
             order = orderDao.selectIdByCourier(courier, OrderStatus.AGREED);
-            if (clientProductOptional.get().getClient().getId() != courier && order == 0) {
+
+            if (clientProductOptional.isPresent() && clientProductOptional.get().getClient().getId() != courier
+                    && order == 0) {
                 result = orderDao.createByField(clientProduct, courier, dateSql, OrderStatus.AGREED);
             } else {
                 result = 0;

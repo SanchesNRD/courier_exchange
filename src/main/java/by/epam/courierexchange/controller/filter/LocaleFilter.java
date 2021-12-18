@@ -15,7 +15,7 @@ public class LocaleFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest)request;
         String contextPath = httpServletRequest.getContextPath();
         String url = httpServletRequest.getHeader("referer");
-        httpServletRequest.getSession().setAttribute(SessionAttribute.PREVIOUS_REQUEST, url);
+        httpServletRequest.getSession().setAttribute(SessionAttribute.PREVIOUS_REQUEST, contextPath);
         chain.doFilter(request, response);
     }
 

@@ -5,7 +5,6 @@ import by.epam.courierexchange.controller.command.CommandResult;
 import by.epam.courierexchange.controller.command.PagePath;
 import by.epam.courierexchange.controller.command.SessionAttribute;
 import by.epam.courierexchange.exception.DaoException;
-import by.epam.courierexchange.model.dao.ClientDao;
 import by.epam.courierexchange.model.dao.impl.ClientDaoImpl;
 import by.epam.courierexchange.model.entity.ClientProduct;
 import by.epam.courierexchange.model.entity.User;

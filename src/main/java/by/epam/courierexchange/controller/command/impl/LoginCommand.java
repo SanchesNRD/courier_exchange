@@ -17,7 +17,6 @@ import jakarta.servlet.http.HttpSession;
 import java.util.Optional;
 
 import static by.epam.courierexchange.controller.command.CommandResult.ResponseType.FORWARD;
-import static by.epam.courierexchange.controller.command.CommandResult.ResponseType.REDIRECT;
 import static by.epam.courierexchange.controller.command.PagePath.*;
 import static by.epam.courierexchange.controller.command.RequestAttribute.*;
 import static by.epam.courierexchange.controller.command.RequestParameter.LOGIN;
@@ -40,9 +39,7 @@ public class LoginCommand implements Command {
                 HttpSession session = request.getSession(true);
                 session.setAttribute(SessionAttribute.USER, user);
                 switch (user.getUserStatus()){
-                    case NON_CONFIRMED -> {
-                        commandResult = new CommandResult(PROFILE_PAGE, FORWARD);
-                    }
+                    case NON_CONFIRMED -> commandResult = new CommandResult(PROFILE_PAGE, FORWARD);
                     case CONFIRMED -> {
                         Optional<Client> clientOptional = clientDao.selectById(user.getId());
                         clientOptional.ifPresent(client -> session.setAttribute(SessionAttribute.CLIENT, client));
@@ -53,9 +50,7 @@ public class LoginCommand implements Command {
                         courierOptional.ifPresent(courier -> session.setAttribute(SessionAttribute.COURIER, courier));
                         commandResult = new CommandResult(PROFILE_PAGE, FORWARD);
                     }
-                    case ADMIN -> {
-                        commandResult = new CommandResult(ADMIN_PAGE, FORWARD);
-                    }
+                    case ADMIN -> commandResult = new CommandResult(ADMIN_PAGE, FORWARD);
                     case BANED -> {
                         request.setAttribute(BANNED_USER, true);
                         commandResult = new CommandResult(LOGIN_PAGE, FORWARD);

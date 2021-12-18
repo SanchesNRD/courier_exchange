@@ -68,5 +68,5 @@ public class MailSender {
         }
     }
 
-    private MailSender(){};
+    private MailSender(){}
 }

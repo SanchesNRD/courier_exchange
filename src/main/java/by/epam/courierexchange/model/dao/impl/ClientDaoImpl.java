@@ -120,7 +120,7 @@ public class ClientDaoImpl implements ClientDao {
                 Client client = new Client.ClientBuilder()
                         .setAddress(resultSet.getLong(ADDRESS_ID))
                         .setBuilder(new User.UserBuilder()
-                                .setId(resultSet.getLong(USER_ID))
+                                .setId(resultSet.getLong(CLIENT_POINT_ID))
                                 .setLogin(resultSet.getString(USER_LOGIN))
                                 .setPassword(resultSet.getString(USER_PASSWORD))
                                 .setMail(resultSet.getString(USER_MAIL))

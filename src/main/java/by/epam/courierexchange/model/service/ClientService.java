@@ -4,7 +4,6 @@ import by.epam.courierexchange.exception.ServiceException;
 import by.epam.courierexchange.model.entity.Address;
 import by.epam.courierexchange.model.entity.Client;
 import by.epam.courierexchange.model.entity.ClientProduct;
-import by.epam.courierexchange.model.entity.User;
 
 import java.util.List;
 import java.util.Optional;

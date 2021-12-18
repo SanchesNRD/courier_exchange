@@ -6,13 +6,11 @@ import by.epam.courierexchange.exception.ServiceException;
 import by.epam.courierexchange.model.dao.impl.ClientDaoImpl;
 import by.epam.courierexchange.model.entity.ClientProduct;
 import by.epam.courierexchange.model.entity.User;
-import by.epam.courierexchange.model.entity.UserStatus;
 import by.epam.courierexchange.model.service.impl.ClientServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
-import java.util.Optional;
 
 public class DeleteClientProductCommand implements Command {
     @Override

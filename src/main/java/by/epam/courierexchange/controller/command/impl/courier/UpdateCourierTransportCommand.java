@@ -2,18 +2,15 @@ package by.epam.courierexchange.controller.command.impl.courier;
 
 import by.epam.courierexchange.controller.command.*;
 import by.epam.courierexchange.exception.ServiceException;
-import by.epam.courierexchange.model.entity.Address;
-import by.epam.courierexchange.model.entity.Client;
 import by.epam.courierexchange.model.entity.Courier;
 import by.epam.courierexchange.model.entity.Transport;
-import by.epam.courierexchange.model.service.impl.ClientServiceImpl;
 import by.epam.courierexchange.model.service.impl.CourierServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.Optional;
 
-public class UpdateCourierTranposrtCommand implements Command {
+public class UpdateCourierTransportCommand implements Command {
     @Override
     public CommandResult execute(HttpServletRequest request) {
         String name = request.getParameter(RequestParameter.NAME);

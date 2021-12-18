@@ -3,7 +3,6 @@ package by.epam.courierexchange.controller.command.impl.user;
 import by.epam.courierexchange.controller.command.*;
 import by.epam.courierexchange.exception.ServiceException;
 import by.epam.courierexchange.model.entity.User;
-import by.epam.courierexchange.model.entity.UserStatus;
 import by.epam.courierexchange.model.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

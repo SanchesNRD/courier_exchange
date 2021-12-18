@@ -113,6 +113,7 @@ public class ProductDaoImpl implements ProductDao {
         }
     }
 
+    @Override
     public Optional<Product> selectByName(String name) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
@@ -139,7 +140,6 @@ public class ProductDaoImpl implements ProductDao {
             throw new DaoException("SQL exception in method selectProductName", e);
         }
     }
-
 
     @Override
     public boolean deleteById(Long id) throws DaoException {

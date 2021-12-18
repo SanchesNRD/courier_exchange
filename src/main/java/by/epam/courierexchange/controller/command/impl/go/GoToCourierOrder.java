@@ -4,7 +4,6 @@ import by.epam.courierexchange.controller.command.*;
 import by.epam.courierexchange.exception.ServiceException;
 import by.epam.courierexchange.model.entity.Courier;
 import by.epam.courierexchange.model.entity.Order;
-import by.epam.courierexchange.model.entity.User;
 import by.epam.courierexchange.model.service.impl.CourierServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

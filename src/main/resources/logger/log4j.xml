@@ -12,9 +12,9 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="${pattern_console}"/>
         </Console>
-        <File name="File" fileName="web-logs/applicationLogs.log" bufferedIO="true">
+        <RollingFile name="File" fileName="${sys:catalina.home}/logs/applicationLogs.log">
             <PatternLayout pattern="${pattern_file}"/>
-        </File>
+        </RollingFile>
     </Appenders>
     <Loggers>
         <Root level="debug">

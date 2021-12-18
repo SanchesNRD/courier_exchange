@@ -6,7 +6,6 @@ import by.epam.courierexchange.model.entity.User;
 import by.epam.courierexchange.model.service.impl.UserServiceImpl;
 import by.epam.courierexchange.util.MailSender;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 import java.util.Optional;
 

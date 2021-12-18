@@ -1,7 +1,6 @@
 package by.epam.courierexchange.controller.listener;
 
 import by.epam.courierexchange.controller.command.RequestParameter;
-import by.epam.courierexchange.controller.command.SessionAttribute;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.HttpSessionEvent;
 import jakarta.servlet.http.HttpSessionListener;

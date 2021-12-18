@@ -40,7 +40,6 @@ public class UserServiceImpl implements UserService {
         if (CourierExchangeValidator.loginIsInvalid(login) || CourierExchangeValidator.passwordIsInvalid(password)){
             return Optional.empty();
         }
-
         try {
             optionalUser = userDao.selectByLogin(login);
             if(optionalUser.isEmpty()){
@@ -65,7 +64,7 @@ public class UserServiceImpl implements UserService {
         User user;
         if(CourierExchangeValidator.loginIsInvalid(login) || CourierExchangeValidator.passwordIsInvalid(password)
                 || CourierExchangeValidator.emailIsInvalid(mail) || CourierExchangeValidator.nameIsInvalid(name)
-                || CourierExchangeValidator.surnameIsInvalid(surname) || CourierExchangeValidator.phoneIsInvalid(phone)){
+                || CourierExchangeValidator.nameIsInvalid(surname) || CourierExchangeValidator.phoneIsInvalid(phone)){
             return 0;
         }
         try{
@@ -168,7 +167,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> updateProfile(String name, String surname, String phone, User user) throws ServiceException {
         Optional<User> optionalUser;
-        if(CourierExchangeValidator.nameIsInvalid(name) || CourierExchangeValidator.surnameIsInvalid(surname)
+        if(CourierExchangeValidator.nameIsInvalid(name) || CourierExchangeValidator.nameIsInvalid(surname)
                 || CourierExchangeValidator.phoneIsInvalid(phone)){
             return Optional.empty();
         }

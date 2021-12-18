@@ -2,15 +2,11 @@ package by.epam.courierexchange.controller.command.impl.user;
 
 import by.epam.courierexchange.controller.command.*;
 import by.epam.courierexchange.exception.ServiceException;
-import by.epam.courierexchange.model.entity.Client;
-import by.epam.courierexchange.model.entity.User;
 import by.epam.courierexchange.model.entity.UserStatus;
 import by.epam.courierexchange.model.service.impl.ClientServiceImpl;
 import by.epam.courierexchange.model.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
-import java.util.Optional;
 
 public class ConfirmProfileCommand implements Command {
     @Override

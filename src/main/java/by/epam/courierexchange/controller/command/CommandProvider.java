@@ -5,7 +5,7 @@ import by.epam.courierexchange.controller.command.impl.admin.*;
 import by.epam.courierexchange.controller.command.impl.client.*;
 import by.epam.courierexchange.controller.command.impl.courier.CompleteOrderCommand;
 import by.epam.courierexchange.controller.command.impl.courier.TakeCourierOrderCommand;
-import by.epam.courierexchange.controller.command.impl.courier.UpdateCourierTranposrtCommand;
+import by.epam.courierexchange.controller.command.impl.courier.UpdateCourierTransportCommand;
 import by.epam.courierexchange.controller.command.impl.go.*;
 import by.epam.courierexchange.controller.command.impl.user.*;
 
@@ -31,7 +31,7 @@ public class CommandProvider {
         commands.put(CONFIRM_PROFILE, new ConfirmProfileCommand());
         commands.put(CHANGE_USER_ROLE, new ChangeRoleCommand());
         commands.put(UPDATE_CLIENT_ADDRESS, new UpdateClientAddressCommand());
-        commands.put(UPDATE_COURIER_TRANSPORT, new UpdateCourierTranposrtCommand());
+        commands.put(UPDATE_COURIER_TRANSPORT, new UpdateCourierTransportCommand());
         commands.put(TAKE_COURIER_ORDER, new TakeCourierOrderCommand());
         commands.put(COMPLETE_ORDER, new CompleteOrderCommand());
         commands.put(DELETE_CLIENT_PRODUCT, new DeleteClientProductCommand());

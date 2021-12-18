@@ -5,7 +5,6 @@ import by.epam.courierexchange.exception.DaoException;
 import by.epam.courierexchange.exception.ServiceException;
 import by.epam.courierexchange.model.dao.impl.ClientDaoImpl;
 import by.epam.courierexchange.model.entity.ClientProduct;
-import by.epam.courierexchange.model.entity.User;
 import by.epam.courierexchange.model.service.impl.ClientServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -17,7 +16,6 @@ public class DeleteAdminClientProductCommand implements Command {
     public CommandResult execute(HttpServletRequest request) {
         String id = request.getParameter(RequestParameter.ID);
         HttpSession session = request.getSession();
-        User user = (User)session.getAttribute(SessionAttribute.USER);
         ClientServiceImpl clientService = ClientServiceImpl.getInstance();
         ClientDaoImpl clientDao = ClientDaoImpl.getInstance();
         List<ClientProduct> clientProducts;

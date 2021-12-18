@@ -130,6 +130,7 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    @Override
     public Optional<User> selectByLogin(String login) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
@@ -159,6 +160,7 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    @Override
     public Optional<User> selectByMail(String mail) throws DaoException {
         try(
                 Connection connection = connectionPool.getConnection();
